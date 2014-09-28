@@ -1,3 +1,5 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
 target 'WLXBluetoothDevice', :exclusive => true do
   pod "WLXBluetoothDevice", :path => "../"
 end
