@@ -1,0 +1,24 @@
+require './lib/xcodebuild'
+
+PROJECT = 'WLXBluetoothDevice'
+WORKSPACE = "#{PROJECT}.xcworkspace" 
+SCHEME = PROJECT
+
+namespace :xcode do
+  XCodeBuild::ACTIONS.each do |action|
+    desc "Runs xcodebuild's #{action} action"
+    task action do
+      xcodebuild.run(action)
+    end
+  end
+end
+
+task default: 'xcode:test'
+
+def xcodebuild
+  @xcodebuild ||= XCodeBuild.new(WORKSPACE, SCHEME, {
+    dry_run: ENV['DRY_RUN'] == 'true',
+    verbose: ENV['VERBOSE'] == 'true',
+    pretty: !(ENV['DISABLE_XCPRETTY'] == 'true')
+  })
+end
