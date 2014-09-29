@@ -2,6 +2,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target 'WLXBluetoothDevice', :exclusive => true do
   pod "WLXBluetoothDevice", :path => "../"
+  pod 'CocoaLumberjack', '~>2.0.0-beta'
 end
 
 target 'Tests', :exclusive => true do
@@ -9,4 +10,5 @@ target 'Tests', :exclusive => true do
 
   pod 'Specta', '~> 0.2.1'
   pod 'Expecta'
+  pod 'OCMockito', '~> 1.0'
 end

@@ -639,7 +639,7 @@ fi
 			<string>2147483647</string>
 			<key>files</key>
 			<array>
-				<string>6003F5BC195388D20070C39A</string>
+				<string>9D1EFB3A19D9D3C500CB4F45</string>
 			</array>
 			<key>isa</key>
 			<string>PBXSourcesBuildPhase</string>
@@ -777,8 +777,8 @@ fi
 		<dict>
 			<key>children</key>
 			<array>
-				<string>6003F5BB195388D20070C39A</string>
 				<string>6003F5B6195388D20070C39A</string>
+				<string>9D1EFB3919D9D3C500CB4F45</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -843,24 +843,6 @@ fi
 		<dict>
 			<key>fileRef</key>
 			<string>6003F5B8195388D20070C39A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>6003F5BB195388D20070C39A</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>Tests.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>6003F5BC195388D20070C39A</key>
-		<dict>
-			<key>fileRef</key>
-			<string>6003F5BB195388D20070C39A</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>
@@ -1219,12 +1201,34 @@ fi
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
+		<key>9D1EFB3919D9D3C500CB4F45</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>WLXBluetoothDeviceDiscovererSpec.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D1EFB3A19D9D3C500CB4F45</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9D1EFB3919D9D3C500CB4F45</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
 		<key>A2887F621891F6A15A9626BB</key>
 		<dict>
 			<key>includeInIndex</key>
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text</string>
 			<key>name</key>
 			<string>WLXBluetoothDevice.podspec</string>
 			<key>path</key>
@@ -1278,6 +1282,8 @@ fi
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>net.daringfireball.markdown</string>
 			<key>name</key>
 			<string>README.md</string>
 			<key>path</key>
@@ -1304,6 +1310,8 @@ fi
 			<string>1</string>
 			<key>isa</key>
 			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>text</string>
 			<key>name</key>
 			<string>LICENSE</string>
 			<key>path</key>

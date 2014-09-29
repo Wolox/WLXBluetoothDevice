@@ -1,0 +1,144 @@
+//
+//  WLXBluetoohDeviceDiscoverer.m
+//  Pods
+//
+//  Created by Guido Marucci Blas on 9/28/14.
+//
+//
+
+#import "WLXBluetoothDeviceDiscoverer.h"
+#import "WLXBluetoothDeviceLogger.h"
+
+@interface WLXBluetoothDeviceDiscoverer ()
+
+@property (nonatomic) NSRegularExpression * deviceNameRegex;
+@property (nonatomic) NSUInteger timeout;
+@property (nonatomic) CBCentralManager * centralManager;
+@property (nonatomic) dispatch_queue_t queue;
+@property (nonatomic) NSMutableDictionary * discoveredDevicesDictionary;
+@property (nonatomic) NSNotificationCenter * notificationCenter;
+
+@end
+
+@implementation WLXBluetoothDeviceDiscoverer
+
+@dynamic discoveredDevices;
+
+- (instancetype)initWithCentralManager:(CBCentralManager *)centralManager
+                    notificationCenter:(NSNotificationCenter *)notificationCenter
+                                 queue:(dispatch_queue_t)queue {
+    NSAssert(centralManager != nil, @"Central manager cannot be nil");
+    self = [super init];
+    if (self) {
+        _centralManager = centralManager;
+        _queue = queue;
+        _discovering = NO;
+        _notificationCenter = notificationCenter;
+        _scanOptions = @{CBCentralManagerScanOptionAllowDuplicatesKey: @NO};
+    }
+    return self;
+}
+
+- (NSArray *)discoveredDevices {
+    return [self.discoveredDevicesDictionary allValues];
+}
+
+- (BOOL)discoverDevicesNamed:(NSString *)nameRegex
+                withServices:(NSArray *)servicesUUIDs
+                  andTimeout:(NSUInteger)timeout {
+    if (timeout == 0) {
+        [NSException raise:@"InvalidTimeoutException" format:@"Timeout must be a positive number"];
+    }
+    if (self.discovering) {
+        DDLogWarn(@"Cannot start discovering devices, the discovery process has already been started.");
+        return NO;
+    }
+    if (nameRegex != nil) {
+        self.deviceNameRegex = [self buildRegularExpression:nameRegex];
+    }
+    
+    DDLogDebug(@"Discovering devices named %@ with service UUIDs %@ and timeout %lul", nameRegex, servicesUUIDs,
+               (unsigned long)timeout);
+    self.timeout = timeout;
+    self.discoveredDevicesDictionary = [[NSMutableDictionary alloc] init];
+    [self.centralManager scanForPeripheralsWithServices:servicesUUIDs options:self.scanOptions];
+    [self startDiscoveryTerminationTimerWithTimeout:timeout];
+    self.discovering = YES;
+    [self.notificationCenter postNotificationName:WLXBluetoothDeviceStartDiscovering object:self];
+    
+    return YES;
+}
+
+- (void)stopDiscoveringDevices {
+    if (self.discovering) {
+        DDLogDebug(@"Stopped discovering devices.");
+        [self.centralManager stopScan];
+        self.discovering = NO;
+        [self.notificationCenter postNotificationName:WLXBluetoothDeviceStoptDiscovering object:self];
+    } else {
+        DDLogWarn(@"Cannot stop discovering devices, the discovery process has already been stopped.");
+    }
+}
+
+- (BOOL)addDiscoveredDevice:(WLXDeviceDiscoveryData *)deviceDiscoveryData {
+    if (!self.discovering) {
+        DDLogWarn(@"Request to add a new discovered device when the app is not discovering devices.");
+        return NO;
+    }
+    if ([self deviceAlreadyDiscovered:deviceDiscoveryData]) {
+        DDLogDebug(@"Device %@ with UUID %@ has already been discovered", deviceDiscoveryData.deviceName,
+                   deviceDiscoveryData.deviceUUID);
+        return NO;
+    }
+    if (![self discoveredDeviceMatchesRequiredName:deviceDiscoveryData]) {
+        DDLogDebug(@"Device %@ that not matches required name %@", deviceDiscoveryData.deviceName,
+                   self.deviceNameRegex.pattern);
+        return NO;
+    }
+    self.discoveredDevicesDictionary[deviceDiscoveryData.deviceUUID] = deviceDiscoveryData;
+    [self.notificationCenter postNotificationName:WLXBluetoothDeviceDeviceDiscovered
+                                           object:self
+                                         userInfo:@{WLXBluetoothDeviceDiscoveryData : deviceDiscoveryData}];
+    return YES;
+}
+
+#pragma mark - Private methods
+
+- (BOOL)discoveredDeviceMatchesRequiredName:(WLXDeviceDiscoveryData *)discoveryData {
+    BOOL matchesName = YES;
+    if (self.deviceNameRegex) {
+        NSString * deviceName = discoveryData.deviceName;
+        NSRange range = NSMakeRange(0, [deviceName length]);
+        NSTextCheckingResult * match = [self.deviceNameRegex firstMatchInString:deviceName options:0 range:range];
+        matchesName = match != nil;
+    }
+    return matchesName;
+}
+
+- (BOOL)deviceAlreadyDiscovered:(WLXDeviceDiscoveryData *)discoveryData {
+    return self.discoveredDevicesDictionary[discoveryData.deviceUUID] != nil;
+}
+
+- (void)startDiscoveryTerminationTimerWithTimeout:(NSUInteger)timeout {
+    DDLogVerbose(@"Discovery timer started with timeout %lul", (unsigned long)timeout);
+    __block typeof(self) this = self;
+    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_MSEC));
+    dispatch_after(delayTime, self.queue, ^{
+        DDLogDebug(@"Discovery time has experied");
+        if (this.discovering) {
+            [this stopDiscoveringDevices];
+        }
+    });
+}
+
+- (NSRegularExpression *)buildRegularExpression:(NSString *)pattern {
+    NSError * error;
+    NSRegularExpression * regexp = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                             options:0
+                                                                               error:&error];
+    NSString * errorMessage = [NSString stringWithFormat:@"Invalid device name regexp: %@", error];
+    NSAssert(error == nil, errorMessage);
+    return regexp;
+}
+
+@end
