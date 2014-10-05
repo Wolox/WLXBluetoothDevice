@@ -17,6 +17,9 @@
 @property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic) NSMutableDictionary * discoveredDevicesDictionary;
 @property (nonatomic) NSNotificationCenter * notificationCenter;
+@property (nonatomic) NSArray * handlers;
+@property BOOL bluetoothOn;
+
 
 @end
 
@@ -33,10 +36,16 @@
         _centralManager = centralManager;
         _queue = queue;
         _discovering = NO;
+        _bluetoothOn = NO;
         _notificationCenter = notificationCenter;
         _scanOptions = @{CBCentralManagerScanOptionAllowDuplicatesKey: @NO};
+        [self registerNotificationHandlers];
     }
     return self;
+}
+
+- (void)dealloc {
+    [self unregisterNotificationHandlers];
 }
 
 - (NSArray *)discoveredDevices {
@@ -48,6 +57,10 @@
                   andTimeout:(NSUInteger)timeout {
     if (timeout == 0) {
         [NSException raise:@"InvalidTimeoutException" format:@"Timeout must be a positive number"];
+    }
+    if (!self.bluetoothOn) {
+        DDLogDebug(@"Cannot start discovering devices, Bluetooth service is turned off.");
+        return NO;
     }
     if (self.discovering) {
         DDLogWarn(@"Cannot start discovering devices, the discovery process has already been started.");
@@ -139,6 +152,30 @@
     NSString * errorMessage = [NSString stringWithFormat:@"Invalid device name regexp: %@", error];
     NSAssert(error == nil, errorMessage);
     return regexp;
+}
+
+- (void)registerNotificationHandlers {
+    __block typeof(self) this = self;
+    self.handlers = @[
+        [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOn
+                                             object:nil
+                                              queue:nil
+                                         usingBlock:^(NSNotification * notification){
+                                             this.bluetoothOn = YES;
+                                         }],
+        [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOff
+                                             object:nil
+                                              queue:nil
+                                         usingBlock:^(NSNotification * notification){
+                                             this.bluetoothOn = NO;
+                                         }]
+    ];
+}
+
+- (void)unregisterNotificationHandlers {
+    for (id handler in self.handlers) {
+        [self.notificationCenter removeObserver:handler];
+    }
 }
 
 @end

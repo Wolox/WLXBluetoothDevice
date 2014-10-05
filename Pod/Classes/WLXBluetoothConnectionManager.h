@@ -7,16 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#import "WLXConnectionManager.h"
 #import "WLXBluetoothDeviceRepository.h"
 #import "WLXReconnectionStrategy.h"
 
 @import CoreBluetooth;
 
-@interface WLXBluetoothConnectionManager : NSObject
+@interface WLXBluetoothConnectionManager : NSObject<WLXConnectionManager>
 
 @property (nonatomic, readonly, getter=isConnected) BOOL connected;
 @property (nonatomic, readonly, getter=isConnecting) BOOL connecting;
 @property (nonatomic, readonly) CBPeripheral * peripheral;
+@property (nonatomic, readonly) NSString * peripheralUUID;
 @property (nonatomic) NSDictionary * connectionOptions;
 
 

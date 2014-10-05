@@ -32,6 +32,7 @@ SpecBegin(WLXBluetoothConnectionManager)
                                                                    notificationCenter:notificationCenter
                                                                                 queue:queue
                                                                  reconnectionStrategy:mockReconnectionStrategy];
+        [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
     });
 
     afterEach(^{
@@ -123,6 +124,18 @@ SpecBegin(WLXBluetoothConnectionManager)
                     }];
                 });
                 
+            });
+            
+        });
+        
+        context(@"when bluetooth is off", ^{
+            
+            beforeEach(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOff object:nil userInfo:nil];
+            });
+            
+            it(@"does not start the connection process", ^{
+                expect([connectionManager connectWithTimeout:0 usingBlock:nil]).to.beFalsy;
             });
             
         });

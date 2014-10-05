@@ -21,10 +21,14 @@
 @property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic) id<WLXReconnectionStrategy> reconnectionStrategy;
 @property (nonatomic) BOOL disconnecting;
+@property (nonatomic) BOOL bluetoothOn;
+@property NSArray * handlers;
 
 @end
 
 @implementation WLXBluetoothConnectionManager
+
+@dynamic peripheralUUID;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                     centralManager:(CBCentralManager *)centralManager
@@ -45,8 +49,18 @@
         _connecting = NO;
         _connectionOptions = nil;
         _disconnecting = NO;
+        _bluetoothOn = NO;
+        [self registerNotificationHandlers];
     }
     return self;
+}
+
+- (void)dealloc {
+    [self unregisterNotificationHandlers];
+}
+
+- (NSString *)peripheralUUID {
+    return self.peripheral.identifier.UUIDString;
 }
 
 - (BOOL)connectWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block {
@@ -138,6 +152,13 @@
 }
 
 - (BOOL)canConnectUsingBlock:(void(^)(NSError *))block {
+    if (!self.bluetoothOn) {
+        DDLogDebug(@"Connection with peripheral, connection could not be initiated because Bluetooth service is not available.");
+        if (block) {
+            block(WLXBluetoothNotAvailableError());
+        }
+        return NO;
+    }
     if (self.connecting) {
         DDLogWarn(@"Connection with peripheral '%@' could not be initiated because a connection has already been started.",
                   self.peripheral.name);
@@ -165,6 +186,30 @@
     if (!willTryToReconnect) {
         NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
         [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionLost object:self userInfo:userInfo];
+    }
+}
+
+- (void)registerNotificationHandlers {
+    __block typeof(self) this = self;
+    self.handlers = @[
+        [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOn
+                                             object:nil
+                                              queue:nil
+                                         usingBlock:^(NSNotification * notification){
+                                             this.bluetoothOn = YES;
+                                         }],
+        [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOff
+                                             object:nil
+                                              queue:nil
+                                         usingBlock:^(NSNotification * notification){
+                                             this.bluetoothOn = NO;
+                                         }]
+    ];
+}
+
+- (void)unregisterNotificationHandlers {
+    for (id handler in self.handlers) {
+        [self.notificationCenter removeObserver:handler];
     }
 }
 

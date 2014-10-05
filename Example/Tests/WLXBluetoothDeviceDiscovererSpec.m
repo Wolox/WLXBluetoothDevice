@@ -14,23 +14,26 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
 
     __block CBCentralManager * centralManager;
     __block WLXBluetoothDeviceDiscoverer * discoverer;
+    __block NSNotificationCenter * notificationCenter;
 
     beforeEach(^{
         centralManager = mock([CBCentralManager class]);
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        NSNotificationCenter * notificationCenter = [NSNotificationCenter defaultCenter];
+        notificationCenter = [NSNotificationCenter defaultCenter];
         discoverer = [[WLXBluetoothDeviceDiscoverer alloc] initWithCentralManager:centralManager
                                                                notificationCenter:notificationCenter
                                                                             queue:queue];
+        [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
     });
 
     afterEach(^{
+        notificationCenter = nil;
         centralManager = nil;
         discoverer = nil;
     });
 
     describe(@"#discoverDevicesNamed:withServices:andTimeout", ^{
-    
+        
         afterEach(^{
             [discoverer stopDiscoveringDevices];
         });
@@ -80,6 +83,18 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
                 [discoverer discoverDevicesNamed:nil withServices:nil andTimeout:500];
                 expect(discoverer.discovering).after(0.6).to.beFalsy;
             });
+        });
+        
+        context(@"when bluetooth is off", ^{
+            
+            beforeEach(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOff object:nil userInfo:nil];
+            });
+            
+            it(@"does not start the discovery process", ^{
+                expect([discoverer discoverDevicesNamed:nil withServices:nil andTimeout:10]).to.beFalsy;
+            });
+            
         });
         
         it(@"changes the discovering status", ^{

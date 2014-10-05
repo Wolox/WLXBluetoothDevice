@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+#import "WLXDeviceDiscoverer.h"
 #import "WLXDeviceDiscoveryData.h"
 #import "WLXBluetoothDeviceNotifications.h"
 
 @import CoreBluetooth;
 
-@interface WLXBluetoothDeviceDiscoverer : NSObject
+@interface WLXBluetoothDeviceDiscoverer : NSObject<WLXDeviceDiscoverer>
 
 @property (getter=isDiscovering) BOOL discovering;
 @property (nonatomic, readonly) NSArray * discoveredDevices;
