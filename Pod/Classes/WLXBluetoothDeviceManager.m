@@ -76,7 +76,8 @@ static const char * const kDefaultDeviceQueueName = "ar.com.wolox.BluetoothDevic
                                                                       centralManager:self.centralManager
                                                                   notificationCenter:self.notificationCenter
                                                                                queue:self.queue
-                                                                reconnectionStrategy:reconnectionStrategy];
+                                                                reconnectionStrategy:reconnectionStrategy
+                                                                          bluetoohOn:self.centralManagerDelegate.bluetoothOn];
     [self.centralManagerDelegate registerConnectionManager:connectionManager];
     return connectionManager;
 }

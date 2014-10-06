@@ -31,7 +31,8 @@ SpecBegin(WLXBluetoothConnectionManager)
                                                                        centralManager:mockCentralManager
                                                                    notificationCenter:notificationCenter
                                                                                 queue:queue
-                                                                 reconnectionStrategy:mockReconnectionStrategy];
+                                                                 reconnectionStrategy:mockReconnectionStrategy
+                                                                           bluetoohOn:NO];
         [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
     });
 

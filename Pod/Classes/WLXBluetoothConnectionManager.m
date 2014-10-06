@@ -35,7 +35,8 @@
                     centralManager:(CBCentralManager *)centralManager
                 notificationCenter:(NSNotificationCenter *)notificationCenter
                              queue:(dispatch_queue_t)queue
-              reconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy {
+              reconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy
+                        bluetoohOn:(BOOL)bluetoothOn{
     WLXAssertNotNil(peripheral);
     WLXAssertNotNil(centralManager);
     WLXAssertNotNil(notificationCenter);
@@ -51,7 +52,7 @@
         _reconnecting = NO;
         _connectionOptions = nil;
         _disconnecting = NO;
-        _bluetoothOn = NO;
+        _bluetoothOn = bluetoothOn;
         [self registerNotificationHandlers];
     }
     return self;
