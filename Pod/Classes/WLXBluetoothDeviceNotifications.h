@@ -22,8 +22,10 @@ extern NSString * const WLXBluetoothDeviceConnectionEstablished;
 extern NSString * const WLXBluetoothDeviceFailToConnect;
 extern NSString * const WLXBluetoothDeviceConnectionLost;
 extern NSString * const WLXBluetoothDeviceConnectionTerminated;
+extern NSString * const WLXBluetoothDeviceReconnecting;
 
 // User info keys
 extern NSString * const WLXBluetoothDeviceDiscoveryData;
 extern NSString * const WLXBluetoothDevicePeripheral;
 extern NSString * const WLXBluetoothDeviceError;
+extern NSString * const WLXBluetoothDeviceRemainingReconnectionAttemps;

@@ -189,7 +189,11 @@
 - (void)tryToReconnect {
     __block typeof(self) this = self;
     BOOL willTryToReconnect = [self.reconnectionStrategy tryToReconnectUsingConnectionBlock:^{
-        [this connectWithTimeout:0 usingBlock:nil];
+        NSDictionary * userInfo = @{
+            WLXBluetoothDeviceRemainingReconnectionAttemps : @(this.reconnectionStrategy.remainingConnectionAttempts)
+        };
+        [this.notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:this userInfo:userInfo];
+        [this connectWithTimeout:this.reconnectionStrategy.connectionTimeout usingBlock:nil];
     }];
     if (!willTryToReconnect) {
         NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };

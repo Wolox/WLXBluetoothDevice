@@ -356,6 +356,8 @@ SpecBegin(WLXBluetoothConnectionManager)
                 
                     beforeEach(^{
                         [[MKTGiven([mockReconnectionStrategy tryToReconnectUsingConnectionBlock:^{}]) withMatcher:anything()] willReturnBool:YES];
+                        [MKTGiven([mockReconnectionStrategy remainingConnectionAttempts]) willReturnUnsignedInteger:1];
+                        [MKTGiven([mockReconnectionStrategy connectionTimeout]) willReturnUnsignedInteger:0];
                     });
                     
                     it(@"changes the connected attribute", ^{
@@ -370,6 +372,19 @@ SpecBegin(WLXBluetoothConnectionManager)
                         void (^connectionBlock)() = connectionBlockCaptor.value;
                         connectionBlock();
                         [MKTVerifyCount(mockCentralManager, times(2)) connectPeripheral:mockPeripheral options:connectionManager.connectionOptions];
+                    });
+                    
+                    it(@"notifies about the reconnection", ^{
+                        [connectionManager didDisconnect:error];
+                        NSDictionary * userInfo = @{
+                            WLXBluetoothDeviceRemainingReconnectionAttemps : @(1)
+                        };
+                        NSNotification * notification = [[NSNotification alloc] initWithName:WLXBluetoothDeviceReconnecting
+                                                                                      object:connectionManager
+                                                                                    userInfo:userInfo];
+                        [MKTVerify(mockReconnectionStrategy) tryToReconnectUsingConnectionBlock:connectionBlockCaptor.capture];
+                        void (^connectionBlock)() = connectionBlockCaptor.value;
+                        expect(^{ connectionBlock(); }).notify(notification);
                     });
                     
                 });

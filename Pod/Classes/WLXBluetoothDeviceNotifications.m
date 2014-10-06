@@ -22,8 +22,10 @@ NSString * const WLXBluetoothDeviceConnectionEstablished = @"ar.com.wolox.WLXBlu
 NSString * const WLXBluetoothDeviceFailToConnect = @"ar.com.wolox.WLXBluetoothDevice.FailToConnect";
 NSString * const WLXBluetoothDeviceConnectionLost = @"ar.com.wolox.WLXBluetoothDevice.ConnectionLost";
 NSString * const WLXBluetoothDeviceConnectionTerminated = @"ar.com.wolox.WLXBluetoothDevice.ConnectionTerminated";
+NSString * const WLXBluetoothDeviceReconnecting = @"ar.com.wolox.WLXBluetoothDevice.Reconnecting";
 
 // User info keys
 NSString * const WLXBluetoothDeviceDiscoveryData = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.DiscoveryData";
 NSString * const WLXBluetoothDevicePeripheral = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.Peripheral";
 NSString * const WLXBluetoothDeviceError = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.Error";
+NSString * const WLXBluetoothDeviceRemainingReconnectionAttemps = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.RemainingReconnectionAttemps";
