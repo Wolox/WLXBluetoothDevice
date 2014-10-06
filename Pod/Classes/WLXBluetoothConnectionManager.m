@@ -29,6 +29,7 @@
 @implementation WLXBluetoothConnectionManager
 
 @dynamic peripheralUUID;
+@dynamic active;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                     centralManager:(CBCentralManager *)centralManager
@@ -61,6 +62,10 @@
 
 - (NSString *)peripheralUUID {
     return self.peripheral.identifier.UUIDString;
+}
+
+- (BOOL)isActive {
+    return self.connecting || self.connected;
 }
 
 - (BOOL)connectWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block {
