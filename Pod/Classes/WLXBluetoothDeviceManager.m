@@ -11,7 +11,6 @@
 #import "WLXBluetoothDeviceDiscoverer.h"
 #import "WLXBluetoothDeviceLogger.h"
 #import "WLXBluetoothDeviceHelpers.h"
-#import "WLXBluetoothDeviceUserDefaultsRepository.h"
 #import "WLXBluetoothConnectionManager.h"
 #import "WLXBluetoothDeviceDiscoverer.h"
 #import "WLXBluetoothDeviceConnectionError.h"
@@ -22,21 +21,15 @@
 static dispatch_queue_t defaultDeviceQueue = NULL;
 static const char * const kDefaultDeviceQueueName = "ar.com.wolox.BluetoothDeviceQueue";
 
-@interface WLXBluetoothDeviceManager () {
-    CBPeripheral * _lastConnectedPeripheral;
-}
+@interface WLXBluetoothDeviceManager ()
 
 @property (nonatomic) NSNotificationCenter * notificationCenter;
-@property (nonatomic) id<WLXBluetoothDeviceRepository> repository;
 @property (nonatomic) WLXCentralManagerDelegate * centralManagerDelegate;
 @property (nonatomic) dispatch_queue_t queue;
 
 @end
 
 @implementation WLXBluetoothDeviceManager
-
-@dynamic lastConnectedPeripheral;
-@dynamic lastConnectionRecord;
 
 + (void)initialize {
     defaultDeviceQueue = dispatch_queue_create(kDefaultDeviceQueueName, NULL);
@@ -50,24 +43,18 @@ static const char * const kDefaultDeviceQueueName = "ar.com.wolox.BluetoothDevic
     NSDictionary * options = @{CBCentralManagerOptionShowPowerAlertKey: @YES};
     CBCentralManager * centralManager = [[CBCentralManager alloc] initWithDelegate:nil queue:queue options:options];
     NSNotificationCenter * notificationCenter = [NSNotificationCenter defaultCenter];
-    NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
-    id repository = [[WLXBluetoothDeviceUserDefaultsRepository alloc] initWithUserDefaults:userDefaults];
     return [[WLXBluetoothDeviceManager alloc] initWithCentralManager:centralManager
                                                   notificationCenter:notificationCenter
-                                                          repository:repository
                                                                queue:queue];
 }
 
 - (instancetype)initWithCentralManager:(CBCentralManager *)centralManager
                     notificationCenter:(NSNotificationCenter *)notificationCenter
-                            repository:(id<WLXBluetoothDeviceRepository>)repository
                                  queue:(dispatch_queue_t)queue {
     WLXAssertNotNil(centralManager);
     WLXAssertNotNil(notificationCenter);
-    WLXAssertNotNil(repository);
     self = [super init];
     if (self) {
-        _repository = repository;
         _notificationCenter = notificationCenter;
         _queue = queue;
         _discoverer = [[WLXBluetoothDeviceDiscoverer alloc] initWithCentralManager:centralManager
@@ -95,34 +82,10 @@ static const char * const kDefaultDeviceQueueName = "ar.com.wolox.BluetoothDevic
     return connectionManager;
 }
 
-#pragma mark - Connection management
-
-- (WLXBluetoothDeviceConnectionRecord *)lastConnectionRecord {
-    return [self.repository fetchLastConnectionRecord];
-}
-
-- (CBPeripheral *)lastConnectedPeripheral {
-    if (_lastConnectedPeripheral == nil) {
-        _lastConnectedPeripheral = [self loadLastConnectedPeripheral];
-    }
-    return _lastConnectedPeripheral;
-}
-
-- (void)setLastConnectedPeripheral:(CBPeripheral *)lastConnectedPeripheral {
-    _lastConnectedPeripheral = lastConnectedPeripheral;
-    [self saveLastConnectedPeripheral:lastConnectedPeripheral];
-}
-
-#pragma mark - Private methods
-
-- (CBPeripheral *)loadLastConnectedPeripheral {
-    NSArray * UUIDs = @[[[NSUUID alloc] initWithUUIDString:self.lastConnectionRecord.UUID]];
-    NSArray * peripherals = [self.centralManager retrieveConnectedPeripheralsWithServices:UUIDs];
-    return [peripherals firstObject];
-}
-
-- (void)saveLastConnectedPeripheral:(CBPeripheral *)peripheral {
-    [self.repository saveConnectionRecord:[WLXBluetoothDeviceConnectionRecord recordWithPeripheral:peripheral]];
+- (WLXBluetoothDeviceRegistry *)deviceRegistryWithRepository:(id<WLXBluetoothDeviceRepository>)repository {
+    return [[WLXBluetoothDeviceRegistry alloc] initWithRepository:repository
+                                               notificationCenter:self.notificationCenter
+                                                   centralManager:self.centralManager];
 }
 
 @end

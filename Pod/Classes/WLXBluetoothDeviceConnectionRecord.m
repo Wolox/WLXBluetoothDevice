@@ -8,11 +8,23 @@
 
 #import "WLXBluetoothDeviceConnectionRecord.h"
 #import "WLXBluetoothDeviceHelpers.h"
+#import "WLXRealDateProvider.h"
+
+static id<WLXDateProvider> dateProvider;
 
 @implementation WLXBluetoothDeviceConnectionRecord
 
++ (void)initialize {
+    dateProvider = [[WLXRealDateProvider alloc] init];
+}
+
++ (void)setDateProvider:(id<WLXDateProvider>)aDateProvider {
+    WLXAssertNotNil(aDateProvider);
+    dateProvider = aDateProvider;
+}
+
 + (instancetype)recordWithPeripheral:(CBPeripheral *)peripheral {
-    return [[WLXBluetoothDeviceConnectionRecord alloc] initWithPeripheral:peripheral connectionDate:[NSDate date]];
+    return [[WLXBluetoothDeviceConnectionRecord alloc] initWithPeripheral:peripheral connectionDate:[dateProvider now]];
 }
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral connectionDate:(NSDate *)connectionDate {

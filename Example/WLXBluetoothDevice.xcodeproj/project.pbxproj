@@ -643,6 +643,7 @@ fi
 				<string>9D7F2C6219DC6F8B00D44251</string>
 				<string>9D7F2C6619DC8A3C00D44251</string>
 				<string>9D7F2C6419DC779000D44251</string>
+				<string>9D24EAA919E20AD5002B14F6</string>
 				<string>9D7F2C6819DC902A00D44251</string>
 			</array>
 			<key>isa</key>
@@ -787,6 +788,7 @@ fi
 				<string>9D7F2C6319DC779000D44251</string>
 				<string>9D7F2C6519DC8A3C00D44251</string>
 				<string>9D7F2C6719DC902A00D44251</string>
+				<string>9D24EAA819E20AD5002B14F6</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -1226,6 +1228,26 @@ fi
 		<dict>
 			<key>fileRef</key>
 			<string>9D1EFB3919D9D3C500CB4F45</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>9D24EAA819E20AD5002B14F6</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>WLXBluetoothDeviceRegistrySpec.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D24EAA919E20AD5002B14F6</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9D24EAA819E20AD5002B14F6</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "WLXDateProvider.h"
+
 @import CoreBluetooth;
 
 @interface WLXBluetoothDeviceConnectionRecord : NSObject<NSCoding>
@@ -15,6 +17,8 @@
 @property (nonatomic, readonly) NSString * UUID;
 @property (nonatomic, readonly) NSString * name;
 @property (nonatomic, readonly) NSDate * connectionDate;
+
++ (void)setDateProvider:(id<WLXDateProvider>)dateProvider;
 
 + (instancetype)recordWithPeripheral:(CBPeripheral *)peripheral;
 
