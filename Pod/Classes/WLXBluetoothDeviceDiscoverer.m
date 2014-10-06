@@ -70,7 +70,7 @@
         self.deviceNameRegex = [self buildRegularExpression:nameRegex];
     }
     
-    DDLogDebug(@"Discovering devices named %@ with service UUIDs %@ and timeout %lul", nameRegex, servicesUUIDs,
+    DDLogDebug(@"Discovering devices named %@ with service UUIDs %@ and timeout %lu", nameRegex, servicesUUIDs,
                (unsigned long)timeout);
     self.timeout = timeout;
     self.discoveredDevicesDictionary = [[NSMutableDictionary alloc] init];
@@ -133,11 +133,11 @@
 }
 
 - (void)startDiscoveryTerminationTimerWithTimeout:(NSUInteger)timeout {
-    DDLogVerbose(@"Discovery timer started with timeout %lul", (unsigned long)timeout);
+    DDLogVerbose(@"Discovery timer started with timeout %lu", (unsigned long)timeout);
     __block typeof(self) this = self;
     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_MSEC));
     dispatch_after(delayTime, self.queue, ^{
-        DDLogDebug(@"Discovery time has experied");
+        DDLogDebug(@"Discovery timer has experied");
         if (this.discovering) {
             [this stopDiscoveringDevices];
         }
