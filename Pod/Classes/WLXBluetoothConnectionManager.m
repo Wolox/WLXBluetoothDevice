@@ -133,7 +133,7 @@
 
 - (void)startConnectionTerminationTimerWithTimeout:(NSUInteger)timeout forPeripheral:(CBPeripheral *)peripheral {
     NSAssert(timeout > 0, @"Timeout must be a positive number.");
-    DDLogVerbose(@"Connection timer started with timeout %lul", (unsigned long)timeout);
+    DDLogVerbose(@"Connection timer started with timeout %lu", (unsigned long)timeout);
     __block typeof(self) this = self;
     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_MSEC));
     dispatch_after(delayTime, self.queue, ^{
