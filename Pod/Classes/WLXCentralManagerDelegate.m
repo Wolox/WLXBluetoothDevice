@@ -36,9 +36,11 @@
 
 - (void)registerConnectionManager:(WLXBluetoothConnectionManager *)connectionManager {
     WLXAssertNotNil(connectionManager);
-    NSString * message = [NSString stringWithFormat:@"A connection manager has already been registered for peripheral '%@'",
+    NSString * message = [NSString stringWithFormat:@"An active connection manager has already been registered for peripheral '%@'",
                           connectionManager.peripheralUUID];
-    NSAssert(self.connectionMangers[connectionManager.peripheralUUID] == nil, message);
+    WLXBluetoothConnectionManager * previousConnectionManager = self.connectionMangers[connectionManager.peripheralUUID];
+    NSAssert(previousConnectionManager == nil || previousConnectionManager.active == NO, message);
+    
     self.connectionMangers[connectionManager.peripheralUUID] = connectionManager;
 }
 
