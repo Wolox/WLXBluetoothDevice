@@ -404,7 +404,10 @@ SpecBegin(WLXBluetoothConnectionManager)
                     });
                     
                     it(@"notifies about the connection being terminated", ^{
-                        NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : mockPeripheral };
+                        NSDictionary * userInfo = @{
+                            WLXBluetoothDevicePeripheral : mockPeripheral,
+                            WLXBluetoothDeviceError : error
+                        };
                         NSNotification * notification = [NSNotification notificationWithName:WLXBluetoothDeviceConnectionLost
                                                                                       object:connectionManager
                                                                                     userInfo:userInfo];

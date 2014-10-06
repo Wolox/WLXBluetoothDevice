@@ -112,7 +112,7 @@
     } else {
         NSAssert(error != nil, @"There must be an error if disconnecting is NO");
         DDLogInfo(@"Connection with device '%@' has been lost due to an error: %@", self.peripheral.name, error);
-        [self tryToReconnect];
+        [self tryToReconnect:(NSError *)error];
     }
 }
 
@@ -187,7 +187,7 @@
     return YES;
 }
 
-- (void)tryToReconnect {
+- (void)tryToReconnect:(NSError *)error {
     __block typeof(self) this = self;
     BOOL willTryToReconnect = [self.reconnectionStrategy tryToReconnectUsingConnectionBlock:^{
         NSDictionary * userInfo = @{
@@ -197,7 +197,7 @@
         [this connectWithTimeout:this.reconnectionStrategy.connectionTimeout usingBlock:nil];
     }];
     if (!willTryToReconnect) {
-        NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
+        NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral, WLXBluetoothDeviceError : error };
         [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionLost object:self userInfo:userInfo];
         _reconnecting = NO;
     } else {
