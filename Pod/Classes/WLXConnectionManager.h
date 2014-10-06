@@ -12,6 +12,7 @@
 
 @protocol WLXConnectionManager <NSObject>
 
+@property (nonatomic, readonly, getter=isReconnecting) BOOL reconnecting;
 @property (nonatomic, readonly, getter=isActive) BOOL active;
 @property (nonatomic, readonly, getter=isConnected) BOOL connected;
 @property (nonatomic, readonly, getter=isConnecting) BOOL connecting;

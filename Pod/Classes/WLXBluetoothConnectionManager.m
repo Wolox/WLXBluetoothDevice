@@ -48,6 +48,7 @@
         _reconnectionStrategy = reconnectionStrategy;
         _connected = NO;
         _connecting = NO;
+        _reconnecting = NO;
         _connectionOptions = nil;
         _disconnecting = NO;
         _bluetoothOn = NO;
@@ -65,7 +66,7 @@
 }
 
 - (BOOL)isActive {
-    return self.connecting || self.connected;
+    return self.connecting || self.reconnecting || self.connected;
 }
 
 - (BOOL)connectWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block {
@@ -118,6 +119,7 @@
     NSAssert(self.connecting, @"Cannot call didConnect if connecting is NO");
     _connected = YES;
     _connecting = NO;
+    _reconnecting = NO;
     if (self.connectionBlock) {
         self.connectionBlock(nil);
         self.connectionBlock = nil;
@@ -148,6 +150,7 @@
 - (void)failToConnectWithError:(NSError *)error {
     _connected = NO;
     _connecting = NO;
+    _reconnecting = NO;
     if (self.connectionBlock) {
         self.connectionBlock(error);
         self.connectionBlock = nil;
@@ -191,6 +194,9 @@
     if (!willTryToReconnect) {
         NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
         [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionLost object:self userInfo:userInfo];
+        _reconnecting = NO;
+    } else {
+        _reconnecting = YES;
     }
 }
 
