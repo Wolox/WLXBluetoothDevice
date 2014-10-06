@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "WLXDeviceDiscoveryData.h"
+
 @protocol WLXDeviceDiscoverer <NSObject>
 
 @property (getter=isDiscovering) BOOL discovering;
