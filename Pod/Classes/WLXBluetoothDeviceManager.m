@@ -25,7 +25,6 @@ static const char * const kDefaultDeviceQueueName = "ar.com.wolox.BluetoothDevic
 
 @property (nonatomic) NSNotificationCenter * notificationCenter;
 @property (nonatomic) WLXCentralManagerDelegate * centralManagerDelegate;
-@property (nonatomic) dispatch_queue_t queue;
 
 @end
 

@@ -19,6 +19,7 @@
 
 @property (nonatomic, readonly) CBCentralManager * centralManager;
 @property (nonatomic) id<WLXDeviceDiscoverer> discoverer;
+@property (nonatomic) dispatch_queue_t queue;
 
 + (instancetype)deviceManager;
 
