@@ -22,7 +22,6 @@
 @property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic) id<WLXReconnectionStrategy> reconnectionStrategy;
 @property (nonatomic) BOOL disconnecting;
-@property (nonatomic) BOOL bluetoothOn;
 @property NSArray * handlers;
 @property (nonatomic) WLXManagedDelayedExecutor * connectionTimerExecutor;
 
@@ -160,6 +159,10 @@
 }
 
 #pragma mark - Private methods
+
+- (void)setBluetoothOn:(BOOL)bluetoothOn {
+    _bluetoothOn = bluetoothOn;
+}
 
 - (void)startConnectionTerminationTimerWithTimeout:(NSUInteger)timeout forPeripheral:(CBPeripheral *)peripheral {
     NSAssert(timeout > 0, @"Timeout must be a positive number.");

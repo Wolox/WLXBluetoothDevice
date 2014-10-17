@@ -16,6 +16,7 @@
 
 @interface WLXBluetoothConnectionManager : NSObject<WLXConnectionManager>
 
+@property (nonatomic, readonly, getter=isBluetoothOn) BOOL bluetoothOn;
 @property (nonatomic, readonly, getter=isReconnecting) BOOL reconnecting;
 @property (nonatomic, readonly, getter=isActive) BOOL active;
 @property (nonatomic, readonly, getter=isConnected) BOOL connected;

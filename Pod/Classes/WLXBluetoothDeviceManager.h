@@ -20,6 +20,7 @@
 @property (nonatomic, readonly) CBCentralManager * centralManager;
 @property (nonatomic) id<WLXDeviceDiscoverer> discoverer;
 @property (nonatomic) dispatch_queue_t queue;
+@property (nonatomic, readonly, getter=isBluetoothOn) BOOL bluetoothOn;
 
 + (instancetype)deviceManager;
 

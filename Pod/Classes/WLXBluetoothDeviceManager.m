@@ -30,6 +30,8 @@ static const char * const kDefaultDeviceQueueName = "ar.com.wolox.BluetoothDevic
 
 @implementation WLXBluetoothDeviceManager
 
+@dynamic bluetoothOn;
+
 + (void)initialize {
     defaultDeviceQueue = dispatch_queue_create(kDefaultDeviceQueueName, NULL);
 }
@@ -68,6 +70,10 @@ static const char * const kDefaultDeviceQueueName = "ar.com.wolox.BluetoothDevic
     return self;
 }
 
+- (BOOL)isBluetoothOn {
+    return self.centralManagerDelegate.bluetoothOn;
+}
+
 - (id<WLXConnectionManager>)connectionManagerForPeripheral:(CBPeripheral *)peripheral
                                  usingReconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy {
     WLXAssertNotNil(peripheral);
@@ -77,7 +83,7 @@ static const char * const kDefaultDeviceQueueName = "ar.com.wolox.BluetoothDevic
                                                                   notificationCenter:self.notificationCenter
                                                                                queue:self.queue
                                                                 reconnectionStrategy:reconnectionStrategy
-                                                                          bluetoohOn:self.centralManagerDelegate.bluetoothOn];
+                                                                          bluetoohOn:self.bluetoothOn];
     [self.centralManagerDelegate registerConnectionManager:connectionManager];
     return connectionManager;
 }
