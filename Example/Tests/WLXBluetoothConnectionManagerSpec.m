@@ -276,17 +276,6 @@ SpecBegin(WLXBluetoothConnectionManager)
 
     describe(@"#didDisconnect:", ^{
         
-        context(@"when the connection manager is not connected", ^{
-            
-            it(@"raises an exception", ^{
-                expect(^{
-                    [connectionManager didDisconnect:nil];
-                }).to.raise(@"NSInternalInconsistencyException");
-            });
-            
-        });
-        
-        
         context(@"when the connection manager is connected", ^{
         
             beforeEach(^{
@@ -376,16 +365,13 @@ SpecBegin(WLXBluetoothConnectionManager)
                     });
                     
                     it(@"notifies about the reconnection", ^{
-                        [connectionManager didDisconnect:error];
                         NSDictionary * userInfo = @{
                             WLXBluetoothDeviceRemainingReconnectionAttemps : @(1)
                         };
                         NSNotification * notification = [[NSNotification alloc] initWithName:WLXBluetoothDeviceReconnecting
                                                                                       object:connectionManager
                                                                                     userInfo:userInfo];
-                        [MKTVerify(mockReconnectionStrategy) tryToReconnectUsingConnectionBlock:connectionBlockCaptor.capture];
-                        void (^connectionBlock)() = connectionBlockCaptor.value;
-                        expect(^{ connectionBlock(); }).notify(notification);
+                        expect(^{ [connectionManager didDisconnect:error]; }).notify(notification);
                     });
                     
                 });

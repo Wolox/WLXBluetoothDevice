@@ -35,7 +35,7 @@
 
 - (BOOL)tryToReconnectUsingConnectionBlock:(void(^)())block {
     WLXAssertNotNil(block);
-    if (_remainingConnectionAttempts-- == 0) {
+    if (_remainingConnectionAttempts-- <= 0) {
         return NO;
     }
     DDLogDebug(@"Waiting for %d ms before trying to reconnect", (int)_waitTime);
@@ -47,6 +47,11 @@
     });
     return YES;
 }
+
+- (void)reset {
+    _remainingConnectionAttempts = _maxReconnectionAttempts;
+}
+
 
 
 @end

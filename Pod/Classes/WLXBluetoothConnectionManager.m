@@ -78,7 +78,8 @@
     _connecting = YES;
     self.connectionBlock = block;
     [self.centralManager connectPeripheral:self.peripheral options:self.connectionOptions];
-    DDLogDebug(@"Connection with '%@' initiated.", self.peripheral.name);
+    DDLogDebug(@"Connection with '%@' initiated. Reconnecting '%@'", self.peripheral.name,
+               (self.reconnecting) ? @"YES" : @"NO");
     if (timeout > 0) {
         [self startConnectionTerminationTimerWithTimeout:timeout forPeripheral:self.peripheral];
     }
@@ -96,28 +97,52 @@
 
 - (void)didFailToConnect:(NSError *)error {
     NSAssert(self.connecting, @"Cannot call didFailToConnect if connecting is NO");
-    [self failToConnectWithError:error];
+    if (self.reconnecting) {
+        [self tryToReconnect:error];
+    } else {
+        [self failToConnectWithError:error];
+    }
 }
 
 - (void)didDisconnect:(NSError *)error {
-    NSAssert(self.connected, @"Cannot call didDisconnect if connected is NO");
+    if (!self.connected && !self.reconnecting) {
+        DDLogDebug(@"Call to didDisconnect ignored because connection manager is neigher connected or reconnecting.");
+        return;
+    }
     _connected = NO;
     _connecting = NO;
     if (self.disconnecting) {
         NSAssert(error == nil, @"Cannot be an error if disconnecting is YES");
         self.disconnecting = NO;
-        DDLogInfo(@"Connection with device '%@' has been terminated.", self.peripheral.name);
-        NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
-        [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionTerminated object:self userInfo:userInfo];
-    } else {
-        NSAssert(error != nil, @"There must be an error if disconnecting is NO");
+        if (self.reconnecting) {
+            DDLogDebug(@"Reconnection attemp has been terminated.");
+        } else {
+            DDLogInfo(@"Connection with device '%@' has been terminated.", self.peripheral.name);
+            NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
+            [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionTerminated object:self userInfo:userInfo];
+        }
+    } else if (self.reconnecting || error != nil) {
+        NSAssert(!self.connected || error != nil, @"There must be an error if disconnecting is NO");
         DDLogInfo(@"Connection with device '%@' has been lost due to an error: %@", self.peripheral.name, error);
-        [self tryToReconnect:(NSError *)error];
+        [self tryToReconnect:error];
+    } else {
+        // This branch is executed because when the connection timer expires the cancelPeripheralConnection:
+        // on the CBCentralManager is called and that might result into a call to this methods.
+        DDLogDebug(@"Ignoring didDisconnect call because connection manager is trying to reconnect");
     }
 }
 
 - (void)didConnect {
     NSAssert(self.connecting, @"Cannot call didConnect if connecting is NO");
+    DDLogDebug(@"Connection with peripheral '%@' successfully established. Reconnecting '%@'", self.peripheralUUID,
+               (self.reconnecting) ? @"YES" : @"NO");
+    NSString * notificationName;
+    if (self.reconnecting) {
+        notificationName = WLXBluetoothDeviceReconnectionEstablished;
+    } else {
+        notificationName = WLXBluetoothDeviceConnectionEstablished;
+    }
+    [self.reconnectionStrategy reset];
     _connected = YES;
     _connecting = NO;
     _reconnecting = NO;
@@ -126,23 +151,32 @@
         self.connectionBlock = nil;
     }
     NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
-    [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionEstablished object:self userInfo:userInfo];
+    [self.notificationCenter postNotificationName:notificationName object:self userInfo:userInfo];
 }
 
 #pragma mark - Private methods
 
 - (void)startConnectionTerminationTimerWithTimeout:(NSUInteger)timeout forPeripheral:(CBPeripheral *)peripheral {
     NSAssert(timeout > 0, @"Timeout must be a positive number.");
-    DDLogVerbose(@"Connection timer started with timeout %lu", (unsigned long)timeout);
+    DDLogVerbose(@"Connection timer started with timeout %lu. Connected '%@'. Connecting '%@'. Reconnecting '%@'.",
+                 (unsigned long)timeout, (self.connected) ? @"YES" : @"NO", (self.connecting) ? @"YES" : @"NO",
+                 (self.reconnecting) ? @"YES" : @"NO");
     __block typeof(self) this = self;
     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_MSEC));
     dispatch_after(delayTime, self.queue, ^{
-        DDLogDebug(@"Connection timer has experied");
-        if (!this.connected && this.connecting) {
+        DDLogDebug(@"Connection timer has expired. Connected '%@'. Connecting '%@'. Reconnecting '%@'.",
+                   (self.connected) ? @"YES" : @"NO", (self.connecting) ? @"YES" : @"NO",
+                   (self.reconnecting) ? @"YES" : @"NO");
+        if (!this.connected && (this.connecting || this.reconnecting)) {
             NSError * error = [NSError errorWithDomain:WLXBluetoothDeviceConnectionErrorDomain
                                                   code:WLXBluetoothDeviceConnectionErrorConnectionTimeoutExpired
                                               userInfo:nil];
-            [self failToConnectWithError:error];
+            if (self.reconnecting) {
+                [self tryToReconnect:error];
+            } else {
+                [self failToConnectWithError:error];
+            }
+            self.disconnecting = YES;
             [this.centralManager cancelPeripheralConnection:peripheral];
         }
     });
@@ -188,20 +222,20 @@
 }
 
 - (void)tryToReconnect:(NSError *)error {
+    _reconnecting = YES;
     __block typeof(self) this = self;
     BOOL willTryToReconnect = [self.reconnectionStrategy tryToReconnectUsingConnectionBlock:^{
-        NSDictionary * userInfo = @{
-            WLXBluetoothDeviceRemainingReconnectionAttemps : @(this.reconnectionStrategy.remainingConnectionAttempts)
-        };
-        [this.notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:this userInfo:userInfo];
         [this connectWithTimeout:this.reconnectionStrategy.connectionTimeout usingBlock:nil];
     }];
     if (!willTryToReconnect) {
+        _reconnecting = NO;
         NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral, WLXBluetoothDeviceError : error };
         [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionLost object:self userInfo:userInfo];
-        _reconnecting = NO;
     } else {
-        _reconnecting = YES;
+        NSDictionary * userInfo = @{
+                                    WLXBluetoothDeviceRemainingReconnectionAttemps : @(this.reconnectionStrategy.remainingConnectionAttempts)
+                                    };
+        [this.notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:this userInfo:userInfo];
     }
 }
 

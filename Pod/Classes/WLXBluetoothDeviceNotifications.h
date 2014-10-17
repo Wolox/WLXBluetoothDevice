@@ -19,6 +19,7 @@ extern NSString * const WLXBluetoothDeviceDeviceDiscovered;
 
 // Connection related notifications
 extern NSString * const WLXBluetoothDeviceConnectionEstablished;
+extern NSString * const WLXBluetoothDeviceReconnectionEstablished;
 extern NSString * const WLXBluetoothDeviceFailToConnect;
 extern NSString * const WLXBluetoothDeviceConnectionLost;
 extern NSString * const WLXBluetoothDeviceConnectionTerminated;

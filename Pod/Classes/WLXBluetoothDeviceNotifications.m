@@ -19,6 +19,7 @@ NSString * const WLXBluetoothDeviceDeviceDiscovered = @"ar.com.wolox.WLXBluetoot
 
 // Connection related notifications
 NSString * const WLXBluetoothDeviceConnectionEstablished = @"ar.com.wolox.WLXBluetoothDevice.ConnectionEstablished";
+NSString * const WLXBluetoothDeviceReconnectionEstablished = @"ar.com.wolox.WLXBluetoothDevice.ReconnectionEstablished";
 NSString * const WLXBluetoothDeviceFailToConnect = @"ar.com.wolox.WLXBluetoothDevice.FailToConnect";
 NSString * const WLXBluetoothDeviceConnectionLost = @"ar.com.wolox.WLXBluetoothDevice.ConnectionLost";
 NSString * const WLXBluetoothDeviceConnectionTerminated = @"ar.com.wolox.WLXBluetoothDevice.ConnectionTerminated";

@@ -209,7 +209,10 @@ fi
 			<string>2147483647</string>
 			<key>files</key>
 			<array>
+				<string>9D3A499B19E31667006E3063</string>
 				<string>6003F59E195388D20070C39A</string>
+				<string>9D3A499619E2E84E006E3063</string>
+				<string>9D3A499319E2E832006E3063</string>
 				<string>6003F5A7195388D20070C39A</string>
 				<string>6003F59A195388D20070C39A</string>
 			</array>
@@ -394,6 +397,13 @@ fi
 				<string>6003F5A6195388D20070C39A</string>
 				<string>6003F5A8195388D20070C39A</string>
 				<string>6003F594195388D20070C39A</string>
+				<string>9D3A499119E2E832006E3063</string>
+				<string>9D3A499219E2E832006E3063</string>
+				<string>9D3A499419E2E84E006E3063</string>
+				<string>9D3A499519E2E84E006E3063</string>
+				<string>9D3A499719E2EBE7006E3063</string>
+				<string>9D3A499819E2EE92006E3063</string>
+				<string>9D3A499919E2EE92006E3063</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -1248,6 +1258,118 @@ fi
 		<dict>
 			<key>fileRef</key>
 			<string>9D24EAA819E20AD5002B14F6</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>9D3A499119E2E832006E3063</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>WLXConnectViewController.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D3A499219E2E832006E3063</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>WLXConnectViewController.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D3A499319E2E832006E3063</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9D3A499219E2E832006E3063</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>9D3A499419E2E84E006E3063</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>WLXDiscoverViewController.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D3A499519E2E84E006E3063</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>WLXDiscoverViewController.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D3A499619E2E84E006E3063</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9D3A499519E2E84E006E3063</string>
+			<key>isa</key>
+			<string>PBXBuildFile</string>
+		</dict>
+		<key>9D3A499719E2EBE7006E3063</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>WLXDiscoverViewControllerDelegate.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D3A499819E2EE92006E3063</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.h</string>
+			<key>path</key>
+			<string>WLXApplication.h</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D3A499919E2EE92006E3063</key>
+		<dict>
+			<key>fileEncoding</key>
+			<string>4</string>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>sourcecode.c.objc</string>
+			<key>path</key>
+			<string>WLXApplication.m</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>9D3A499B19E31667006E3063</key>
+		<dict>
+			<key>fileRef</key>
+			<string>9D3A499919E2EE92006E3063</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
 		</dict>

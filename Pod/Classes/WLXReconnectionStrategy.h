@@ -16,4 +16,6 @@
 
 - (BOOL)tryToReconnectUsingConnectionBlock:(void(^)())block;
 
+- (void)reset;
+
 @end
