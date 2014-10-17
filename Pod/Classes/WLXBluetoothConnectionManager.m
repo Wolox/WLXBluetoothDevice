@@ -12,6 +12,7 @@
 #import "WLXBluetoothDeviceConnectionError.h"
 #import "WLXBluetoothDeviceNotifications.h"
 #import "WLXReconnectionStrategy.h"
+#import "WLXManagedDelayedExecutor.h"
 
 @interface WLXBluetoothConnectionManager ()
 
@@ -23,6 +24,7 @@
 @property (nonatomic) BOOL disconnecting;
 @property (nonatomic) BOOL bluetoothOn;
 @property NSArray * handlers;
+@property (nonatomic) WLXManagedDelayedExecutor * connectionTimerExecutor;
 
 @end
 
@@ -53,6 +55,7 @@
         _connectionOptions = nil;
         _disconnecting = NO;
         _bluetoothOn = bluetoothOn;
+        _connectionTimerExecutor = [[WLXManagedDelayedExecutor alloc] initWithQueue:queue];
         [self registerNotificationHandlers];
     }
     return self;
@@ -97,6 +100,7 @@
 
 - (void)didFailToConnect:(NSError *)error {
     NSAssert(self.connecting, @"Cannot call didFailToConnect if connecting is NO");
+    [self.connectionTimerExecutor invalidateExecutors];
     if (self.reconnecting) {
         [self tryToReconnect:error];
     } else {
@@ -136,6 +140,7 @@
     NSAssert(self.connecting, @"Cannot call didConnect if connecting is NO");
     DDLogDebug(@"Connection with peripheral '%@' successfully established. Reconnecting '%@'", self.peripheralUUID,
                (self.reconnecting) ? @"YES" : @"NO");
+    [self.connectionTimerExecutor invalidateExecutors];
     NSString * notificationName;
     if (self.reconnecting) {
         notificationName = WLXBluetoothDeviceReconnectionEstablished;
@@ -161,9 +166,9 @@
     DDLogVerbose(@"Connection timer started with timeout %lu. Connected '%@'. Connecting '%@'. Reconnecting '%@'.",
                  (unsigned long)timeout, (self.connected) ? @"YES" : @"NO", (self.connecting) ? @"YES" : @"NO",
                  (self.reconnecting) ? @"YES" : @"NO");
+    
     __block typeof(self) this = self;
-    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_MSEC));
-    dispatch_after(delayTime, self.queue, ^{
+    [self.connectionTimerExecutor after:timeout dispatchBlock:^{
         DDLogDebug(@"Connection timer has expired. Connected '%@'. Connecting '%@'. Reconnecting '%@'.",
                    (self.connected) ? @"YES" : @"NO", (self.connecting) ? @"YES" : @"NO",
                    (self.reconnecting) ? @"YES" : @"NO");
@@ -179,7 +184,7 @@
             self.disconnecting = YES;
             [this.centralManager cancelPeripheralConnection:peripheral];
         }
-    });
+    }];
 }
 
 - (void)failToConnectWithError:(NSError *)error {
