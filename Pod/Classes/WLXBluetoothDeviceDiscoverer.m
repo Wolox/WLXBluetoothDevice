@@ -8,6 +8,7 @@
 
 #import "WLXBluetoothDeviceDiscoverer.h"
 #import "WLXBluetoothDeviceLogger.h"
+#import "WLXManagedDelayedExecutor.h"
 
 @interface WLXBluetoothDeviceDiscoverer ()
 
@@ -18,6 +19,7 @@
 @property (nonatomic) NSMutableDictionary * discoveredDevicesDictionary;
 @property (nonatomic) NSNotificationCenter * notificationCenter;
 @property (nonatomic) NSArray * handlers;
+@property (nonatomic) WLXManagedDelayedExecutor * discoveryTimerExecutor;
 @property BOOL bluetoothOn;
 
 
@@ -39,6 +41,7 @@
         _bluetoothOn = NO;
         _notificationCenter = notificationCenter;
         _scanOptions = @{CBCentralManagerScanOptionAllowDuplicatesKey: @NO};
+        _discoveryTimerExecutor = [[WLXManagedDelayedExecutor alloc] initWithQueue:queue];
         [self registerNotificationHandlers];
     }
     return self;
@@ -83,6 +86,7 @@
 }
 
 - (void)stopDiscoveringDevices {
+    [self.discoveryTimerExecutor invalidateExecutors];
     if (self.discovering) {
         DDLogDebug(@"Stopped discovering devices.");
         [self.centralManager stopScan];
@@ -135,13 +139,12 @@
 - (void)startDiscoveryTerminationTimerWithTimeout:(NSUInteger)timeout {
     DDLogVerbose(@"Discovery timer started with timeout %lu", (unsigned long)timeout);
     __block typeof(self) this = self;
-    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_MSEC));
-    dispatch_after(delayTime, self.queue, ^{
+    [self.discoveryTimerExecutor after:timeout dispatchBlock:^(){
         DDLogDebug(@"Discovery timer has experied");
         if (this.discovering) {
             [this stopDiscoveringDevices];
         }
-    });
+    }];
 }
 
 - (NSRegularExpression *)buildRegularExpression:(NSString *)pattern {
