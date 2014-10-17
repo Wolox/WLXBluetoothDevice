@@ -15,6 +15,7 @@ SpecBegin(WLXBluetoothDeviceUserDefaultsRepository)
     __block WLXBluetoothDeviceUserDefaultsRepository * repository;
     __block NSUserDefaults * mockUserDefaults;
     __block WLXBluetoothDeviceConnectionRecord * connectionRecord;
+    __block NSData * encodedConnectionRecord;
 
     beforeEach(^{
         mockUserDefaults = mock([NSUserDefaults class]);
@@ -22,19 +23,21 @@ SpecBegin(WLXBluetoothDeviceUserDefaultsRepository)
         connectionRecord = [[WLXBluetoothDeviceConnectionRecord alloc] initWithUUID:@"FAKEUUID"
                                                                                name:@"Fake name"
                                                                      connectionDate:[NSDate date]];
+        encodedConnectionRecord = [NSKeyedArchiver archivedDataWithRootObject:connectionRecord];
     });
 
     afterEach(^{
         mockUserDefaults = nil;
         repository = nil;
         connectionRecord = nil;
+        encodedConnectionRecord = nil;
     });
 
     describe(@"#saveConnectionRecord:", ^{
         
         it(@"stores the record in the user defaults", ^{
             [repository saveConnectionRecord:connectionRecord];
-            [MKTVerify(mockUserDefaults) setObject:connectionRecord forKey:WLXBluetoothDeviceLastConnectionRecord];
+            [MKTVerify(mockUserDefaults) setObject:encodedConnectionRecord forKey:WLXBluetoothDeviceLastConnectionRecord];
         });
         
     });
@@ -44,7 +47,7 @@ SpecBegin(WLXBluetoothDeviceUserDefaultsRepository)
         context(@"when a connection record was saved", ^{
         
             beforeEach(^{
-                [MKTGiven([mockUserDefaults objectForKey:WLXBluetoothDeviceLastConnectionRecord]) willReturn:connectionRecord];
+                [MKTGiven([mockUserDefaults objectForKey:WLXBluetoothDeviceLastConnectionRecord]) willReturn:encodedConnectionRecord];
             });
             
             it(@"fetches the record from the user defaults", ^{
