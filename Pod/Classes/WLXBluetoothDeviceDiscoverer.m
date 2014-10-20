@@ -81,6 +81,7 @@
     [self startDiscoveryTerminationTimerWithTimeout:timeout];
     self.discovering = YES;
     [self.notificationCenter postNotificationName:WLXBluetoothDeviceStartDiscovering object:self];
+    [self.delegate deviceDiscoverer:self startDiscoveringDevicesWithTimeout:timeout];
     
     return YES;
 }
@@ -92,6 +93,7 @@
         [self.centralManager stopScan];
         self.discovering = NO;
         [self.notificationCenter postNotificationName:WLXBluetoothDeviceStoptDiscovering object:self];
+        [self.delegate deviceDiscovererStopDiscoveringDevices:self];
     } else {
         DDLogWarn(@"Cannot stop discovering devices, the discovery process has already been stopped.");
     }
@@ -116,6 +118,8 @@
     [self.notificationCenter postNotificationName:WLXBluetoothDeviceDeviceDiscovered
                                            object:self
                                          userInfo:@{WLXBluetoothDeviceDiscoveryData : deviceDiscoveryData}];
+    [self.delegate deviceDiscoverer:self discoveredDevice:deviceDiscoveryData];
+    
     return YES;
 }
 

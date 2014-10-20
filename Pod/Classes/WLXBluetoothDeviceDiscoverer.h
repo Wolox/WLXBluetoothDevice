@@ -19,6 +19,7 @@
 @property (getter=isDiscovering) BOOL discovering;
 @property (nonatomic, readonly) NSArray * discoveredDevices;
 @property (nonatomic) NSDictionary * scanOptions;
+@property (nonatomic, weak) id<WLXDeviceDiscovererDelegate> delegate;
 
 - (instancetype)initWithCentralManager:(CBCentralManager *)centralManager
                     notificationCenter:(NSNotificationCenter *)notificationCenter
