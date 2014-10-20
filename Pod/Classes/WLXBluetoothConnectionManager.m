@@ -88,6 +88,9 @@
     return YES;
 }
 
+- (BOOL)connectWithTimeout:(NSUInteger)timeout {
+    return [self connectWithTimeout:timeout usingBlock:nil];
+}
 
 - (void)disconnect {
     if (self.connected) {
@@ -123,6 +126,7 @@
             DDLogInfo(@"Connection with device '%@' has been terminated.", self.peripheral.name);
             NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
             [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionTerminated object:self userInfo:userInfo];
+            [self.delegate connecitonManagerDidTerminateConnection:self];
         }
     } else if (self.reconnecting || error != nil) {
         NSAssert(!self.connected || error != nil, @"There must be an error if disconnecting is NO");
@@ -156,6 +160,11 @@
     }
     NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
     [self.notificationCenter postNotificationName:notificationName object:self userInfo:userInfo];
+    if (self.reconnecting && [self.delegate respondsToSelector:@selector(connecitonManagerDidReconnect:)]) {
+        [self.delegate connecitonManagerDidReconnect:self];
+    } else if (!self.reconnecting) {
+        [self.delegate connecitonManagerDidConnect:self];
+    }
 }
 
 #pragma mark - Private methods
@@ -200,6 +209,7 @@
     }
     NSDictionary * userInfo = @{ WLXBluetoothDeviceError : error };
     [self.notificationCenter postNotificationName:WLXBluetoothDeviceFailToConnect object:self userInfo:userInfo];
+    [self.delegate connectionManager:self didFailToConnect:error];
 }
 
 - (BOOL)canConnectUsingBlock:(void(^)(NSError *))block {
@@ -239,11 +249,16 @@
         _reconnecting = NO;
         NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral, WLXBluetoothDeviceError : error };
         [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionLost object:self userInfo:userInfo];
+        [self.delegate connectionManager:self didLostConnection:error];
     } else {
+        NSUInteger remainingAttemps = self.reconnectionStrategy.remainingConnectionAttempts;
         NSDictionary * userInfo = @{
-                                    WLXBluetoothDeviceRemainingReconnectionAttemps : @(this.reconnectionStrategy.remainingConnectionAttempts)
-                                    };
-        [this.notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:this userInfo:userInfo];
+            WLXBluetoothDeviceRemainingReconnectionAttemps : @(remainingAttemps)
+        };
+        [self.notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:this userInfo:userInfo];
+        if ([self.delegate respondsToSelector:@selector(connectionManager:willAttemptToReconnect:)]) {
+            [self.delegate connectionManager:self willAttemptToReconnect:remainingAttemps];
+        }
     }
 }
 

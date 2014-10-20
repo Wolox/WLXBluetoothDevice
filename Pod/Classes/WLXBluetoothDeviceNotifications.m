@@ -11,6 +11,7 @@
 // Bluetooth related notifications
 NSString * const WLXBluetoothDeviceBluetoothIsOn = @"ar.com.wolox.WLXBluetoothDevice.BluetoothIsOn";
 NSString * const WLXBluetoothDeviceBluetoothIsOff = @"ar.com.wolox.WLXBluetoothDevice.BluetoothIsOff";
+NSString * const WLXBluetoothDeviceBluetoothPowerStatusChanged = @"ar.com.wolox.WLXBluetoothDevice.PowerStatusChanged";
 
 // Discovering related notifications
 NSString * const WLXBluetoothDeviceStartDiscovering = @"ar.com.wolox.WLXBluetoothDevice.StartDiscovering";
@@ -30,3 +31,4 @@ NSString * const WLXBluetoothDeviceDiscoveryData = @"ar.com.wolox.WLXBluetoothDe
 NSString * const WLXBluetoothDevicePeripheral = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.Peripheral";
 NSString * const WLXBluetoothDeviceError = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.Error";
 NSString * const WLXBluetoothDeviceRemainingReconnectionAttemps = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.RemainingReconnectionAttemps";
+NSString * const WLXBluetoothEnabled = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.BluetoothEnabled";

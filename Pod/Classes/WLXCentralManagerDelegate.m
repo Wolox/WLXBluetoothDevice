@@ -51,6 +51,7 @@
 
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    NSDictionary * userInfo;
     switch (central.state) {
         case CBCentralManagerStateUnknown:
             DDLogDebug(@"The Bluetooth manager state is unknown");
@@ -72,12 +73,20 @@
         case CBCentralManagerStatePoweredOn:
             DDLogDebug(@"Bluetooh is turned on");
             self.bluetoothOn = YES;
+            userInfo = @{ WLXBluetoothEnabled : @(self.bluetoothOn) };
             [self.notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:self];
+            [self.notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothPowerStatusChanged
+                                                   object:self
+                                                 userInfo:userInfo];
             break;
         case CBCentralManagerStatePoweredOff:
             DDLogDebug(@"Bluetooth is turned off");
             self.bluetoothOn = NO;
+            userInfo = @{ WLXBluetoothEnabled : @(self.bluetoothOn) };
             [self.notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOff object:self];
+            [self.notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothPowerStatusChanged
+                                                   object:self
+                                                 userInfo:userInfo];
             break;
         default:
             DDLogDebug(@"Central Manager did change state to %ld", (long)central.state);

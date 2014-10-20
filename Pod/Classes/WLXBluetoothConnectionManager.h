@@ -24,6 +24,7 @@
 @property (nonatomic, readonly) CBPeripheral * peripheral;
 @property (nonatomic, readonly) NSString * peripheralUUID;
 @property (nonatomic) NSDictionary * connectionOptions;
+@property (nonatomic, weak) id<WLXConnectionManagerDelegate> delegate;
 
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
@@ -33,7 +34,9 @@
               reconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy
                         bluetoohOn:(BOOL)bluetoothOn;
 
-- (BOOL)connectWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block ;
+- (BOOL)connectWithTimeout:(NSUInteger)timeout;
+
+- (BOOL)connectWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block;
 
 - (void)disconnect;
 

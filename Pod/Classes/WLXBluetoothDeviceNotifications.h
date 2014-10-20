@@ -11,6 +11,7 @@
 // Bluetooth related notifications
 extern NSString * const WLXBluetoothDeviceBluetoothIsOn;
 extern NSString * const WLXBluetoothDeviceBluetoothIsOff;
+extern NSString * const WLXBluetoothDeviceBluetoothPowerStatusChanged;
 
 // Discovering related notifications
 extern NSString * const WLXBluetoothDeviceStartDiscovering;
@@ -30,3 +31,4 @@ extern NSString * const WLXBluetoothDeviceDiscoveryData;
 extern NSString * const WLXBluetoothDevicePeripheral;
 extern NSString * const WLXBluetoothDeviceError;
 extern NSString * const WLXBluetoothDeviceRemainingReconnectionAttemps;
+extern NSString * const WLXBluetoothEnabled;
