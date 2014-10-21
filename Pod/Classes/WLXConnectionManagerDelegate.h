@@ -14,9 +14,6 @@
 
 - (void)connectionManagerDidConnect:(id<WLXConnectionManager>)connectionManager;
 
-@optional
-- (void)connecitonManagerDidReconnect:(id<WLXConnectionManager>)connectionManager;
-
 - (void)connectionManagerDidTerminateConnection:(id<WLXConnectionManager>)connectionManager;
 
 - (void)connectionManager:(id<WLXConnectionManager>)connectionManager didFailToConnect:(NSError *)error;
@@ -25,5 +22,7 @@
 
 @optional
 - (void)connectionManager:(id<WLXConnectionManager>)connectionManager willAttemptToReconnect:(NSUInteger)remainingReconnectionAttemps;
+
+- (void)connecitonManagerDidReconnect:(id<WLXConnectionManager>)connectionManager;
 
 @end
