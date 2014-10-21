@@ -20,6 +20,7 @@ SpecBegin(WLXBluetoothConnectionManager)
     __block NSNotificationCenter * notificationCenter;
     __block id<WLXReconnectionStrategy> mockReconnectionStrategy;
     __block WLXBluetoothConnectionManager * connectionManager;
+    __block id<WLXConnectionManagerDelegate> connectionManagerDelegate;
 
     beforeEach(^{
         mockPeripheral = mock([CBPeripheral class]);
@@ -33,6 +34,8 @@ SpecBegin(WLXBluetoothConnectionManager)
                                                                                 queue:queue
                                                                  reconnectionStrategy:mockReconnectionStrategy
                                                                            bluetoohOn:NO];
+        connectionManagerDelegate = mockProtocol(@protocol(WLXConnectionManagerDelegate));
+        connectionManager.delegate = connectionManagerDelegate;
         [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
     });
 
@@ -41,6 +44,7 @@ SpecBegin(WLXBluetoothConnectionManager)
         mockCentralManager = nil;
         notificationCenter = nil;
         connectionManager = nil;
+        connectionManagerDelegate = nil;
     });
 
     describe(@"#connectWithTimeout:usingBlock:", ^{
@@ -213,6 +217,12 @@ SpecBegin(WLXBluetoothConnectionManager)
                 expect(^{ [connectionManager didFailToConnect:error]; }).to.notify(notification);
             });
             
+            it(@"invokes the delegate's connectionManager:didFailToConnect: method", ^{
+                [connectionManager connectWithTimeout:0 usingBlock:nil];
+                [connectionManager didFailToConnect:error];
+                [MKTVerify(connectionManagerDelegate) connectionManager:connectionManager didFailToConnect:error];
+            });
+            
             it(@"passes the error to the connection block", ^AsyncBlock{
                 [connectionManager connectWithTimeout:0 usingBlock:^(NSError * anError){
                     expect(anError).to.equal(error);
@@ -262,6 +272,12 @@ SpecBegin(WLXBluetoothConnectionManager)
                 expect(^{ [connectionManager didConnect]; }).to.notify(notification);
             });
             
+            it(@"invokes the delegate's ", ^{
+                [connectionManager connectWithTimeout:0 usingBlock:nil];
+                [connectionManager didConnect];
+                [MKTVerify(connectionManagerDelegate) connectionManagerDidConnect:connectionManager];
+            });
+            
             it(@"calls the connection block", ^AsyncBlock{
                 [connectionManager connectWithTimeout:0 usingBlock:^(NSError * error){
                     expect(error).to.beNil;
@@ -301,6 +317,11 @@ SpecBegin(WLXBluetoothConnectionManager)
                                                                                   object:connectionManager
                                                                                 userInfo:userInfo];
                     expect(^{ [connectionManager didDisconnect:nil]; }).to.notify(notification);
+                });
+                
+                it(@"invokes the delegate's didDisconnect: method", ^{
+                    [connectionManager didDisconnect:nil];
+                    [MKTVerify(connectionManagerDelegate) connectionManagerDidTerminateConnection:connectionManager];
                 });
                 
                 context(@"when an error is given", ^{
@@ -374,6 +395,11 @@ SpecBegin(WLXBluetoothConnectionManager)
                         expect(^{ [connectionManager didDisconnect:error]; }).notify(notification);
                     });
                     
+                    it(@"invokes the delegate's connectionManager:willAttemptToReconnect: method", ^{
+                        [connectionManager didDisconnect:error];
+                        [MKTVerify(connectionManagerDelegate) connectionManager:connectionManager willAttemptToReconnect:1];
+                    });
+                    
                 });
                 
                 context(@"when there are no reconnection attemps left", ^{
@@ -400,6 +426,11 @@ SpecBegin(WLXBluetoothConnectionManager)
                         expect(^{
                             [connectionManager didDisconnect:error];
                         }).to.notify(notification);
+                    });
+                    
+                    it(@"invokes the delegate's connectionManager:didLostConnection:", ^{
+                        [connectionManager didDisconnect:error];
+                        [MKTVerify(connectionManagerDelegate) connectionManager:connectionManager didLostConnection:error];
                     });
                     
                 });

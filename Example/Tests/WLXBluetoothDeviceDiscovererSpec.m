@@ -15,6 +15,7 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
     __block CBCentralManager * centralManager;
     __block WLXBluetoothDeviceDiscoverer * discoverer;
     __block NSNotificationCenter * notificationCenter;
+    __block id<WLXDeviceDiscovererDelegate> discovererDelegate;
 
     beforeEach(^{
         centralManager = mock([CBCentralManager class]);
@@ -23,6 +24,8 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
         discoverer = [[WLXBluetoothDeviceDiscoverer alloc] initWithCentralManager:centralManager
                                                                notificationCenter:notificationCenter
                                                                             queue:queue];
+        discovererDelegate = mockProtocol(@protocol(WLXDeviceDiscovererDelegate));
+        discoverer.delegate = discovererDelegate;
         [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
     });
 
@@ -30,6 +33,7 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
         notificationCenter = nil;
         centralManager = nil;
         discoverer = nil;
+        discovererDelegate = nil;
     });
 
     describe(@"#discoverDevicesNamed:withServices:andTimeout", ^{
@@ -108,6 +112,11 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
             }).to.notify(WLXBluetoothDeviceStartDiscovering);
         });
         
+        it(@"invokes the deviceDiscoverer:startDiscoveringDevicesWithTimeout: delegate's method", ^{
+            [discoverer discoverDevicesNamed:nil withServices:nil andTimeout:1000];
+            [MKTVerify(discovererDelegate) deviceDiscoverer:discoverer startDiscoveringDevicesWithTimeout:1000];
+        });
+        
     });
 
     describe(@"#stopDiscoveringDevices", ^{
@@ -142,6 +151,11 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
             expect(^{
                 [discoverer stopDiscoveringDevices]; nil;
             }).to.notify(WLXBluetoothDeviceStoptDiscovering);
+        });
+        
+        it(@"invokes the deviceDiscovererStopDiscoveringDevices: delegate's method", ^{
+            [discoverer stopDiscoveringDevices];
+            [MKTVerify(discovererDelegate) deviceDiscovererStopDiscoveringDevices:discoverer];
         });
         
     });
@@ -283,6 +297,17 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
             expect(^{
                 [discoverer addDiscoveredDevice:data];
             }).to.notify(notification);
+        });
+        
+        it(@"invokes the deviceDiscoverer:discoveredDevice: delegate's method", ^{
+            CBPeripheral * peripheral = mock([CBPeripheral class]);
+            NSUUID * UUID = [[NSUUID alloc] initWithUUIDString:@"68753A44-4D6F-1226-9C60-0050E4C00069"];
+            [MKTGiven([peripheral name]) willReturn:@"Device Name"];
+            [MKTGiven([peripheral identifier]) willReturn: UUID];
+            data = [[WLXDeviceDiscoveryData alloc] initWithPeripheral:peripheral advertisementData:@{} RSSI:@(10)];
+            [discoverer discoverDevicesNamed:nil withServices:nil andTimeout:5000];
+            [discoverer addDiscoveredDevice:data];
+            [MKTVerify(discovererDelegate) deviceDiscoverer:discoverer discoveredDevice:data];
         });
         
     });
