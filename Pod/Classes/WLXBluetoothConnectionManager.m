@@ -126,7 +126,7 @@
             DDLogInfo(@"Connection with device '%@' has been terminated.", self.peripheral.name);
             NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
             [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionTerminated object:self userInfo:userInfo];
-            [self.delegate connecitonManagerDidTerminateConnection:self];
+            [self.delegate connectionManagerDidTerminateConnection:self];
         }
     } else if (self.reconnecting || error != nil) {
         NSAssert(!self.connected || error != nil, @"There must be an error if disconnecting is NO");
@@ -163,7 +163,7 @@
     if (self.reconnecting && [self.delegate respondsToSelector:@selector(connecitonManagerDidReconnect:)]) {
         [self.delegate connecitonManagerDidReconnect:self];
     } else if (!self.reconnecting) {
-        [self.delegate connecitonManagerDidConnect:self];
+        [self.delegate connectionManagerDidConnect:self];
     }
 }
 

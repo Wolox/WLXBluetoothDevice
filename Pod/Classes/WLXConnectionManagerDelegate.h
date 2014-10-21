@@ -12,12 +12,12 @@
 
 @protocol WLXConnectionManagerDelegate <NSObject>
 
-- (void)connecitonManagerDidConnect:(id<WLXConnectionManager>)connectionManager;
+- (void)connectionManagerDidConnect:(id<WLXConnectionManager>)connectionManager;
 
 @optional
 - (void)connecitonManagerDidReconnect:(id<WLXConnectionManager>)connectionManager;
 
-- (void)connecitonManagerDidTerminateConnection:(id<WLXConnectionManager>)connectionManager;
+- (void)connectionManagerDidTerminateConnection:(id<WLXConnectionManager>)connectionManager;
 
 - (void)connectionManager:(id<WLXConnectionManager>)connectionManager didFailToConnect:(NSError *)error;
 

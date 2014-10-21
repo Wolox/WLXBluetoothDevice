@@ -272,7 +272,7 @@ SpecBegin(WLXBluetoothConnectionManager)
                 expect(^{ [connectionManager didConnect]; }).to.notify(notification);
             });
             
-            it(@"invokes the delegate's ", ^{
+            it(@"invokes the delegate's connectionManagerDidConnect", ^{
                 [connectionManager connectWithTimeout:0 usingBlock:nil];
                 [connectionManager didConnect];
                 [MKTVerify(connectionManagerDelegate) connectionManagerDidConnect:connectionManager];
@@ -319,7 +319,7 @@ SpecBegin(WLXBluetoothConnectionManager)
                     expect(^{ [connectionManager didDisconnect:nil]; }).to.notify(notification);
                 });
                 
-                it(@"invokes the delegate's didDisconnect: method", ^{
+                it(@"invokes the delegate's connectionManagerDidTerminateConnection: method", ^{
                     [connectionManager didDisconnect:nil];
                     [MKTVerify(connectionManagerDelegate) connectionManagerDidTerminateConnection:connectionManager];
                 });
