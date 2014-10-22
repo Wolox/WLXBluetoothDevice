@@ -10,7 +10,6 @@
 
 #import "WLXBluetoothDeviceHelpers.h"
 #import "WLXBluetoothDeviceLogger.h"
-#import "WLXCharacteristicAsyncExecutor.h"
 #import "WLXDictionaryOfArrays.h"
 
 #define DISPATCH(line)  \
@@ -33,7 +32,6 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
 @property (nonatomic) WLXDictionaryOfArrays * readHandlerBlockQueues;
 @property (nonatomic) WLXDictionaryOfArrays * writeHandlerBlockQueues;
 @property (nonatomic) WLXDictionaryOfArrays * stateChangeHandlerBlockQueues;
-@property (nonatomic) WLXCharacteristicAsyncExecutor * asyncExecutor;
 
 @end
 
@@ -53,7 +51,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
         _readHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _writeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _stateChangeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
-        _asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithServiceManager:self queue:self.queue];
+        _asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:self queue:self.queue];
     }
     return self;
 }

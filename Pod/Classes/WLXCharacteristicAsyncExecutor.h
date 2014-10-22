@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@import CoreBluetooth;
+#import "WLXCharacteristicLocator.h"
 
-@class WLXServiceManager;
+@import CoreBluetooth;
 
 @interface WLXCharacteristicAsyncExecutor : NSObject
 
-- (instancetype)initWithServiceManager:(WLXServiceManager *)serviceManager queue:(dispatch_queue_t)queue;
+- (instancetype)initWithCharacteristicLocator:(id<WLXCharacteristicLocator>)locator queue:(dispatch_queue_t)queue;
 
 - (void)executeBlock:(void(^)(NSError *, CBCharacteristic *))block forCharacteristic:(CBUUID *)characteristicUUID;
 

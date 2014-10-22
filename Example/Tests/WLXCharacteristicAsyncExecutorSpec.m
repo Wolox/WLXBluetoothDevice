@@ -10,26 +10,26 @@
 #import <Foundation/Foundation.h>
 
 #import <WLXBluetoothDevice/WLXCharacteristicAsyncExecutor.h>
-#import <WLXBluetoothDevice/WLXServiceManager.h>
+#import <WLXBluetoothDevice/WLXCharacteristicLocator.h>
 
 SpecBegin(WLXCharacteristicAsyncExecutor)
 
-    __block WLXServiceManager * mockServiceManager;
+    __block id<WLXCharacteristicLocator> mockLocator;
     __block WLXCharacteristicAsyncExecutor * asyncExecutor;
     __block CBUUID * characteristicUUID;
     __block CBCharacteristic * mockCharacteristic;
 
     beforeEach(^{
-        mockServiceManager = mock([WLXServiceManager class]);
+        mockLocator = mockProtocol(@protocol(WLXCharacteristicLocator));
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithServiceManager:mockServiceManager queue:queue];
+        asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:mockLocator queue:queue];
         characteristicUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
         mockCharacteristic = mock([CBCharacteristic class]);
         [MKTGiven(mockCharacteristic.UUID) willReturn:characteristicUUID];
     });
 
     afterEach(^{
-        mockServiceManager = nil;
+        mockLocator = nil;
         asyncExecutor = nil;
         characteristicUUID = nil;
         mockCharacteristic = nil;
@@ -40,7 +40,7 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
         context(@"when the characteristic has already been discovered", ^{
         
             beforeEach(^{
-                [MKTGiven([mockServiceManager characteristicFromUUID:characteristicUUID]) willReturn:mockCharacteristic];
+                [MKTGiven([mockLocator characteristicFromUUID:characteristicUUID]) willReturn:mockCharacteristic];
             });
             
             it(@"executes the block immediately", ^AsyncBlock{
@@ -56,7 +56,7 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
         context(@"when the characteristic has not been discovered", ^{
         
             beforeEach(^{
-                [MKTGiven([mockServiceManager characteristicFromUUID:characteristicUUID]) willReturn:nil];
+                [MKTGiven([mockLocator characteristicFromUUID:characteristicUUID]) willReturn:nil];
             });
             
             context(@"when there are pending operations for the given characteristic", ^{
@@ -67,11 +67,11 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
                     } forCharacteristic:characteristicUUID];
                 });
                 
-                it(@"does not tell the service manager to discover the characteristic", ^{
+                it(@"does not tell the characteristic locator to discover the characteristic", ^{
                     [asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
                         
                     } forCharacteristic:characteristicUUID];
-                    [MKTVerifyCount(mockServiceManager, times(1)) discoverCharacteristics:@[characteristicUUID]];
+                    [MKTVerifyCount(mockLocator, times(1)) discoverCharacteristics:@[characteristicUUID]];
                 });
                 
                 it(@"increments the amount of pending operations", ^{
@@ -84,11 +84,11 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
                 
             });
             
-            it(@"tells the service manager to discover the characteristic", ^{
+            it(@"tells the characteristic locator to discover the characteristic", ^{
                 [asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
                     
                 } forCharacteristic:characteristicUUID];
-                [MKTVerify(mockServiceManager) discoverCharacteristics:@[characteristicUUID]];
+                [MKTVerify(mockLocator) discoverCharacteristics:@[characteristicUUID]];
             });
             
             it(@"increments the amount of pending operations", ^{
@@ -111,8 +111,8 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
         context(@"when there are pending operations for the discovered characteristics", ^{
         
             beforeEach(^{
-                [MKTGiven([mockServiceManager characteristicFromUUID:characteristicUUID]) willReturn:nil];
-                [MKTGiven(mockServiceManager.characteristics) willReturn:@[mockCharacteristic]];
+                [MKTGiven([mockLocator characteristicFromUUID:characteristicUUID]) willReturn:nil];
+                [MKTGiven(mockLocator.characteristics) willReturn:@[mockCharacteristic]];
             });
             
             it(@"executes the pending operations", ^{
@@ -135,8 +135,8 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
         context(@"when there are pending operations for the discovered characteristics", ^{
             
             beforeEach(^{
-                [MKTGiven([mockServiceManager characteristicFromUUID:characteristicUUID]) willReturn:nil];
-                [MKTGiven(mockServiceManager.characteristics) willReturn:@[mockCharacteristic]];
+                [MKTGiven([mockLocator characteristicFromUUID:characteristicUUID]) willReturn:nil];
+                [MKTGiven(mockLocator.characteristics) willReturn:@[mockCharacteristic]];
             });
             
             it(@"executes the pending operations", ^{
