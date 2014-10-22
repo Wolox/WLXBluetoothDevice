@@ -49,6 +49,10 @@
     }
 }
 
+- (NSUInteger)pendingOperationsCountForCharacteristic:(CBUUID *)characteristicUUID {
+    return [self.pendingOperations[characteristicUUID] count];
+}
+
 - (void)flushPendingOperations {
     for (CBCharacteristic * characteristic in self.serviceManager.characteristics) {
         DDLogDebug(@"Flusing pending operations for characteristic %@", characteristic.UUID.UUIDString);

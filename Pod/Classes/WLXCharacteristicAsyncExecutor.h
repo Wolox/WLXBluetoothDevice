@@ -18,6 +18,8 @@
 
 - (void)executeBlock:(void(^)(NSError *, CBCharacteristic *))block forCharacteristic:(CBUUID *)characteristicUUID;
 
+- (NSUInteger)pendingOperationsCountForCharacteristic:(CBUUID *)characteristicUUID;
+
 - (void)flushPendingOperations;
 
 - (void)flushPendingOperationsWithError:(NSError *)error;

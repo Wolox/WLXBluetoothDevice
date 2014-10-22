@@ -26,7 +26,11 @@
     if (self) {
         _dictionary = [[NSMutableDictionary alloc] init];
     }
-    return nil;
+    return self;
+}
+
+- (NSArray *)allKeys {
+    return self.dictionary.allKeys;
 }
 
 - (NSUInteger)count {
