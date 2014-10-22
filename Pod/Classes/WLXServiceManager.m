@@ -10,6 +10,12 @@
 
 #import "WLXBluetoothDeviceHelpers.h"
 #import "WLXBluetoothDeviceLogger.h"
+#import "WLXCharacteristicAsyncExecutor.h"
+#import "WLXDictionaryOfArrays.h"
+
+#define DISPATCH(line)  \
+    dispatch_async(_queue, ^{ line; })
+
 
 static NSString * createQueueName(CBPeripheral * peripheral) {
     return [NSString stringWithFormat:@"ar.com.wolox.WLXBluetoothDevice.WLXServiceManager.%@",
@@ -24,10 +30,10 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
 @property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic) NSString * queueName;
 @property (nonatomic) NSMutableDictionary * observers;
-@property (nonatomic) NSMutableDictionary * readHandlerBlockQueues;
-@property (nonatomic) NSMutableDictionary * writeHandlerBlockQueues;
-@property (nonatomic) NSMutableDictionary * stateChangeHandlerBlockQueues;
-@property (nonatomic) NSMutableDictionary * pendingOperationPerCharacteristicUUID;
+@property (nonatomic) WLXDictionaryOfArrays * readHandlerBlockQueues;
+@property (nonatomic) WLXDictionaryOfArrays * writeHandlerBlockQueues;
+@property (nonatomic) WLXDictionaryOfArrays * stateChangeHandlerBlockQueues;
+@property (nonatomic) WLXCharacteristicAsyncExecutor * asyncExecutor;
 
 @end
 
@@ -44,10 +50,10 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
         _observers = [[NSMutableDictionary alloc] init];
         _queueName = createQueueName(peripheral);
         _queue = dispatch_queue_create([_queueName cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-        _readHandlerBlockQueues = [[NSMutableDictionary alloc] init];
-        _writeHandlerBlockQueues = [[NSMutableDictionary alloc] init];
-        _stateChangeHandlerBlockQueues = [[NSMutableDictionary alloc] init];
-        _pendingOperationPerCharacteristicUUID = [[NSMutableDictionary alloc] init];
+        _readHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
+        _writeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
+        _stateChangeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
+        _asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithServiceManager:self queue:self.queue];
     }
     return self;
 }
@@ -72,11 +78,11 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
     WLXAssertNotNil(block);
     DDLogVerbose(@"Trying to read value for characteristic %@", characteristicUUID.UUIDString);
     __block typeof(self) this = self;
-    [self executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
+    [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
         if (error) {
-            block(error, nil);
+            DISPATCH(block(error, nil));
         } else {
-            [this putBlock:block forCharacteristic:characteristicUUID inDictionary:this.readHandlerBlockQueues];
+            this.readHandlerBlockQueues[characteristicUUID] = [block copy];
             DDLogDebug(@"Reading value for characteristic %@", characteristicUUID.UUIDString);
             [this.peripheral readValueForCharacteristic:characteristic];
         }
@@ -88,11 +94,11 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
     WLXAssertNotNil(block);
     DDLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
     __block typeof(self) this = self;
-    [self executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
+    [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
         if (error) {
-            block(error);
+            DISPATCH(block(error));
         } else {
-            [this putBlock:block forCharacteristic:characteristicUUID inDictionary:this.writeHandlerBlockQueues];
+            this.writeHandlerBlockQueues[characteristicUUID] = [block copy];
             DDLogDebug(@"Writting value for characteristic %@ with response", characteristicUUID);
             [this.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
         }
@@ -103,7 +109,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
     WLXAssertNotNil(characteristicUUID);
     __block typeof(self) this = self;
     DDLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
-    [self executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
+    [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
         if (!error) {
             DDLogDebug(@"Writting value for characteristic %@ without response", characteristicUUID);
             [this.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
@@ -125,12 +131,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
     DDLogVerbose(@"Adding observer for characteristic %@", characteristicUUID);
-    // Dispatching the block to a separate queue relives the main bluetooth queue for any delay that might occur
-    // while processing characteristic update notifications.
-    id dispatchedBlock = ^(NSError * error, NSData * data) {
-        dispatch_async(_queue, ^{ block(error, data); });
-    };
-    return [self putBlock:dispatchedBlock forCharacteristic:characteristicUUID inDictionary:self.observers];
+    return self.observers[characteristicUUID] = [block copy];
 }
 
 - (id)addObserverForCharacteristic:(CBUUID *)characteristicUUID selector:(SEL)selector target:(id)target {
@@ -163,13 +164,13 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
 - (void)didDiscoverCharacteristics {
     DDLogDebug(@"Characterisctics successfully discovered %@", self.characteristics);
     [self cacheDiscoveredCharacteristics];
-    [self flushPendingOperations];
+    [self.asyncExecutor flushPendingOperations];
 }
 
 - (void)failToDiscoverCharacteristics:(NSError *)error {
     WLXAssertNotNil(error);
     DDLogDebug(@"Characteristics could not be discovered: %@", error);
-    [self flushPendingOperationsWithError:error];
+    [self.asyncExecutor flushPendingOperationsWithError:error];
 }
 
 - (void)didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -184,12 +185,12 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
     NSData * data = (error) ? nil : characteristic.value;
     if (block) {
         DDLogVerbose(@"Dispatching value for characteristic %@ to registered block", characteristic.UUID.UUIDString);
-        block(error, data);
+        DISPATCH(block(error, data));
         [blocks removeObject:block];
     } else {
         DDLogVerbose(@"Dispatching value for characteristic %@ to observers", characteristic.UUID.UUIDString);
         for (void(^observer)(NSError *, NSData *) in self.observers[characteristic.UUID]) {
-            observer(error, data);
+            DISPATCH(observer(error, data));
         }
     }
 }
@@ -204,7 +205,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
     NSMutableArray * blocks = self.writeHandlerBlockQueues[characteristic.UUID];
     void (^block)(NSError *) = [blocks firstObject];
     if (block) {
-        block(error);
+        DISPATCH(block(error));
         [blocks removeObject:block];
     } else {
         DDLogWarn(@"Write success notification for characteristic %@ could not be dispatched. There is no registered block",
@@ -222,7 +223,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
     NSMutableArray * blocks = self.stateChangeHandlerBlockQueues[characteristic.UUID];
     void (^block)(NSError *) = [blocks firstObject];
     if (block) {
-        block(error);
+        DISPATCH(block(error));
         [blocks removeObject:block];
     } else {
         DDLogWarn(@"Notification state change for characteristic %@ could not be dispatched. There is no registered block",
@@ -237,71 +238,15 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
     WLXAssertNotNil(block);
     __block typeof(self) this = self;
     DDLogVerbose(@"Trying to set notification state for characteristic %@ to %@", characteristicUUID.UUIDString, (enabled) ? @"YES" : @"NO");
-    [self executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
+    [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
         if (error) {
-            block(error);
+            DISPATCH(block(error));
         } else {
-            [this putBlock:block forCharacteristic:characteristicUUID inDictionary:this.stateChangeHandlerBlockQueues];
+            this.stateChangeHandlerBlockQueues[characteristicUUID] = [block copy];
             DDLogDebug(@"Setting notification state for characteristic %@ to %@", characteristicUUID.UUIDString, (enabled) ? @"YES" : @"NO");
             [this.peripheral setNotifyValue:enabled forCharacteristic:characteristic];
         }
     } forCharacteristic:characteristicUUID];
-}
-
-- (void)executeBlock:(void(^)(NSError *, CBCharacteristic *))block forCharacteristic:(CBUUID *)characteristicUUID {
-    CBCharacteristic * characteristic = self.characteristicByUUID[characteristicUUID];
-    // Dispatching the block to a separate queue relives the main bluetooth queue for any delay that might occur
-    // while processing characteristic read or write notifications.
-    void(^dispatchedBlock)(NSError *, CBCharacteristic *) = ^(NSError * error, CBCharacteristic * characteristic) {
-        dispatch_async(_queue, ^{ block(error, characteristic); });
-    };
-    if (characteristic) {
-        dispatchedBlock(nil, characteristic);
-    } else {
-        DDLogDebug(@"Characteristic %@ has not been discovered.", characteristicUUID.UUIDString);
-        [self executeBlock:dispatchedBlock whenCharacteristicIsDiscovered:characteristicUUID];
-    }
-}
-
-- (void)executeBlock:(void(^)(NSError *, CBCharacteristic *))block whenCharacteristicIsDiscovered:(CBUUID *)characteristicUUID {
-    // Checking if there are pending operations MUST be done before putting the given block
-    // to the pending operation queue.
-    BOOL pendingOperations = [self pendingOperationsForCharacteristic:characteristicUUID];
-    DDLogDebug(@"Enqueuing block to be executed when characteristic %@ gets discovered", characteristicUUID.UUIDString);
-    [self putBlock:block forCharacteristic:characteristicUUID inDictionary:self.pendingOperationPerCharacteristicUUID];
-    if (!pendingOperations) {
-        [self discoverCharacteristics:@[characteristicUUID]];
-    } else {
-        DDLogDebug(@"There are pending operation for characteristic %@, this mean that discovery for this characteristic has already been started",
-                   characteristicUUID.UUIDString);
-    }
-}
-
-- (void)flushPendingOperations {
-    for (CBCharacteristic * characteristic in self.service.characteristics) {
-        DDLogDebug(@"Flusing pending operations for characteristic %@", characteristic.UUID.UUIDString);
-        NSMutableArray * operations = self.pendingOperationPerCharacteristicUUID[characteristic.UUID];
-        for (void(^operation)(NSError *, CBCharacteristic *) in operations) {
-            operation(nil, characteristic);
-        }
-        [operations removeAllObjects];
-    }
-}
-
-- (void)flushPendingOperationsWithError:(NSError *)error {
-    for (CBUUID * characteristicUUID in [self.pendingOperationPerCharacteristicUUID allKeys]) {
-        DDLogDebug(@"Flusing pending operations with error for characteristic %@", characteristicUUID.UUIDString);
-        NSMutableArray * operations = self.pendingOperationPerCharacteristicUUID[characteristicUUID];
-        for (void(^operation)(NSError *, CBCharacteristic *) in operations) {
-            operation(error, nil);
-        }
-        [operations removeAllObjects];
-    }
-}
-
-- (BOOL)pendingOperationsForCharacteristic:(CBUUID *)characteristicUUID {
-    NSArray * pendingOperations = self.pendingOperationPerCharacteristicUUID[characteristicUUID];
-    return pendingOperations != nil && [pendingOperations count] > 0;
 }
 
 - (void)cacheDiscoveredCharacteristics {
@@ -309,16 +254,6 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
         DDLogDebug(@"Caching characteristic %@", characteristic.UUID.UUIDString);
         self.characteristicByUUID[characteristic.UUID] = characteristic;
     }
-}
-
-- (id)putBlock:(id)block forCharacteristic:(CBUUID *)characteristicUUID inDictionary:(NSMutableDictionary *)dictionary {
-    NSMutableArray * observers = dictionary[characteristicUUID];
-    if (observers == nil) {
-        observers = dictionary[characteristicUUID] = [[NSMutableArray alloc] init];
-    }
-    id observer = [block copy];
-    [observers addObject:observer];
-    return observer;
 }
 
 @end
