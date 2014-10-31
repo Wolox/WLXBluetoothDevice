@@ -28,7 +28,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
 @property (nonatomic) NSMutableDictionary * characteristicByUUID;
 @property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic) NSString * queueName;
-@property (nonatomic) NSMutableDictionary * observers;
+@property (nonatomic) WLXDictionaryOfArrays * observers;
 @property (nonatomic) WLXDictionaryOfArrays * readHandlerBlockQueues;
 @property (nonatomic) WLXDictionaryOfArrays * writeHandlerBlockQueues;
 @property (nonatomic) WLXDictionaryOfArrays * stateChangeHandlerBlockQueues;
@@ -45,7 +45,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
         _peripheral = peripheral;
         _service = service;
         _characteristicByUUID = [[NSMutableDictionary alloc] init];
-        _observers = [[NSMutableDictionary alloc] init];
+        _observers = [[WLXDictionaryOfArrays alloc] init];
         _queueName = createQueueName(peripheral);
         _queue = dispatch_queue_create([_queueName cStringUsingEncoding:NSASCIIStringEncoding], NULL);
         _readHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
@@ -54,19 +54,6 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
         _asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:self queue:self.queue];
     }
     return self;
-}
-
-- (CBCharacteristic *)characteristicFromUUID:(CBUUID *)characteristicUUID {
-    return self.characteristicByUUID[characteristicUUID];
-}
-
-- (void)discoverCharacteristics:(NSArray *)characteristicUUIDs {
-    DDLogDebug(@"Discovering characteristics with UUIDs %@ for service %@", characteristicUUIDs, self.service.UUID.UUIDString);
-    [self.peripheral discoverCharacteristics:characteristicUUIDs forService:self.service];
-}
-
-- (void)discoverCharacteristics {
-    [self discoverCharacteristics:nil];
 }
 
 #pragma mark - Reading & writing characteristic value
@@ -90,6 +77,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
 - (void)writeValue:(NSData *)data forCharacteristicUUID:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
+    WLXAssertNotNil(data);
     DDLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
     __block typeof(self) this = self;
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
@@ -105,6 +93,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
 
 - (void)writeValue:(NSData *)data forCharacteristicUUID:(CBUUID *)characteristicUUID {
     WLXAssertNotNil(characteristicUUID);
+    WLXAssertNotNil(data);
     __block typeof(self) this = self;
     DDLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
@@ -141,14 +130,15 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
         // All the selector should return void and accept an error and a data object.
         // http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknow
         IMP imp = [target methodForSelector:selector];
-        void (*func)(id, SEL, NSError *, NSData *) = (void *)imp;
-        func(target, selector, error, data);
+        void (*func)(id, SEL, NSData *, NSError *) = (void *)imp;
+        func(target, selector, data, error);
     }];
 }
 
 - (void)removeObserver:(id)observer {
     DDLogVerbose(@"Removing observer %p.", observer);
-    for (NSMutableArray * observers in self.observers) {
+    for (CBUUID * characteristicUUID in [self.observers allKeys]) {
+        NSMutableArray * observers = self.observers[characteristicUUID];
         if ([observers containsObject:observer]) {
             [observers removeObject:observer];
             DDLogVerbose(@"Observer %p successfully removed.", observer);
@@ -156,6 +146,22 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
         }
     }
 }
+
+#pragma mark - WLXCharacteristicLocator methods
+
+- (CBCharacteristic *)characteristicFromUUID:(CBUUID *)characteristicUUID {
+    return self.characteristicByUUID[characteristicUUID];
+}
+
+- (void)discoverCharacteristics:(NSArray *)characteristicUUIDs {
+    DDLogDebug(@"Discovering characteristics with UUIDs %@ for service %@", characteristicUUIDs, self.service.UUID.UUIDString);
+    [self.peripheral discoverCharacteristics:characteristicUUIDs forService:self.service];
+}
+
+- (void)discoverCharacteristics {
+    [self discoverCharacteristics:nil];
+}
+
 
 #pragma mark - WLXServicesManagerDelegate methods
 
