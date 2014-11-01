@@ -17,15 +17,13 @@ typedef enum : NSUInteger {
 
 @import CoreBluetooth;
 
-@interface WLXServicesManager : NSObject
+@interface WLXServicesManager : NSObject<CBPeripheralDelegate>
 
 @property (nonatomic, readonly) NSArray * services;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
 
 - (BOOL)discoverServicesUsingBlock:(void(^)(NSError *))block;
-
-- (BOOL)discoverServices;
 
 - (CBService *)serviceFromUUID:(CBUUID *)serviceUUID;
 

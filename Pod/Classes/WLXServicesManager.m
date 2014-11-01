@@ -15,7 +15,7 @@
 NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBluetoothDevice.ServiceErrorDomain";
 
 
-@interface WLXServicesManager ()<CBPeripheralDelegate>
+@interface WLXServicesManager ()
 
 @property (nonatomic) NSMutableDictionary * servicesByUUID;
 @property (nonatomic) CBPeripheral * peripheral;
@@ -34,6 +34,7 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
     WLXAssertNotNil(peripheral);
     self = [super init];
     if (self) {
+        _peripheral = peripheral;
         _servicesByUUID = [[NSMutableDictionary alloc] init];
         _managers = [[NSMutableDictionary alloc] init];
         _managersByCharacteristic = [[NSMutableDictionary alloc] init];
@@ -61,6 +62,7 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
     if (block) {
         self.discoveryBlock = block;
     }
+    self.discovering = YES;
     [self.peripheral discoverServices:nil];
     return YES;
 }
@@ -83,8 +85,10 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 #pragma mark - CBPeripheralDelegate methods
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
+    self.discovering = NO;
     if (!error) {
         [self createManagers];
+        [self registerDiscoveredServices];
     } else {
         DDLogDebug(@"Services could not be discovered: %@", error);
     }
@@ -125,6 +129,12 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 }
 
 #pragma mark - Private methods
+
+- (void)registerDiscoveredServices {
+    for (CBService * service in self.peripheral.services) {
+        self.servicesByUUID[service.UUID] = service;
+    }
+}
 
 - (void)associateManager:(WLXServiceManager *)manager withCharacteristicsForService:(CBService *)service {
     WLXAssertNotNil(service);
