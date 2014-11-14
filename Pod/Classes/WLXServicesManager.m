@@ -21,7 +21,6 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 @property (nonatomic) CBPeripheral * peripheral;
 @property (nonatomic) NSMutableDictionary * managers;
 @property (nonatomic) NSMutableDictionary * managersByCharacteristic;
-@property (nonatomic) BOOL discovering;
 @property (nonatomic, copy) void(^discoveryBlock)(NSError *);
 
 @end
@@ -29,6 +28,7 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 @implementation WLXServicesManager
 
 @dynamic services;
+@dynamic servicesDiscovered;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral {
     WLXAssertNotNil(peripheral);
@@ -48,6 +48,10 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
     return (services != nil) ? services : @[];
 }
 
+- (BOOL)servicesDiscovered {
+    return self.services.count > 0;
+}
+
 - (BOOL)discoverServicesUsingBlock:(void(^)(NSError *))block {
     if (self.discovering) {
         if (block) {
@@ -62,7 +66,9 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
     if (block) {
         self.discoveryBlock = block;
     }
-    self.discovering = YES;
+    _discovering = YES;
+    DDLogDebug(@"Discovering services for peripheral %@", self.peripheral.identifier.UUIDString);
+    self.peripheral.delegate = self;
     [self.peripheral discoverServices:nil];
     return YES;
 }
@@ -85,7 +91,7 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 #pragma mark - CBPeripheralDelegate methods
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
-    self.discovering = NO;
+    _discovering = NO;
     if (!error) {
         [self createManagers];
         [self registerDiscoveredServices];
@@ -148,10 +154,15 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 
 - (void)createManagers {
     for (CBService * service in self.peripheral.services) {
-        DDLogVerbose(@"Creating service manager for service %@ and peripheral %@", service.UUID.UUIDString,
-                     self.peripheral.identifier.UUIDString);
-        WLXServiceManager * manager = [[WLXServiceManager alloc] initWithPeripheral:self.peripheral service:service];
-        self.managers[service.UUID] = manager;
+        if (self.managers[service.UUID] != nil) {
+            DDLogVerbose(@"Manager for service %@ and peripheral %@ has already been created", service.UUID.UUIDString,
+                         self.peripheral.identifier.UUIDString);
+        } else {
+            DDLogDebug(@"Creating service manager for service %@ and peripheral %@", service.UUID.UUIDString,
+                       self.peripheral.identifier.UUIDString);
+            WLXServiceManager * manager = [[WLXServiceManager alloc] initWithPeripheral:self.peripheral service:service];
+            self.managers[service.UUID] = manager;
+        }
     }
 }
 

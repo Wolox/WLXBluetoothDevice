@@ -37,6 +37,8 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
 
 @implementation WLXServiceManager
 
+@dynamic characteristics;
+
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral service:(CBService *)service {
     WLXAssertNotNil(peripheral);
     WLXAssertNotNil(service);
@@ -54,6 +56,10 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
         _asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:self queue:self.queue];
     }
     return self;
+}
+
+- (NSArray *)characteristics {
+    return (self.service.characteristics) ? self.service.characteristics : @[];
 }
 
 #pragma mark - Reading & writing characteristic value

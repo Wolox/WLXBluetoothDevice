@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *reconnectSwitch;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *discoverButton;
 @property (weak, nonatomic) IBOutlet UISwitch *remeberDeviceSwitch;
+@property (weak, nonatomic) IBOutlet UIButton *servicesButton;
 
 - (IBAction)connectButtonPressed:(id)sender;
 

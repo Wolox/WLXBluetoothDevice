@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "WLXConnectionManagerDelegate.h"
+#import "WLXServicesManager.h"
 
 @import CoreBluetooth;
 
@@ -22,6 +23,7 @@
 @property (nonatomic, readonly) NSString * peripheralUUID;
 @property (nonatomic) NSDictionary * connectionOptions;
 @property (nonatomic, weak) id<WLXConnectionManagerDelegate> delegate;
+@property (nonatomic, readonly) WLXServicesManager * servicesManager;
 
 - (BOOL)connectWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block ;
 

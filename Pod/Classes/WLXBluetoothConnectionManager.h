@@ -25,7 +25,7 @@
 @property (nonatomic, readonly) NSString * peripheralUUID;
 @property (nonatomic) NSDictionary * connectionOptions;
 @property (nonatomic, weak) id<WLXConnectionManagerDelegate> delegate;
-
+@property (nonatomic, readonly) WLXServicesManager * servicesManager;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                     centralManager:(CBCentralManager *)centralManager

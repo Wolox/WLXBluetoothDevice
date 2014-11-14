@@ -20,6 +20,8 @@ typedef enum : NSUInteger {
 @interface WLXServicesManager : NSObject<CBPeripheralDelegate>
 
 @property (nonatomic, readonly) NSArray * services;
+@property (nonatomic, readonly) BOOL discovering;
+@property (nonatomic, readonly) BOOL servicesDiscovered;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
 

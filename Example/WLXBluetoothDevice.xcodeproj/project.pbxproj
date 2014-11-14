@@ -34,6 +34,8 @@
 		9D7F2C6419DC779000D44251 /* WLXBluetoothDeviceUserDefaultsRepositorySpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F2C6319DC779000D44251 /* WLXBluetoothDeviceUserDefaultsRepositorySpec.m */; };
 		9D7F2C6619DC8A3C00D44251 /* WLXBluetoothDeviceConnectionRecordSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F2C6519DC8A3C00D44251 /* WLXBluetoothDeviceConnectionRecordSpec.m */; };
 		9D7F2C6819DC902A00D44251 /* WLXBluetoothConnectionManagerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F2C6719DC902A00D44251 /* WLXBluetoothConnectionManagerSpec.m */; };
+		9DCDAB651A13FA1D0042B6B4 /* WLXServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DCDAB641A13FA1D0042B6B4 /* WLXServiceViewController.m */; };
+		9DCDAB681A1405420042B6B4 /* WLXDummyService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DCDAB671A1405420042B6B4 /* WLXDummyService.m */; };
 		9DFA0E111A03F7FD00B74C59 /* WLXServicesManagerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DFA0E101A03F7FD00B74C59 /* WLXServicesManagerSpec.m */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +89,10 @@
 		9D7F2C6319DC779000D44251 /* WLXBluetoothDeviceUserDefaultsRepositorySpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXBluetoothDeviceUserDefaultsRepositorySpec.m; sourceTree = "<group>"; };
 		9D7F2C6519DC8A3C00D44251 /* WLXBluetoothDeviceConnectionRecordSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXBluetoothDeviceConnectionRecordSpec.m; sourceTree = "<group>"; };
 		9D7F2C6719DC902A00D44251 /* WLXBluetoothConnectionManagerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXBluetoothConnectionManagerSpec.m; sourceTree = "<group>"; };
+		9DCDAB631A13FA1D0042B6B4 /* WLXServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WLXServiceViewController.h; sourceTree = "<group>"; };
+		9DCDAB641A13FA1D0042B6B4 /* WLXServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXServiceViewController.m; sourceTree = "<group>"; };
+		9DCDAB661A1405420042B6B4 /* WLXDummyService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WLXDummyService.h; sourceTree = "<group>"; };
+		9DCDAB671A1405420042B6B4 /* WLXDummyService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXDummyService.m; sourceTree = "<group>"; };
 		9DFA0E101A03F7FD00B74C59 /* WLXServicesManagerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXServicesManagerSpec.m; sourceTree = "<group>"; };
 		A2887F621891F6A15A9626BB /* WLXBluetoothDevice.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = WLXBluetoothDevice.podspec; path = ../WLXBluetoothDevice.podspec; sourceTree = "<group>"; };
 		CD9F907B60A98A166470E4E8 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -173,6 +179,10 @@
 				9D3A499719E2EBE7006E3063 /* WLXDiscoverViewControllerDelegate.h */,
 				9D3A499819E2EE92006E3063 /* WLXApplication.h */,
 				9D3A499919E2EE92006E3063 /* WLXApplication.m */,
+				9DCDAB631A13FA1D0042B6B4 /* WLXServiceViewController.h */,
+				9DCDAB641A13FA1D0042B6B4 /* WLXServiceViewController.m */,
+				9DCDAB661A1405420042B6B4 /* WLXDummyService.h */,
+				9DCDAB671A1405420042B6B4 /* WLXDummyService.m */,
 			);
 			path = WLXBluetoothDevice;
 			sourceTree = "<group>";
@@ -402,6 +412,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9DCDAB651A13FA1D0042B6B4 /* WLXServiceViewController.m in Sources */,
+				9DCDAB681A1405420042B6B4 /* WLXDummyService.m in Sources */,
 				9D3A499B19E31667006E3063 /* WLXApplication.m in Sources */,
 				6003F59E195388D20070C39A /* WLXAppDelegate.m in Sources */,
 				9D3A499619E2E84E006E3063 /* WLXDiscoverViewController.m in Sources */,
@@ -507,7 +519,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos8.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -539,7 +551,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos8.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};

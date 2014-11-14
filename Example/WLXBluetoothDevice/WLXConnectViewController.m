@@ -14,6 +14,8 @@
 
 #import "WLXDiscoverViewController.h"
 #import "WLXApplication.h"
+#import "WLXServiceViewController.h"
+#import "WLXDummyService.h"
 
 static NSUInteger RECONNECTION_WAIT_TIME = 2000; //ms
 static NSUInteger CONNECTION_TIMEOUT = 30000; //ms
@@ -40,6 +42,8 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
     self.dateFormatter = [[NSDateFormatter alloc] init];
     self.dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
     self.deviceRegistry.enabled = self.remeberDeviceSwitch.on;
+    self.servicesButton.layer.borderWidth = 1.0f;
+    self.servicesButton.layer.borderColor = [UIColor blackColor].CGColor;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -56,6 +60,10 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
         WLXDiscoverViewController * discoverViewController = segue.destinationViewController;
         discoverViewController.discoverer = self.deviceManager.discoverer;
         discoverViewController.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"ShowServiceSegue"]) {
+        WLXServiceViewController * controller = segue.destinationViewController;
+        WLXServiceManager * serviceManager = [self.connectionManager.servicesManager managerForService:[WLXDummyService serviceUUID]];
+        controller.service = [[WLXDummyService alloc] initWithServiceManager:serviceManager];
     }
 }
 
@@ -83,6 +91,14 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
 #pragma mark - WLXConnectionManagerDelegate
 
 - (void)connectionManagerDidConnect:(id<WLXConnectionManager>)connectionManager {
+    __block typeof(self) this = self;
+    [connectionManager.servicesManager discoverServicesUsingBlock:^(NSError * error) {
+        if (error) {
+            [this showConnectionErrorAlert:error];
+        } else {
+            [self reloadUIOnMainThread];
+        }
+    }];
     [self reloadUIOnMainThread];
 }
 
@@ -122,6 +138,7 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
     self.statusLabel.text = @"Disconnected";
     [self.connectButton setTitle:@"Connect" forState:UIControlStateNormal];
     self.reconnectSwitch.enabled = YES;
+    self.servicesButton.enabled = NO;
     WLXBluetoothDeviceConnectionRecord * record = self.deviceRegistry.lastConnectionRecord;
     if (self.connectionManager || record) {
         self.connectButton.enabled = YES;
@@ -137,10 +154,24 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
     self.connectButton.enabled = YES;
     [self.connectButton setTitle:@"Disconnect" forState:UIControlStateNormal];
     [self.connectButton setBackgroundColor:[UIColor redColor]];
-    self.statusLabel.text = @"Connected";
     self.deviceNameLabel.text = self.connectionManager.peripheral.name;
     self.deviceUUIDLabel.text = self.connectionManager.peripheralUUID;
     self.reconnectSwitch.enabled = NO;
+    self.servicesButton.enabled = NO;
+    if (self.connectionManager.servicesManager.servicesDiscovered) {
+        self.statusLabel.text = @"Ready";
+        CBUUID * UUID = [WLXDummyService serviceUUID];
+        WLXServiceManager * serviceManager = [self.connectionManager.servicesManager managerForService:UUID];
+        if (serviceManager == nil) {
+            NSLog(@"ERROR: Dummy service %@ is not available", UUID.UUIDString);
+        } else {
+            self.servicesButton.enabled = YES;
+        }
+    } else if (self.connectionManager.servicesManager.discovering) {
+        self.statusLabel.text = @"Discovering services ...";
+    } else {
+        self.statusLabel.text = @"Connected";
+    }
 }
 
 - (void)setConnectingStatus {
@@ -210,6 +241,14 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
 - (void)showConnectionErrorAlert:(NSError *)error {
     [[[UIAlertView alloc] initWithTitle:@"Connection error"
                                 message:[NSString stringWithFormat:@"There was an error with the connection: %@", error]
+                               delegate:nil
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil] show];
+}
+
+- (void)showServiceDiscoveryErrorAlert:(NSError *)error {
+    [[[UIAlertView alloc] initWithTitle:@"Services discovery error"
+                                message:[NSString stringWithFormat:@"There was an error discovering the services: %@", error]
                                delegate:nil
                       cancelButtonTitle:@"OK"
                       otherButtonTitles:nil] show];
