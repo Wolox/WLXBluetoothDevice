@@ -9,20 +9,21 @@
 
 Pod::Spec.new do |s|
   s.name             = "WLXBluetoothDevice"
-  s.version          = "0.1.0"
-  s.summary          = "A short description of WLXBluetoothDevice."
+  s.version          = "0.1.0-alpha1"
+  s.summary          = "A block-based wrapper of CoreBluetooth"
   s.description      = <<-DESC
-                       An optional longer description of WLXBluetoothDevice
+                       WLXBluetoothDevice provides a better, more modular
+                       API on top of CoreBluetooth. Reposabilities are separated
+                       in different classes and the API is block-based.
 
-                       * Markdown format.
-                       * Don't worry about the indent, we strip it!
+                       WLXBluetoothDevice extracts common patterns that have been
+                       identified while developing Bluetooth 4.0 apps at
+                       [Wolox](http://www.wolox.com.ar).
                        DESC
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/WLXBluetoothDevice"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.homepage         = "https://github.com/Wolox/WLXBluetoothDevice"
   s.license          = 'MIT'
-  s.author           = { "Guido Marucci Blas" => "guidomb@gmail.com" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/WLXBluetoothDevice.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { "Guido Marucci Blas" => "guidomb@wolox.com.ar" }
+  s.source           = { :git => "https://github.com/Wolox/WLXBluetoothDevice.git", :tag => s.version.to_s }
 
   s.platform     = :ios, '7.0'
   s.requires_arc = true
@@ -32,7 +33,7 @@ Pod::Spec.new do |s|
     'WLXBluetoothDevice' => ['Pod/Assets/*.png']
   }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.frameworks = 'CoreBluetooth'
+  s.dependency 'CocoaLumberjack', '~>2.0.0-beta'
+
 end
