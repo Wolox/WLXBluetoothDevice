@@ -1,6 +1,6 @@
 # WLXBluetoothDevice
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Wolox/WLXBluetoothDevice?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Wolox/WLXBluetoothDevice?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![CI Status](http://img.shields.io/travis/Guido Marucci Blas/WLXBluetoothDevice.svg?style=flat)](https://travis-ci.org/Guido Marucci Blas/WLXBluetoothDevice)
 [![Version](https://img.shields.io/cocoapods/v/WLXBluetoothDevice.svg?style=flat)](http://cocoadocs.org/docsets/WLXBluetoothDevice)
 [![License](https://img.shields.io/cocoapods/l/WLXBluetoothDevice.svg?style=flat)](http://cocoadocs.org/docsets/WLXBluetoothDevice)
