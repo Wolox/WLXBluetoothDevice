@@ -83,7 +83,9 @@ it, simply add the following line to your Podfile:
 ## Documentation
 
 You can check the library's [wiki](https://github.com/Wolox/WLXBluetoothDevice/wiki)
-for documentation and examples of how to use different APIs.
+for documentation and examples of how to use different APIs. If there is
+something missing in the wiki you can [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Wolox/WLXBluetoothDevice?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).
+
 
 ## About ##
 
