@@ -79,6 +79,11 @@ it, simply add the following line to your Podfile:
 
     pod "WLXBluetoothDevice"
 
+## Documentation
+
+You can check the library's [wiki](https://github.com/Wolox/WLXBluetoothDevice/wiki)
+for documentation and examples of how to use different APIs.
+
 ## About ##
 
 This project is maintained by [Guido Marucci Blas](https://github.com/guidomb) and it was written by [Wolox](http://www.wolox.com.ar).
