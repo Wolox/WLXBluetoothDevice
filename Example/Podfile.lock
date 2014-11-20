@@ -1,11 +1,11 @@
 PODS:
-  - CocoaLumberjack (2.0.0-beta3):
+  - CocoaLumberjack (2.0.0-beta4):
     - CocoaLumberjack/Default
     - CocoaLumberjack/Extensions
-  - CocoaLumberjack/Core (2.0.0-beta3)
-  - CocoaLumberjack/Default (2.0.0-beta3):
+  - CocoaLumberjack/Core (2.0.0-beta4)
+  - CocoaLumberjack/Default (2.0.0-beta4):
     - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (2.0.0-beta3):
+  - CocoaLumberjack/Extensions (2.0.0-beta4):
     - CocoaLumberjack/Default
   - Expecta (0.3.1)
   - OCHamcrest (4.0.1)
@@ -27,7 +27,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  CocoaLumberjack: 55c22a2b8bde7a29c568ab4015b5874216524d70
+  CocoaLumberjack: 24153b24b17d853d7182b22b128971fb98e8cb18
   Expecta: 03aabd0a89d8dea843baecb19a7fd7466a69a31d
   OCHamcrest: b464725bbb48d0f1cd9c6f4ec3cb35fe0c4f2b94
   OCMockito: 57b8c4bb54ff3a4a14eb2174f9e57faf9f56efb6
