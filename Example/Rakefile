@@ -1,14 +1,14 @@
 require './lib/xcodebuild'
 
 PROJECT = 'WLXBluetoothDevice'
-WORKSPACE = "#{PROJECT}.xcworkspace" 
+WORKSPACE = "#{PROJECT}.xcworkspace"
 SCHEME = PROJECT
 
 namespace :xcode do
   XCodeBuild::ACTIONS.each do |action|
     desc "Runs xcodebuild's #{action} action"
     task action do
-      xcodebuild.run(action)
+      exit(1) unless xcodebuild.run(action)
     end
   end
 end

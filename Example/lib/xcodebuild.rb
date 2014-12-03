@@ -41,14 +41,16 @@ class XCodeBuild
   end
 
   def run(action, arguments = {}, options = {})
+    success = false
     if valid_action?(action)
       options = default_base_options.merge(options)
       arguments = DEFAULT_ACTION_ARGUMENTS.fetch(action, {}).merge(arguments)
       command = build_command(action, arguments, options)
-      execute(command)
+      success = execute(command)
     else
       raise "Invalid action #{action}"
     end
+    success
   end
 
   def dry_run?
@@ -71,7 +73,7 @@ class XCodeBuild
       options = to_options_string(options)
       arguments = to_options_string(arguments)
       cmd = "xcodebuild #{options} #{action} #{arguments}".strip
-      cmd += " | xcpretty -c" if pretty?
+      cmd += " | xcpretty -c && exit ${PIPESTATUS[0]}" if pretty?
       cmd
     end
 
