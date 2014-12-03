@@ -12,10 +12,10 @@
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 #ifdef DEBUG
-static int WLXBluetoothDeviceLogLevel = LOG_LEVEL_VERBOSE;
+static int WLXBluetoothDeviceLogLevel = DDLogLevelVerbose;
 #endif
 #ifdef RELEASE
-static int WLXBluetoothDeviceLogLevel = LOG_LEVEL_WARN;
+static int WLXBluetoothDeviceLogLevel = DDLogLevelWarning;
 #endif
 
 
