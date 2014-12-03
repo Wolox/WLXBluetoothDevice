@@ -3,4 +3,4 @@
 language: objective-c
 podfile: Example/Podfile
 script:
-  - cd Example && rake xcode:test
+  - cd Example && rake xcode:clean xcode:test
