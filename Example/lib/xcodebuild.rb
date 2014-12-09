@@ -73,7 +73,7 @@ class XCodeBuild
       options = to_options_string(options)
       arguments = to_options_string(arguments)
       cmd = "xcodebuild #{options} #{action} #{arguments}".strip
-      cmd += " | xcpretty -c && exit ${PIPESTATUS[0]}" if pretty?
+      cmd = pipe_xcpretty(cmd) if pretty?
       cmd
     end
 
@@ -92,6 +92,10 @@ class XCodeBuild
 
     def default_base_options
       @default_base_options ||= { workspace: workspace, scheme: scheme }
+    end
+
+    def pipe_xcpretty(cmd)
+      "set -o pipefail && #{cmd} | xcpretty -c"
     end
 
     def to_options_string(options = {})
