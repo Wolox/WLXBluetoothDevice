@@ -1,7 +1,7 @@
 PODS:
   - CocoaLumberjack (2.0.0-beta4):
-    - CocoaLumberjack/Default
-    - CocoaLumberjack/Extensions
+    - CocoaLumberjack/Default (= 2.0.0-beta4)
+    - CocoaLumberjack/Extensions (= 2.0.0-beta4)
   - CocoaLumberjack/Core (2.0.0-beta4)
   - CocoaLumberjack/Default (2.0.0-beta4):
     - CocoaLumberjack/Core
@@ -34,4 +34,4 @@ SPEC CHECKSUMS:
   Specta: 9141310f46b1f68b676650ff2854e1ed0b74163a
   WLXBluetoothDevice: e4a619f2a9910ec4a7aa2a2ef24fd9ccb9c7f586
 
-COCOAPODS: 0.34.4
+COCOAPODS: 0.35.0
