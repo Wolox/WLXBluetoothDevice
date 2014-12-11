@@ -37,6 +37,9 @@ SpecBegin(WLXBluetoothConnectionManager)
         connectionManagerDelegate = mockProtocol(@protocol(WLXConnectionManagerDelegate));
         connectionManager.delegate = connectionManagerDelegate;
         [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
+        NSUUID * peripheralUUID = [[NSUUID alloc] initWithUUIDString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
+        [MKTGiven(mockPeripheral.identifier) willReturn:peripheralUUID];
+        [MKTGiven(mockPeripheral.name) willReturn:@"Mock Peripheral"];
     });
 
     afterEach(^{
