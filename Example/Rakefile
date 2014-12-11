@@ -2,7 +2,7 @@ require './lib/xcodebuild'
 
 PROJECT = 'WLXBluetoothDevice'
 WORKSPACE = "#{PROJECT}.xcworkspace"
-SCHEME = PROJECT
+SCHEME = "#{PROJECT}Shared"
 
 namespace :xcode do
   XCodeBuild::ACTIONS.each do |action|
