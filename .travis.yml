@@ -2,5 +2,9 @@
 
 language: objective-c
 podfile: Example/Podfile
+before_install:
+  - bundle install
+  - brew update
+  - brew outdated xctool || brew upgrade xctool
 script:
   - cd Example && rake xbuild:clean xbuild:test
