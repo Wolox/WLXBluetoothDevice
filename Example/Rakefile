@@ -1,24 +1,25 @@
-require './lib/xcodebuild'
+require './lib/xbuild'
 
 PROJECT = 'WLXBluetoothDevice'
 WORKSPACE = "#{PROJECT}.xcworkspace"
 SCHEME = "#{PROJECT}Shared"
 
-namespace :xcode do
-  XCodeBuild::ACTIONS.each do |action|
-    desc "Runs xcodebuild's #{action} action"
+namespace :xbuild do
+  XBuild::ACTIONS.each do |action|
+    desc "Runs the #{action} action"
     task action do
       exit(1) unless xcodebuild.run(action)
     end
   end
 end
 
-task default: 'xcode:test'
+task default: 'xbuild:test'
 
 def xcodebuild
-  @xcodebuild ||= XCodeBuild.new(WORKSPACE, SCHEME, {
+  @xcodebuild ||= XBuild.new(WORKSPACE, SCHEME, {
     dry_run: ENV['DRY_RUN'] == 'true',
     verbose: ENV['VERBOSE'] == 'true',
-    pretty: !(ENV['DISABLE_XCPRETTY'] == 'true')
+    pretty: !(ENV['DISABLE_XCPRETTY'] == 'true'),
+    xctool: !(ENV['USE_XCODEBUILD'] == 'true')
   })
 end

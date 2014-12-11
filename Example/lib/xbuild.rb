@@ -1,4 +1,4 @@
-class XCodeBuild
+class XBuild
 
   ACTIONS = %w(
     clean
@@ -30,14 +30,19 @@ class XCodeBuild
   def initialize(workspace, scheme, opts = {})
     @workspace = workspace
     @scheme = scheme
-    opts = {verbose: false, dry_run: false, pretty: true}.merge(opts)
+    opts = {verbose: false, dry_run: false, pretty: true, xctool: false}.merge(opts)
     @pretty = opts[:pretty]
     @verbose = opts[:verbose]
     @dry_run = opts[:dry_run]
+    @xctool = opts[:xctool]
+  end
+
+  def xctool?
+    @xctool
   end
 
   def pretty?
-    @pretty
+    !xctool? && @pretty
   end
 
   def run(action, arguments = {}, options = {})
@@ -72,9 +77,17 @@ class XCodeBuild
     def build_command(action, arguments, options)
       options = to_options_string(options)
       arguments = to_options_string(arguments)
-      cmd = "xcodebuild #{options} #{action} #{arguments}".strip
+      cmd = "#{build_tool} #{options} #{action} #{arguments}".strip
       cmd = pipe_xcpretty(cmd) if pretty?
       cmd
+    end
+
+    def build_tool
+      if xctool?
+        "xctool"
+      else
+        "xcodebuild"
+      end
     end
 
     def execute(command)
