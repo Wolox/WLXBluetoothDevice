@@ -54,9 +54,11 @@ SpecBegin(WLXServiceManager)
         serviceManager.asyncExecutor = asyncExecutor;
         
         characteristicUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
+        CBUUID * serviceUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00068"];
         mockCharacteristic = mock([CBCharacteristic class]);
         [MKTGiven(mockCharacteristic.UUID) willReturn:characteristicUUID];
         [MKTGiven([mockLocator characteristicFromUUID:characteristicUUID]) willReturn:mockCharacteristic];
+        [MKTGiven(mockService.UUID) willReturn:serviceUUID];
     });
 
     afterEach(^{

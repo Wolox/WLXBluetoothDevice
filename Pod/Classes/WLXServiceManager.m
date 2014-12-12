@@ -16,9 +16,9 @@
     dispatch_async(_queue, ^{ line; })
 
 
-static NSString * createQueueName(CBPeripheral * peripheral) {
+static NSString * createQueueName(CBService * service) {
     return [NSString stringWithFormat:@"ar.com.wolox.WLXBluetoothDevice.WLXServiceManager.%@",
-            peripheral.identifier.UUIDString];
+            service.UUID.UUIDString];
 }
 
 @interface WLXServiceManager ()
@@ -48,7 +48,7 @@ static NSString * createQueueName(CBPeripheral * peripheral) {
         _service = service;
         _characteristicByUUID = [[NSMutableDictionary alloc] init];
         _observers = [[WLXDictionaryOfArrays alloc] init];
-        _queueName = createQueueName(peripheral);
+        _queueName = createQueueName(service);
         _queue = dispatch_queue_create([_queueName cStringUsingEncoding:NSASCIIStringEncoding], NULL);
         _readHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _writeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
