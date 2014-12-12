@@ -49,7 +49,7 @@ static NSString * createQueueName(CBService * service) {
         _characteristicByUUID = [[NSMutableDictionary alloc] init];
         _observers = [[WLXDictionaryOfArrays alloc] init];
         _queueName = createQueueName(service);
-        _queue = dispatch_queue_create([_queueName cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+        _queue = dispatch_queue_create([_queueName cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
         _readHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _writeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _stateChangeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
