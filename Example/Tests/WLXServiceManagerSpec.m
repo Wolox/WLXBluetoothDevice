@@ -46,19 +46,19 @@ SpecBegin(WLXServiceManager)
 
     beforeEach(^{
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        characteristicUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
+        CBUUID * serviceUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00068"];
         mockLocator = mockProtocol(@protocol(WLXCharacteristicLocator));
         mockPeripheral = mock([CBPeripheral class]);
         mockService = mock([CBService class]);
-        asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:mockLocator queue:queue];
-        serviceManager = [[WLXServiceManager alloc] initWithPeripheral:mockPeripheral service:mockService];
-        serviceManager.asyncExecutor = asyncExecutor;
-        
-        characteristicUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
-        CBUUID * serviceUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00068"];
         mockCharacteristic = mock([CBCharacteristic class]);
         [MKTGiven(mockCharacteristic.UUID) willReturn:characteristicUUID];
         [MKTGiven([mockLocator characteristicFromUUID:characteristicUUID]) willReturn:mockCharacteristic];
         [MKTGiven(mockService.UUID) willReturn:serviceUUID];
+        
+        asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:mockLocator queue:queue];
+        serviceManager = [[WLXServiceManager alloc] initWithPeripheral:mockPeripheral service:mockService];
+        serviceManager.asyncExecutor = asyncExecutor;
     });
 
     afterEach(^{
