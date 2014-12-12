@@ -10,6 +10,9 @@
 
 #import <WLXBluetoothDevice/WLXServiceManager.h>
 
+#define ASYNC(code)                     \
+    dispatch_async(specQueue, ^{ code; })
+
 #define VerifyAfter(timeout, mock)      \
     usleep(timeout), MKTVerify(mock)
 
@@ -43,9 +46,17 @@ SpecBegin(WLXServiceManager)
     __block CBCharacteristic * mockCharacteristic;
     __block NSData * data;
     __block NSError * error;
+    __block dispatch_queue_t specQueue;
 
     beforeEach(^{
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        // DO NOT change this queue. It MUST be a serial queue, in order to guarantee that the tasks
+        // are processed in the arrival order. This queue must be the dispatch queue used by the
+        // async executor and every time we perform an operation that requires a characteristic UUID
+        // and then we 'fake' a call to didXXXX method on the WLXServiceManager with MUST wrap that
+        // with the ASYNC macro. That will assure that all the book keeping operation that are performed
+        // async on the async executor are executed BEFORE any other operation triggered by the didXXX
+        // methods. If not a determistic behavior for the spec is not guaranted.
+        specQueue = dispatch_queue_create("ar.com.wolox.WLXBluetoothDevice.Specs", DISPATCH_QUEUE_SERIAL);
         characteristicUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
         CBUUID * serviceUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00068"];
         mockLocator = mockProtocol(@protocol(WLXCharacteristicLocator));
@@ -56,7 +67,7 @@ SpecBegin(WLXServiceManager)
         [MKTGiven([mockLocator characteristicFromUUID:characteristicUUID]) willReturn:mockCharacteristic];
         [MKTGiven(mockService.UUID) willReturn:serviceUUID];
         
-        asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:mockLocator queue:queue];
+        asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:mockLocator queue:specQueue];
         serviceManager = [[WLXServiceManager alloc] initWithPeripheral:mockPeripheral service:mockService];
         serviceManager.asyncExecutor = asyncExecutor;
     });
@@ -108,7 +119,7 @@ SpecBegin(WLXServiceManager)
                     expect(data).to.equal(data);
                     done();
                 }];
-                [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil];
+                ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil]);
             });
             
             it(@"calls the peripheral's readValueForCharacteristic", ^AsyncBlock{
@@ -116,7 +127,7 @@ SpecBegin(WLXServiceManager)
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     done();
                 }];
-                [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil];
+                ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil]);
             });
         
         });
@@ -134,7 +145,7 @@ SpecBegin(WLXServiceManager)
                     expect(data).to.beNil;
                     done();
                 }];
-                [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error];
+                ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error]);
             });
             
             it(@"calls the peripheral's readValueForCharacteristic", ^AsyncBlock{
@@ -142,7 +153,7 @@ SpecBegin(WLXServiceManager)
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     done();
                 }];
-                [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error];
+                ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error]);
             });
             
         });
@@ -194,7 +205,7 @@ SpecBegin(WLXServiceManager)
                     expect(error).to.beNil;
                     done();
                 }];
-                [serviceManager didWriteValueForCharacteristic:mockCharacteristic error:nil];
+                ASYNC([serviceManager didWriteValueForCharacteristic:mockCharacteristic error:nil]);
             });
             
             it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^AsyncBlock{
@@ -202,7 +213,7 @@ SpecBegin(WLXServiceManager)
                     [MKTVerify(mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithResponse];
                     done();
                 }];
-                [serviceManager didWriteValueForCharacteristic:mockCharacteristic error:nil];
+                ASYNC([serviceManager didWriteValueForCharacteristic:mockCharacteristic error:nil]);
             });
         
         });
@@ -214,7 +225,7 @@ SpecBegin(WLXServiceManager)
                     expect(error).notTo.beNil;
                     done();
                 }];
-                [serviceManager didWriteValueForCharacteristic:mockCharacteristic error:error];
+                ASYNC([serviceManager didWriteValueForCharacteristic:mockCharacteristic error:error]);
             });
             
             it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^AsyncBlock{
@@ -222,7 +233,7 @@ SpecBegin(WLXServiceManager)
                     [MKTVerify(mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithResponse];
                     done();
                 }];
-                [serviceManager didWriteValueForCharacteristic:mockCharacteristic error:error];
+                ASYNC([serviceManager didWriteValueForCharacteristic:mockCharacteristic error:error]);
             });
             
         });
@@ -294,7 +305,7 @@ SpecBegin(WLXServiceManager)
                     expect(error).to.beNil;
                     done();
                 }];
-                [serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil];
+                ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil]);
             });
             
             it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^AsyncBlock{
@@ -302,7 +313,7 @@ SpecBegin(WLXServiceManager)
                     [MKTVerify(mockPeripheral) setNotifyValue:YES forCharacteristic:mockCharacteristic];
                     done();
                 }];
-                [serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil];
+                ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil]);
             });
             
         });
@@ -314,7 +325,7 @@ SpecBegin(WLXServiceManager)
                     expect(error).notTo.beNil;
                     done();
                 }];
-                [serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error];
+                ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
             });
             
             it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^AsyncBlock{
@@ -322,7 +333,7 @@ SpecBegin(WLXServiceManager)
                     [MKTVerify(mockPeripheral) setNotifyValue:YES forCharacteristic:mockCharacteristic];
                     done();
                 }];
-                [serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error];
+                ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
             });
         
         });
@@ -358,7 +369,7 @@ SpecBegin(WLXServiceManager)
                     expect(error).to.beNil;
                     done();
                 }];
-                [serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil];
+                ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil]);
             });
             
             it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^AsyncBlock{
@@ -366,7 +377,7 @@ SpecBegin(WLXServiceManager)
                     [MKTVerify(mockPeripheral) setNotifyValue:NO forCharacteristic:mockCharacteristic];
                     done();
                 }];
-                [serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil];
+                ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil]);
             });
             
         });
@@ -378,7 +389,7 @@ SpecBegin(WLXServiceManager)
                     expect(error).notTo.beNil;
                     done();
                 }];
-                [serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error];
+                ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
             });
             
             it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^AsyncBlock{
@@ -386,7 +397,7 @@ SpecBegin(WLXServiceManager)
                     [MKTVerify(mockPeripheral) setNotifyValue:YES forCharacteristic:mockCharacteristic];
                     done();
                 }];
-                [serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error];
+                ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
             });
             
         });
@@ -429,7 +440,7 @@ SpecBegin(WLXServiceManager)
                     expect(aData).to.equal(data);
                     done();
                 }];
-                [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil];
+                ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil]);
             });
             
         });
@@ -442,7 +453,7 @@ SpecBegin(WLXServiceManager)
                     expect(aData).to.beNil;
                     done();
                 }];
-                [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error];
+                ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error]);
             });
             
         });
@@ -488,6 +499,7 @@ SpecBegin(WLXServiceManager)
                 [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil];
                 // This has to be done like this because all bluetooth related operation are executed async and
                 // we cannot mock the object that is the target due to an implementation detail.
+                // So we must 'wait' until the notification is propagated to all observers.
                 usleep(100);
                 expect(observer.data).to.equal(data);
                 expect(observer.error).to.beNil;
@@ -502,6 +514,7 @@ SpecBegin(WLXServiceManager)
                 [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error];
                 // This has to be done like this because all bluetooth related operation are executed async and
                 // we cannot mock the object that is the target due to an implementation detail.
+                // So we must 'wait' until the notification is propagated to all observers.
                 usleep(100);
                 expect(observer.data).to.beNil;
                 expect(observer.error).notTo.beNil;
