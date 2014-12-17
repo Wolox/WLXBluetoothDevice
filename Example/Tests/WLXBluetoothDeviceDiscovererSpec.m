@@ -160,6 +160,25 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
         
     });
 
+    context(@"when the connection is lost while discovering", ^{
+        
+        beforeEach(^{
+            [discoverer discoverDevicesNamed:nil withServices:nil andTimeout:30000];
+        });
+        
+        it(@"stops the discovery process", ^{
+            expect(discoverer.discovering).to.beTruthy;
+            [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOff object:nil userInfo:nil];
+            expect(discoverer.discovering).to.beFalsy;
+        });
+        
+        afterEach(^{
+            [discoverer stopDiscoveringDevices];
+        });
+        
+    });
+
+
     describe(@"#addDiscoveredDevice:", ^{
         
         __block WLXDeviceDiscoveryData * data;

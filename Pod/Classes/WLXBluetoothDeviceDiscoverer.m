@@ -167,14 +167,15 @@
         [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOn
                                              object:nil
                                               queue:nil
-                                         usingBlock:^(NSNotification * notification){
+                                         usingBlock:^(NSNotification * notification) {
                                              this.bluetoothOn = YES;
                                          }],
         [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOff
                                              object:nil
                                               queue:nil
-                                         usingBlock:^(NSNotification * notification){
+                                         usingBlock:^(NSNotification * notification) {
                                              this.bluetoothOn = NO;
+                                             [this stopDiscoveringDevices];
                                          }]
     ];
 }
