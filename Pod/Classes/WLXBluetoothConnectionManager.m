@@ -159,7 +159,8 @@
     // is not a problem because an instance of connection manager always handles the same
     // peripheral therefor the service manager is guaranted to manage the same peripheral.
     if (_servicesManager == nil) {
-        _servicesManager = [[WLXServicesManager alloc] initWithPeripheral:self.peripheral];
+        _servicesManager = [[WLXServicesManager alloc] initWithPeripheral:self.peripheral
+                                                       notificationCenter:self.notificationCenter];
     }
     if (self.connectionBlock) {
         self.connectionBlock(nil);

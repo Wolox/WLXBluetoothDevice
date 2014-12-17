@@ -9,17 +9,20 @@
 #import <Foundation/Foundation.h>
 
 #import <WLXBluetoothDevice/WLXServicesManager.h>
+#import <WLXBluetoothDevice/WLXBluetoothDeviceNotifications.h>
 
 SpecBegin(WLXServicesManager)
 
     __block CBPeripheral * mockPeripheral;
     __block CBService * mockService;
     __block WLXServicesManager * servicesManager;
+    __block NSNotificationCenter * notificationCenter;
 
     beforeEach(^{
         mockPeripheral = mock([CBPeripheral class]);
         mockService = mock([CBService class]);
-        servicesManager = [[WLXServicesManager alloc] initWithPeripheral:mockPeripheral];
+        notificationCenter = [NSNotificationCenter defaultCenter];
+        servicesManager = [[WLXServicesManager alloc] initWithPeripheral:mockPeripheral notificationCenter:notificationCenter];
         
         CBUUID * serviceUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
         [MKTGiven(mockService.UUID) willReturn:serviceUUID];
@@ -29,6 +32,7 @@ SpecBegin(WLXServicesManager)
         mockPeripheral = nil;
         mockService = nil;
         servicesManager = nil;
+        notificationCenter = nil;
     });
 
     describe(@"#discoverServicesUsingBlock:", ^{
@@ -117,6 +121,21 @@ SpecBegin(WLXServicesManager)
                     [MKTVerifyCount(mockPeripheral, times(1)) discoverServices:nil];
                     done();
                 }];
+            });
+            
+        });
+        
+        context(@"when the connection is lost while discovering", ^{
+        
+            beforeEach(^{
+                [MKTGiven(mockPeripheral.services) willReturn:@[mockService]];
+                [servicesManager discoverServicesUsingBlock:^(NSError * error) {}];
+            });
+            
+            it(@"stops discovering services", ^{
+                expect(servicesManager.discovering).to.equal(YES);
+                [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOff object:nil];
+                expect(servicesManager.discovering).to.equal(NO);
             });
             
         });

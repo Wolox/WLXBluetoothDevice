@@ -23,7 +23,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly) BOOL discovering;
 @property (nonatomic, readonly) BOOL servicesDiscovered;
 
-- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral notificationCenter:(NSNotificationCenter *)notificationCenter;
 
 - (BOOL)discoverServicesUsingBlock:(void(^)(NSError *))block;
 
