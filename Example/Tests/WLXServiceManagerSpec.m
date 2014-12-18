@@ -267,11 +267,12 @@ SpecBegin(WLXServiceManager)
             
         });
         
-        it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^{
+        it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^AsyncBlock {
             [serviceManager writeValue:data forCharacteristicUUID:characteristicUUID];
-            // This sleep is necesary because all the bluetooth related operations are
-            // performed async.
-            [VerifyAfter(100, mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithoutResponse];
+            ASYNC({
+                [MKTVerify(mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithoutResponse];
+                done();
+            });
         });
         
     });
@@ -497,12 +498,10 @@ SpecBegin(WLXServiceManager)
             it(@"calls the block with the updated data", ^{
                 [serviceManager addObserverForCharacteristic:characteristicUUID selector:@selector(updatedValue:error:) target:observer];
                 [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil];
-                // This has to be done like this because all bluetooth related operation are executed async and
-                // we cannot mock the object that is the target due to an implementation detail.
-                // So we must 'wait' until the notification is propagated to all observers.
-                usleep(100);
-                expect(observer.data).to.equal(data);
-                expect(observer.error).to.beNil;
+                ASYNC({
+                    expect(observer.data).to.equal(data);
+                    expect(observer.error).to.beNil;                
+                });
             });
             
         });
@@ -512,12 +511,10 @@ SpecBegin(WLXServiceManager)
             it(@"calls the block with an error", ^{
                 [serviceManager addObserverForCharacteristic:characteristicUUID selector:@selector(updatedValue:error:) target:observer];
                 [serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error];
-                // This has to be done like this because all bluetooth related operation are executed async and
-                // we cannot mock the object that is the target due to an implementation detail.
-                // So we must 'wait' until the notification is propagated to all observers.
-                usleep(100);
-                expect(observer.data).to.beNil;
-                expect(observer.error).notTo.beNil;
+                ASYNC({
+                    expect(observer.data).to.beNil;
+                    expect(observer.error).notTo.beNil;
+                });
             });
             
         });
