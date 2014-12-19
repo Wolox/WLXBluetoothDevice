@@ -34,14 +34,6 @@
               reconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy
                         bluetoohOn:(BOOL)bluetoothOn;
 
-- (BOOL)connectWithTimeout:(NSUInteger)timeout;
-
-- (BOOL)connectWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block;
-
-- (BOOL)connectAndDiscoverServicesWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block;
-
-- (void)disconnect;
-
 - (void)didFailToConnect:(NSError *)error;
 
 - (void)didDisconnect:(NSError *)error;
