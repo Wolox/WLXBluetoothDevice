@@ -92,6 +92,16 @@
     return [self connectWithTimeout:timeout usingBlock:nil];
 }
 
+- (BOOL)connectAndDiscoverServicesWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block {
+    return [self connectWithTimeout:timeout usingBlock:^(NSError * error) {
+        if (error == nil) {
+            [self.servicesManager discoverServicesUsingBlock:block];
+        } else {
+            block(error);
+        }
+    }];
+}
+
 - (void)disconnect {
     if (self.connected) {
         DDLogVerbose(@"Disconnecting from device '%@'", self.peripheral.name);

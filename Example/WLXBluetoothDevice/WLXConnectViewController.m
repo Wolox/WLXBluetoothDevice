@@ -91,15 +91,7 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
 #pragma mark - WLXConnectionManagerDelegate
 
 - (void)connectionManagerDidConnect:(id<WLXConnectionManager>)connectionManager {
-    __block typeof(self) this = self;
-    [connectionManager.servicesManager discoverServicesUsingBlock:^(NSError * error) {
-        if (error) {
-            [this showConnectionErrorAlert:error];
-        } else {
-            [self reloadUIOnMainThread];
-        }
-    }];
-    [self reloadUIOnMainThread];
+
 }
 
 - (void)connectionManagerDidReconnect:(id<WLXConnectionManager>)connectionManager {
@@ -218,7 +210,14 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
 
 - (void)connect {
     self.deviceRegistry.enabled = self.remeberDeviceSwitch.on;
-    [self.connectionManager connectWithTimeout:CONNECTION_TIMEOUT];
+    __block typeof(self) this = self;
+    [self.connectionManager connectAndDiscoverServicesWithTimeout:CONNECTION_TIMEOUT usingBlock:^(NSError * error) {
+        if (error) {
+            [this showConnectionErrorAlert:error];
+        } else {
+            [self reloadUIOnMainThread];
+        }
+    }];
     [self reloadUI];
 }
 

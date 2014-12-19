@@ -38,6 +38,8 @@
 
 - (BOOL)connectWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block;
 
+- (BOOL)connectAndDiscoverServicesWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block;
+
 - (void)disconnect;
 
 - (void)didFailToConnect:(NSError *)error;

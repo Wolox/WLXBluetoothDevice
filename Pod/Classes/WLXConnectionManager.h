@@ -29,6 +29,8 @@
 
 - (BOOL)connectWithTimeout:(NSUInteger)timeout;
 
+- (BOOL)connectAndDiscoverServicesWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block;
+
 - (void)disconnect;
 
 @end
