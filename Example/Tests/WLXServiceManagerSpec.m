@@ -83,12 +83,12 @@ SpecBegin(WLXServiceManager)
         error = nil;
     });
 
-    describe(@"#readValueForCharacteristicUUID:usingBlock:", ^{
+    describe(@"#readValueFromCharacteristic:usingBlock:", ^{
         
         context(@"when a nil UUID is given", ^{
             
             it(@"raises an exception", ^{
-                expect(^{ [serviceManager readValueForCharacteristicUUID:nil usingBlock:^(NSError * error, NSData * data) {
+                expect(^{ [serviceManager readValueFromCharacteristic:nil usingBlock:^(NSError * error, NSData * data) {
                     
                 }]; }).to.raise(@"NSInternalInconsistencyException");
             });
@@ -99,7 +99,7 @@ SpecBegin(WLXServiceManager)
             
             it(@"raises an exception", ^{
                 expect(^{
-                    [serviceManager readValueForCharacteristicUUID:characteristicUUID usingBlock:nil];
+                    [serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:nil];
                 }).to.raise(@"NSInternalInconsistencyException");
             });
             
@@ -113,7 +113,7 @@ SpecBegin(WLXServiceManager)
             });
             
             it(@"calls the block with the read data", ^AsyncBlock{
-                [serviceManager readValueForCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
+                [serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     expect(error).to.beNil;
                     expect(data).to.equal(data);
@@ -123,7 +123,7 @@ SpecBegin(WLXServiceManager)
             });
             
             it(@"calls the peripheral's readValueForCharacteristic", ^AsyncBlock{
-                [serviceManager readValueForCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
+                [serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     done();
                 }];
@@ -139,7 +139,7 @@ SpecBegin(WLXServiceManager)
             });
             
             it(@"call the block with an error", ^AsyncBlock{
-                [serviceManager readValueForCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
+                [serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     expect(error).notTo.beNil;
                     expect(data).to.beNil;
@@ -149,7 +149,7 @@ SpecBegin(WLXServiceManager)
             });
             
             it(@"calls the peripheral's readValueForCharacteristic", ^AsyncBlock{
-                [serviceManager readValueForCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
+                [serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     done();
                 }];
@@ -161,7 +161,7 @@ SpecBegin(WLXServiceManager)
         
     });
 
-    describe(@"#writeValue:forCharacteristicUUID:usingBlock:", ^{
+    describe(@"#writeValue:toCharacteristic:usingBlock:", ^{
         
         beforeEach(^{
             data = [[NSData alloc] init];
@@ -172,7 +172,7 @@ SpecBegin(WLXServiceManager)
             
             it(@"raises an exception", ^{
                 expect(^{
-                    [serviceManager writeValue:nil forCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error){}];
+                    [serviceManager writeValue:nil toCharacteristic:characteristicUUID usingBlock:^(NSError * error){}];
                 }).to.raise(@"NSInternalInconsistencyException");
             });
             
@@ -182,7 +182,7 @@ SpecBegin(WLXServiceManager)
             
             it(@"raises an exception", ^{
                 expect(^{
-                    [serviceManager writeValue:data forCharacteristicUUID:nil usingBlock:^(NSError * error){}];
+                    [serviceManager writeValue:data toCharacteristic:nil usingBlock:^(NSError * error){}];
                 }).to.raise(@"NSInternalInconsistencyException");
             });
             
@@ -192,7 +192,7 @@ SpecBegin(WLXServiceManager)
             
             it(@"raises an exception", ^{
                 expect(^{
-                    [serviceManager writeValue:data forCharacteristicUUID:characteristicUUID usingBlock:nil];
+                    [serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:nil];
                 }).to.raise(@"NSInternalInconsistencyException");
             });
             
@@ -201,7 +201,7 @@ SpecBegin(WLXServiceManager)
         context(@"when the characteristic's value is successfully writen", ^{
         
             it(@"calls the block with a nil error", ^AsyncBlock{
-                [serviceManager writeValue:data forCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error) {
+                [serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     expect(error).to.beNil;
                     done();
                 }];
@@ -209,7 +209,7 @@ SpecBegin(WLXServiceManager)
             });
             
             it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^AsyncBlock{
-                [serviceManager writeValue:data forCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error) {
+                [serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     [MKTVerify(mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithResponse];
                     done();
                 }];
@@ -221,7 +221,7 @@ SpecBegin(WLXServiceManager)
         context(@"when the characteristic's value could not be writen", ^{
         
             it(@"calls the block with an error", ^AsyncBlock{
-                [serviceManager writeValue:data forCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error) {
+                [serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     expect(error).notTo.beNil;
                     done();
                 }];
@@ -229,7 +229,7 @@ SpecBegin(WLXServiceManager)
             });
             
             it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^AsyncBlock{
-                [serviceManager writeValue:data forCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error) {
+                [serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     [MKTVerify(mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithResponse];
                     done();
                 }];
@@ -240,7 +240,7 @@ SpecBegin(WLXServiceManager)
         
     });
 
-    describe(@"#writeValue:forCharacteristicUUID:", ^{
+    describe(@"#writeValue:toCharacteristic:", ^{
         
         beforeEach(^{
             data = [[NSData alloc] init];
@@ -251,7 +251,7 @@ SpecBegin(WLXServiceManager)
             
             it(@"raises an exception", ^{
                 expect(^{
-                    [serviceManager writeValue:nil forCharacteristicUUID:characteristicUUID];
+                    [serviceManager writeValue:nil toCharacteristic:characteristicUUID];
                 }).to.raise(@"NSInternalInconsistencyException");
             });
             
@@ -261,14 +261,14 @@ SpecBegin(WLXServiceManager)
             
             it(@"raises an exception", ^{
                 expect(^{
-                    [serviceManager writeValue:data forCharacteristicUUID:nil];
+                    [serviceManager writeValue:data toCharacteristic:nil];
                 }).to.raise(@"NSInternalInconsistencyException");
             });
             
         });
         
         it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^AsyncBlock {
-            [serviceManager writeValue:data forCharacteristicUUID:characteristicUUID];
+            [serviceManager writeValue:data toCharacteristic:characteristicUUID];
             ASYNC({
                 [MKTVerify(mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithoutResponse];
                 done();

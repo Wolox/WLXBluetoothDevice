@@ -40,7 +40,7 @@ static CBUUID * characteristicUUID;
 }
 
 - (void)readValueUsingBlock:(void(^)(NSError *, NSUInteger))block {
-    [self.serviceManager readValueForCharacteristicUUID:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
+    [self.serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
         if (error) {
             block(error, 0);
         } else {
@@ -56,7 +56,7 @@ static CBUUID * characteristicUUID;
 
 - (void)writeValue:(NSUInteger)value usingBlock:(void(^)(NSError *))block {
     NSData * data = [NSData dataWithBytes:&value length:sizeof(value)];
-    [self.serviceManager writeValue:data forCharacteristicUUID:characteristicUUID usingBlock:block];
+    [self.serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:block];
 }
 
 - (void)enableNotificationsUsingBlock:(void(^)(NSError *))block {

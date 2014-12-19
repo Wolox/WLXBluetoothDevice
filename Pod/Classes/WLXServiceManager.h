@@ -23,11 +23,11 @@
 
 #pragma mark - Reading & writing characteristic value
 
-- (void)readValueForCharacteristicUUID:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *, NSData *))block;
+- (void)readValueFromCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *, NSData *))block;
 
-- (void)writeValue:(NSData *)data forCharacteristicUUID:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block;
+- (void)writeValue:(NSData *)data toCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block;
 
-- (void)writeValue:(NSData *)data forCharacteristicUUID:(CBUUID *)characteristicUUID;
+- (void)writeValue:(NSData *)data toCharacteristic:(CBUUID *)characteristicUUID;
 
 #pragma mark - Handling characteristic notifications
 

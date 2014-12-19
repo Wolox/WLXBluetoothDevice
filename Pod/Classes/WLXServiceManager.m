@@ -64,7 +64,7 @@ static NSString * createQueueName(CBService * service) {
 
 #pragma mark - Reading & writing characteristic value
 
-- (void)readValueForCharacteristicUUID:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *, NSData *))block {
+- (void)readValueFromCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *, NSData *))block {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
     DDLogVerbose(@"Trying to read value for characteristic %@", characteristicUUID.UUIDString);
@@ -80,7 +80,7 @@ static NSString * createQueueName(CBService * service) {
     } forCharacteristic:characteristicUUID];
 }
 
-- (void)writeValue:(NSData *)data forCharacteristicUUID:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block {
+- (void)writeValue:(NSData *)data toCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
     WLXAssertNotNil(data);
@@ -97,7 +97,7 @@ static NSString * createQueueName(CBService * service) {
     } forCharacteristic:characteristicUUID];
 }
 
-- (void)writeValue:(NSData *)data forCharacteristicUUID:(CBUUID *)characteristicUUID {
+- (void)writeValue:(NSData *)data toCharacteristic:(CBUUID *)characteristicUUID {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(data);
     __block typeof(self) this = self;
