@@ -2,7 +2,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target 'WLXBluetoothDevice', :exclusive => true do
   pod "WLXBluetoothDevice", :path => "../"
-  pod 'CocoaLumberjack', '~>2.0.0-beta'
+  pod 'CocoaLumberjack', '~>2.0.0-rc'
 end
 
 target 'Tests', :exclusive => true do
