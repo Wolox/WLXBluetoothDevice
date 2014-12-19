@@ -24,7 +24,7 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 @property (nonatomic) NSMutableDictionary * managersByCharacteristic;
 @property (nonatomic, copy) void(^discoveryBlock)(NSError *);
 @property (nonatomic) NSNotificationCenter * notificationCenter;
-@property (nonatomic) id bluetoothOffObserver;
+@property (nonatomic) NSMutableArray * observers;
 
 @end
 
@@ -45,6 +45,7 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
         _managers = [[NSMutableDictionary alloc] init];
         _managersByCharacteristic = [[NSMutableDictionary alloc] init];
         _discovering = NO;
+        _observers = [[NSMutableArray alloc] init];
         [self registerNotificationHandlers];
     }
     return self;
@@ -179,20 +180,38 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 
 - (void)stopDiscoveringServices {
     _discovering = NO;
+    DDLogDebug(@"Stopped discovering services for peripheral %@", self.peripheral.identifier.UUIDString);
 }
 
 - (void)registerNotificationHandlers {
     __block typeof(self) this = self;
-    self.bluetoothOffObserver = [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOff
-                                                                     object:nil
-                                                                      queue:nil
-                                                                 usingBlock:^(NSNotification * notification) {
-                                                                     [this stopDiscoveringServices];
-                                                                 }];
+    id handler = ^(NSNotification * notification) { [this stopDiscoveringServices]; };
+    [self registerHandler:handler forNotifications:@[
+        WLXBluetoothDeviceBluetoothIsOff,
+        WLXBluetoothDeviceConnectionTerminated,
+        WLXBluetoothDeviceConnectionLost,
+        WLXBluetoothDeviceReconnecting
+    ]];
+}
+
+- (void)registerHandler:(void(^)(NSNotification *))handler forNotifications:(NSArray *)notifications {
+    for (NSString * notification in notifications) {
+        [self registerHandler:handler forNotification:notification];
+    }
+}
+
+- (void)registerHandler:(void(^)(NSNotification *))handler forNotification:(NSString *)notification {
+    id observer = [self.notificationCenter addObserverForName:notification
+                                                       object:nil
+                                                        queue:nil
+                                                   usingBlock:handler];
+    [self.observers addObject:observer];
 }
 
 - (void)unregisterNotificationHandlers {
-    [self.notificationCenter removeObserver:self.bluetoothOffObserver];
+    for (id observer in self.observers) {
+        [self.notificationCenter removeObserver:observer];
+    }
 }
 
 @end

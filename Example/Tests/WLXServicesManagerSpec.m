@@ -125,7 +125,7 @@ SpecBegin(WLXServicesManager)
             
         });
         
-        context(@"when the connection is lost while discovering", ^{
+        context(@"when the bluetooth is turned off while discovering", ^{
         
             beforeEach(^{
                 [MKTGiven(mockPeripheral.services) willReturn:@[mockService]];
@@ -135,6 +135,51 @@ SpecBegin(WLXServicesManager)
             it(@"stops discovering services", ^{
                 expect(servicesManager.discovering).to.equal(YES);
                 [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOff object:nil];
+                expect(servicesManager.discovering).to.equal(NO);
+            });
+            
+        });
+        
+        context(@"when the connection is lost while discovering", ^{
+            
+            beforeEach(^{
+                [MKTGiven(mockPeripheral.services) willReturn:@[mockService]];
+                [servicesManager discoverServicesUsingBlock:^(NSError * error) {}];
+            });
+            
+            it(@"stops discovering services", ^{
+                expect(servicesManager.discovering).to.equal(YES);
+                [notificationCenter postNotificationName:WLXBluetoothDeviceConnectionLost object:nil];
+                expect(servicesManager.discovering).to.equal(NO);
+            });
+            
+        });
+        
+        context(@"when the connection is terminated while discovering", ^{
+            
+            beforeEach(^{
+                [MKTGiven(mockPeripheral.services) willReturn:@[mockService]];
+                [servicesManager discoverServicesUsingBlock:^(NSError * error) {}];
+            });
+            
+            it(@"stops discovering services", ^{
+                expect(servicesManager.discovering).to.equal(YES);
+                [notificationCenter postNotificationName:WLXBluetoothDeviceConnectionTerminated object:nil];
+                expect(servicesManager.discovering).to.equal(NO);
+            });
+            
+        });
+        
+        context(@"when trying to reconnect while discovering", ^{
+            
+            beforeEach(^{
+                [MKTGiven(mockPeripheral.services) willReturn:@[mockService]];
+                [servicesManager discoverServicesUsingBlock:^(NSError * error) {}];
+            });
+            
+            it(@"stops discovering services", ^{
+                expect(servicesManager.discovering).to.equal(YES);
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
                 expect(servicesManager.discovering).to.equal(NO);
             });
             
