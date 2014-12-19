@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import <WLXBluetoothDevice/WLXServiceManager.h>
-
 @interface WLXDummyService : NSObject
 
 + (CBUUID *)serviceUUID;

@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import <WLXBluetoothDevice/WLXBluetoothDeviceManager.h>
-#import <WLXBluetoothDevice/WLXBluetoothDeviceRegistry.h>
 
 @interface WLXApplication : NSObject
 

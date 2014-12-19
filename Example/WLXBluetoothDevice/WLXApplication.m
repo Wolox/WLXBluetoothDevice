@@ -7,7 +7,6 @@
 //
 
 #import "WLXApplication.h"
-#import <WLXBluetoothDevice/WLXBluetoothDeviceUserDefaultsRepository.h>
 
 @implementation WLXApplication
 

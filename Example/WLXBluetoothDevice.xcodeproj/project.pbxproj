@@ -191,8 +191,8 @@
 			isa = PBXGroup;
 			children = (
 				6003F595195388D20070C39A /* WLXBluetoothDevice-Info.plist */,
-				6003F596195388D20070C39A /* InfoPlist.strings */,
 				6003F599195388D20070C39A /* main.m */,
+				6003F596195388D20070C39A /* InfoPlist.strings */,
 				6003F59B195388D20070C39A /* WLXBluetoothDevice-Prefix.pch */,
 			);
 			name = "Supporting Files";

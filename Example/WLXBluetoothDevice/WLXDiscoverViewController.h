@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import <WLXBluetoothDevice/WLXDeviceDiscoverer.h>
 #import "WLXDiscoverViewControllerDelegate.h"
 
 @interface WLXDiscoverViewController : UITableViewController

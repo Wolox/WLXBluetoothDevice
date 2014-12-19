@@ -8,10 +8,6 @@
 
 #import "WLXConnectViewController.h"
 
-#import <WLXBluetoothDevice/WLXLinearReconnectionStrategy.h>
-#import <WLXBluetoothDevice/WLXNullReconnectionStrategy.h>
-#import <WLXBluetoothDevice/WLXBluetoothDeviceNotifications.h>
-
 #import "WLXDiscoverViewController.h"
 #import "WLXApplication.h"
 #import "WLXServiceViewController.h"
