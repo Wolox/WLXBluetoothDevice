@@ -80,6 +80,12 @@ it, simply add the following line to your Podfile:
 
     pod "WLXBluetoothDevice"
 
+Once the pod is installed you can add the following header to your prefix file:
+
+```objc
+#import <WLXBluetoothDevice/WLXBluetoothDevice.h>
+```
+
 ## Documentation
 
 You can check the library's [wiki](https://github.com/Wolox/WLXBluetoothDevice/wiki)
