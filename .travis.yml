@@ -8,3 +8,5 @@ before_install:
   - brew outdated xctool || brew upgrade xctool
 script:
   - cd Example && rake xbuild:clean xbuild:test
+after_success:
+  - slather
