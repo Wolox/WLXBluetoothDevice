@@ -34,6 +34,6 @@ Pod::Spec.new do |s|
   }
 
   s.frameworks = 'CoreBluetooth'
-  s.dependency 'CocoaLumberjack', '~>2.0.0-beta'
+  s.dependency 'CocoaLumberjack', '~>2.0.0-rc'
 
 end
