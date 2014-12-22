@@ -9,4 +9,4 @@ before_install:
 script:
   - cd Example && rake xbuild:clean xbuild:test
 after_success:
-  - cd && slather
+  - cd .. && slather
