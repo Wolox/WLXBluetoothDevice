@@ -2,6 +2,7 @@
 
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Wolox/WLXBluetoothDevice?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![CI Status](https://travis-ci.org/Wolox/WLXBluetoothDevice.svg?branch=master)](https://travis-ci.org/Wolox/WLXBluetoothDevice)
+[![Coverage Status](https://coveralls.io/repos/Wolox/WLXBluetoothDevice/badge.png?branch=master)](https://coveralls.io/r/Wolox/WLXBluetoothDevice?branch=master)
 [![Version](https://img.shields.io/cocoapods/v/WLXBluetoothDevice.svg?style=flat)](http://cocoadocs.org/docsets/WLXBluetoothDevice)
 [![License](https://img.shields.io/cocoapods/l/WLXBluetoothDevice.svg?style=flat)](http://cocoadocs.org/docsets/WLXBluetoothDevice)
 [![Platform](https://img.shields.io/cocoapods/p/WLXBluetoothDevice.svg?style=flat)](http://cocoadocs.org/docsets/WLXBluetoothDevice)
