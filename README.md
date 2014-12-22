@@ -48,12 +48,9 @@ will get a lot of information about what the library is doing.
 ### Current status
 
 Although we have been using this code in several projects this library
-is in alpha state because we have refactored it to make it more general
-so there might be some bugs that we haven't catch yet. Also we want to get
-some feedback from the community before we lock down the API.
-[Here](https://github.com/Wolox/WLXBluetoothDevice/issues?q=is%3Aopen+is%3Aissue+milestone%3Av0.1.0)
-is a list of issues that need to be solved before we release the first
-stable version of the library.
+is in beta state because we have refactored it to make it more general
+so there might be some bugs that we haven't catch yet. The API is stable
+and probably this will be final `0.1.0` version.
 
 ### Future versions
 
