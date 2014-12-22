@@ -9,6 +9,7 @@
 #import "WLXAppDelegate.h"
 
 #import <CocoaLumberjack/CocoaLumberjack.h>
+#import <WLXBluetoothDevice/WLXBluetoothDeviceLogger.h>
 
 @implementation WLXAppDelegate
 
@@ -16,6 +17,7 @@
 {
     [DDLog addLogger:[DDASLLogger sharedInstance]];
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
+        
     return YES;
 }
 							

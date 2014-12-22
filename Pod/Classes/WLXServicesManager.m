@@ -33,6 +33,8 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 @dynamic services;
 @dynamic servicesDiscovered;
 
+DYNAMIC_LOGGER_METHODS
+
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                 notificationCenter:(NSNotificationCenter *)notificationCenter {
     WLXAssertNotNil(peripheral);
@@ -72,14 +74,14 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
                                               userInfo:nil];
             block(error);
         }
-        DDLogDebug(@"Cannot discover services, the discovery process has already been started.");
+        WLXLogDebug(@"Cannot discover services, the discovery process has already been started.");
         return NO;
     }
     if (block) {
         self.discoveryBlock = block;
     }
     _discovering = YES;
-    DDLogDebug(@"Discovering services for peripheral %@", self.peripheral.identifier.UUIDString);
+    WLXLogDebug(@"Discovering services for peripheral %@", self.peripheral.identifier.UUIDString);
     self.peripheral.delegate = self;
     [self.peripheral discoverServices:nil];
     return YES;
@@ -108,7 +110,7 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
         [self createManagers];
         [self registerDiscoveredServices];
     } else {
-        DDLogDebug(@"Services could not be discovered: %@", error);
+        WLXLogDebug(@"Services could not be discovered: %@", error);
     }
 
     if (self.discoveryBlock) {
@@ -167,10 +169,10 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 - (void)createManagers {
     for (CBService * service in self.peripheral.services) {
         if (self.managers[service.UUID] != nil) {
-            DDLogVerbose(@"Manager for service %@ and peripheral %@ has already been created", service.UUID.UUIDString,
+            WLXLogVerbose(@"Manager for service %@ and peripheral %@ has already been created", service.UUID.UUIDString,
                          self.peripheral.identifier.UUIDString);
         } else {
-            DDLogDebug(@"Creating service manager for service %@ and peripheral %@", service.UUID.UUIDString,
+            WLXLogDebug(@"Creating service manager for service %@ and peripheral %@", service.UUID.UUIDString,
                        self.peripheral.identifier.UUIDString);
             WLXServiceManager * manager = [[WLXServiceManager alloc] initWithPeripheral:self.peripheral service:service];
             self.managers[service.UUID] = manager;
@@ -180,7 +182,7 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 
 - (void)stopDiscoveringServices {
     _discovering = NO;
-    DDLogDebug(@"Stopped discovering services for peripheral %@", self.peripheral.identifier.UUIDString);
+    WLXLogDebug(@"Stopped discovering services for peripheral %@", self.peripheral.identifier.UUIDString);
 }
 
 - (void)registerNotificationHandlers {

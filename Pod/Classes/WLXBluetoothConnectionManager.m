@@ -32,6 +32,8 @@
 @dynamic peripheralUUID;
 @dynamic active;
 
+DYNAMIC_LOGGER_METHODS
+
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                     centralManager:(CBCentralManager *)centralManager
                 notificationCenter:(NSNotificationCenter *)notificationCenter
@@ -80,7 +82,7 @@
     _connecting = YES;
     self.connectionBlock = block;
     [self.centralManager connectPeripheral:self.peripheral options:self.connectionOptions];
-    DDLogDebug(@"Connection with '%@' initiated. Reconnecting '%@'", self.peripheral.name,
+    WLXLogDebug(@"Connection with '%@' initiated. Reconnecting '%@'", self.peripheral.name,
                (self.reconnecting) ? @"YES" : @"NO");
     if (timeout > 0) {
         [self startConnectionTerminationTimerWithTimeout:timeout forPeripheral:self.peripheral];
@@ -104,7 +106,7 @@
 
 - (void)disconnect {
     if (self.connected) {
-        DDLogVerbose(@"Disconnecting from device '%@'", self.peripheral.name);
+        WLXLogVerbose(@"Disconnecting from device '%@'", self.peripheral.name);
         [self.centralManager cancelPeripheralConnection:self.peripheral];
         self.disconnecting = YES;
     }
@@ -122,7 +124,7 @@
 
 - (void)didDisconnect:(NSError *)error {
     if (!self.connected && !self.reconnecting) {
-        DDLogDebug(@"Call to didDisconnect ignored because connection manager is neigher connected or reconnecting.");
+        WLXLogDebug(@"Call to didDisconnect ignored because connection manager is neigher connected or reconnecting.");
         return;
     }
     _connected = NO;
@@ -131,27 +133,27 @@
         NSAssert(error == nil, @"Cannot be an error if disconnecting is YES");
         self.disconnecting = NO;
         if (self.reconnecting) {
-            DDLogDebug(@"Reconnection attemp has been terminated.");
+            WLXLogDebug(@"Reconnection attemp has been terminated.");
         } else {
-            DDLogInfo(@"Connection with device '%@' has been terminated.", self.peripheral.name);
+            WLXLogInfo(@"Connection with device '%@' has been terminated.", self.peripheral.name);
             NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
             [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionTerminated object:self userInfo:userInfo];
             [self.delegate connectionManagerDidTerminateConnection:self];
         }
     } else if (self.reconnecting || error != nil) {
         NSAssert(!self.connected || error != nil, @"There must be an error if disconnecting is NO");
-        DDLogInfo(@"Connection with device '%@' has been lost due to an error: %@", self.peripheral.name, error);
+        WLXLogInfo(@"Connection with device '%@' has been lost due to an error: %@", self.peripheral.name, error);
         [self tryToReconnect:error];
     } else {
         // This branch is executed because when the connection timer expires the cancelPeripheralConnection:
         // on the CBCentralManager is called and that might result into a call to this methods.
-        DDLogDebug(@"Ignoring didDisconnect call because connection manager is trying to reconnect");
+        WLXLogDebug(@"Ignoring didDisconnect call because connection manager is trying to reconnect");
     }
 }
 
 - (void)didConnect {
     NSAssert(self.connecting, @"Cannot call didConnect if connecting is NO");
-    DDLogDebug(@"Connection with peripheral '%@' successfully established. Reconnecting '%@'", self.peripheralUUID,
+    WLXLogDebug(@"Connection with peripheral '%@' successfully established. Reconnecting '%@'", self.peripheralUUID,
                (self.reconnecting) ? @"YES" : @"NO");
     [self.connectionTimerExecutor invalidateExecutors];
     NSString * notificationName;
@@ -193,13 +195,13 @@
 
 - (void)startConnectionTerminationTimerWithTimeout:(NSUInteger)timeout forPeripheral:(CBPeripheral *)peripheral {
     NSAssert(timeout > 0, @"Timeout must be a positive number.");
-    DDLogVerbose(@"Connection timer started with timeout %lu. Connected '%@'. Connecting '%@'. Reconnecting '%@'.",
+    WLXLogVerbose(@"Connection timer started with timeout %lu. Connected '%@'. Connecting '%@'. Reconnecting '%@'.",
                  (unsigned long)timeout, (self.connected) ? @"YES" : @"NO", (self.connecting) ? @"YES" : @"NO",
                  (self.reconnecting) ? @"YES" : @"NO");
     
     __block typeof(self) this = self;
     [self.connectionTimerExecutor after:timeout dispatchBlock:^{
-        DDLogDebug(@"Connection timer has expired. Connected '%@'. Connecting '%@'. Reconnecting '%@'.",
+        WLXLogDebug(@"Connection timer has expired. Connected '%@'. Connecting '%@'. Reconnecting '%@'.",
                    (self.connected) ? @"YES" : @"NO", (self.connecting) ? @"YES" : @"NO",
                    (self.reconnecting) ? @"YES" : @"NO");
         if (!this.connected && (this.connecting || this.reconnecting)) {
@@ -232,14 +234,14 @@
 
 - (BOOL)canConnectUsingBlock:(void(^)(NSError *))block {
     if (!self.bluetoothOn) {
-        DDLogDebug(@"Connection with peripheral, connection could not be initiated because Bluetooth service is not available.");
+        WLXLogDebug(@"Connection with peripheral, connection could not be initiated because Bluetooth service is not available.");
         if (block) {
             block(WLXBluetoothNotAvailableError());
         }
         return NO;
     }
     if (self.connecting) {
-        DDLogWarn(@"Connection with peripheral '%@' could not be initiated because a connection has already been started.",
+        WLXLogWarn(@"Connection with peripheral '%@' could not be initiated because a connection has already been started.",
                   self.peripheral.name);
         if (block) {
             block(WLXConnectionAlreadyStartedError());
@@ -247,7 +249,7 @@
         return NO;
     }
     if (self.connected) {
-        DDLogWarn(@"Connection could not be initiated because a previous connection with '%@' is still active.",
+        WLXLogWarn(@"Connection could not be initiated because a previous connection with '%@' is still active.",
                   self.peripheral.name);
         if (block) {
             block(WLXAlreadyConnectedError());

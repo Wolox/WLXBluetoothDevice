@@ -22,6 +22,8 @@
 
 @implementation WLXCharacteristicAsyncExecutor
 
+DYNAMIC_LOGGER_METHODS
+
 - (instancetype)initWithCharacteristicLocator:(id<WLXCharacteristicLocator>)locator queue:(dispatch_queue_t)queue {
     WLXAssertNotNil(locator);
     self = [super init];
@@ -43,7 +45,7 @@
     if (characteristic) {
         dispatchedBlock(nil, characteristic);
     } else {
-        DDLogDebug(@"Characteristic %@ has not been discovered.", characteristicUUID.UUIDString);
+        WLXLogDebug(@"Characteristic %@ has not been discovered.", characteristicUUID.UUIDString);
         [self executeBlock:dispatchedBlock whenCharacteristicIsDiscovered:characteristicUUID];
     }
 }
@@ -54,7 +56,7 @@
 
 - (void)flushPendingOperations {
     for (CBCharacteristic * characteristic in self.locator.characteristics) {
-        DDLogDebug(@"Flusing pending operations for characteristic %@", characteristic.UUID.UUIDString);
+        WLXLogDebug(@"Flusing pending operations for characteristic %@", characteristic.UUID.UUIDString);
         NSMutableArray * operations = self.pendingOperations[characteristic.UUID];
         for (void(^operation)(NSError *, CBCharacteristic *) in operations) {
             operation(nil, characteristic);
@@ -65,7 +67,7 @@
 
 - (void)flushPendingOperationsWithError:(NSError *)error {
     for (CBUUID * characteristicUUID in [self.pendingOperations allKeys]) {
-        DDLogDebug(@"Flusing pending operations with error for characteristic %@", characteristicUUID.UUIDString);
+        WLXLogDebug(@"Flusing pending operations with error for characteristic %@", characteristicUUID.UUIDString);
         NSMutableArray * operations = self.pendingOperations[characteristicUUID];
         for (void(^operation)(NSError *, CBCharacteristic *) in operations) {
             operation(error, nil);
@@ -80,12 +82,12 @@
     // Checking if there are pending operations MUST be done before putting the given block
     // to the pending operation queue.
     BOOL pendingOperations = [self pendingOperationsForCharacteristic:characteristicUUID];
-    DDLogDebug(@"Enqueuing block to be executed when characteristic %@ gets discovered", characteristicUUID.UUIDString);
+    WLXLogDebug(@"Enqueuing block to be executed when characteristic %@ gets discovered", characteristicUUID.UUIDString);
     self.pendingOperations[characteristicUUID] = [block copy];
     if (!pendingOperations) {
         [self.locator discoverCharacteristics:@[characteristicUUID]];
     } else {
-        DDLogDebug(@"There are pending operation for characteristic %@, this mean that discovery for this characteristic has already been started",
+        WLXLogDebug(@"There are pending operation for characteristic %@, this mean that discovery for this characteristic has already been started",
                    characteristicUUID.UUIDString);
     }
 }

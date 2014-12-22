@@ -602,6 +602,23 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/CocoaLumberjack\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/Expecta\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/OCHamcrest\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/OCMockito\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/Specta\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/WLXBluetoothDevice\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;

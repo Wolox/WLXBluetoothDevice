@@ -32,6 +32,8 @@ static const char * const kDefaultDeviceQueueName = "ar.com.wolox.BluetoothDevic
 
 @dynamic bluetoothOn;
 
+DYNAMIC_LOGGER_METHODS
+
 + (void)initialize {
     defaultDeviceQueue = dispatch_queue_create(kDefaultDeviceQueueName, DISPATCH_QUEUE_SERIAL);
 }

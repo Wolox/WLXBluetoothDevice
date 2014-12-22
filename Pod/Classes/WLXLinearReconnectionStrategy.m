@@ -18,6 +18,8 @@
 
 @implementation WLXLinearReconnectionStrategy
 
+DYNAMIC_LOGGER_METHODS
+
 - (instancetype)initWithWaitTime:(NSUInteger)waitTime
          maxReconnectionAttempts:(NSUInteger)maxReconnectionAttempts
                connectionTimeout:(NSUInteger)connectionTimeout
@@ -38,10 +40,10 @@
     if (_remainingConnectionAttempts-- <= 0) {
         return NO;
     }
-    DDLogDebug(@"Waiting for %d ms before trying to reconnect", (int)_waitTime);
+    WLXLogDebug(@"Waiting for %d ms before trying to reconnect", (int)_waitTime);
     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.waitTime * NSEC_PER_MSEC));
     dispatch_after(delayTime, self.queue, ^{
-        DDLogDebug(@"Trying to reconnect with device. Remaining reconnection attempts %d. Max reconnection attempts %d",
+        WLXLogDebug(@"Trying to reconnect with device. Remaining reconnection attempts %d. Max reconnection attempts %d",
                    (int)_remainingConnectionAttempts, (int)_maxReconnectionAttempts);
         block();
     });

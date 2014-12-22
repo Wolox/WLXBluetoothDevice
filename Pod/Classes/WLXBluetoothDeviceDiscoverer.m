@@ -29,6 +29,8 @@
 
 @dynamic discoveredDevices;
 
+DYNAMIC_LOGGER_METHODS
+
 - (instancetype)initWithCentralManager:(CBCentralManager *)centralManager
                     notificationCenter:(NSNotificationCenter *)notificationCenter
                                  queue:(dispatch_queue_t)queue {
@@ -62,18 +64,18 @@
         [NSException raise:@"InvalidTimeoutException" format:@"Timeout must be a positive number"];
     }
     if (!self.bluetoothOn) {
-        DDLogDebug(@"Cannot start discovering devices, Bluetooth service is turned off.");
+        WLXLogDebug(@"Cannot start discovering devices, Bluetooth service is turned off.");
         return NO;
     }
     if (self.discovering) {
-        DDLogWarn(@"Cannot start discovering devices, the discovery process has already been started.");
+        WLXLogWarn(@"Cannot start discovering devices, the discovery process has already been started.");
         return NO;
     }
     if (nameRegex != nil) {
         self.deviceNameRegex = [self buildRegularExpression:nameRegex];
     }
     
-    DDLogDebug(@"Discovering devices named %@ with service UUIDs %@ and timeout %lu", nameRegex, servicesUUIDs,
+    WLXLogDebug(@"Discovering devices named %@ with service UUIDs %@ and timeout %lu", nameRegex, servicesUUIDs,
                (unsigned long)timeout);
     self.timeout = timeout;
     self.discoveredDevicesDictionary = [[NSMutableDictionary alloc] init];
@@ -89,28 +91,28 @@
 - (void)stopDiscoveringDevices {
     [self.discoveryTimerExecutor invalidateExecutors];
     if (self.discovering) {
-        DDLogDebug(@"Stopped discovering devices.");
+        WLXLogDebug(@"Stopped discovering devices.");
         [self.centralManager stopScan];
         self.discovering = NO;
         [self.notificationCenter postNotificationName:WLXBluetoothDeviceStoptDiscovering object:self];
         [self.delegate deviceDiscovererStopDiscoveringDevices:self];
     } else {
-        DDLogWarn(@"Cannot stop discovering devices, the discovery process has already been stopped.");
+        WLXLogWarn(@"Cannot stop discovering devices, the discovery process has already been stopped.");
     }
 }
 
 - (BOOL)addDiscoveredDevice:(WLXDeviceDiscoveryData *)deviceDiscoveryData {
     if (!self.discovering) {
-        DDLogWarn(@"Request to add a new discovered device when the app is not discovering devices.");
+        WLXLogWarn(@"Request to add a new discovered device when the app is not discovering devices.");
         return NO;
     }
     if ([self deviceAlreadyDiscovered:deviceDiscoveryData]) {
-        DDLogDebug(@"Device %@ with UUID %@ has already been discovered", deviceDiscoveryData.deviceName,
+        WLXLogDebug(@"Device %@ with UUID %@ has already been discovered", deviceDiscoveryData.deviceName,
                    deviceDiscoveryData.deviceUUID);
         return NO;
     }
     if (![self discoveredDeviceMatchesRequiredName:deviceDiscoveryData]) {
-        DDLogDebug(@"Device %@ that not matches required name %@", deviceDiscoveryData.deviceName,
+        WLXLogDebug(@"Device %@ that not matches required name %@", deviceDiscoveryData.deviceName,
                    self.deviceNameRegex.pattern);
         return NO;
     }
@@ -141,10 +143,10 @@
 }
 
 - (void)startDiscoveryTerminationTimerWithTimeout:(NSUInteger)timeout {
-    DDLogVerbose(@"Discovery timer started with timeout %lu", (unsigned long)timeout);
+    WLXLogVerbose(@"Discovery timer started with timeout %lu", (unsigned long)timeout);
     __block typeof(self) this = self;
     [self.discoveryTimerExecutor after:timeout dispatchBlock:^(){
-        DDLogDebug(@"Discovery timer has experied");
+        WLXLogDebug(@"Discovery timer has experied");
         if (this.discovering) {
             [this stopDiscoveringDevices];
         }

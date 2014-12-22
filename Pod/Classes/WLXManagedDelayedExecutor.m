@@ -19,6 +19,8 @@
 
 @implementation WLXManagedDelayedExecutor
 
+DYNAMIC_LOGGER_METHODS
+
 - (instancetype)initWithQueue:(dispatch_queue_t)queue {
     self = [super init];
     if (self) {
@@ -31,11 +33,11 @@
 - (void)after:(NSInteger)delay dispatchBlock:(void(^)())block {
     id timestamp = @([NSDate timeIntervalSinceReferenceDate]);
     [self.executorsTimestamps addObject:timestamp];
-    DDLogDebug(@"Enqueing block with timestamp %@ to be executed in %d ms", timestamp, (int)delay);
+    WLXLogDebug(@"Enqueing block with timestamp %@ to be executed in %d ms", timestamp, (int)delay);
     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_MSEC));
     dispatch_after(delayTime, self.queue, ^{
         if (![self.executorsTimestamps containsObject:timestamp]) {
-            DDLogVerbose(@"Block with timestamp %@ is not valid anymore", timestamp);
+            WLXLogVerbose(@"Block with timestamp %@ is not valid anymore", timestamp);
             return;
         }
         [self.executorsTimestamps removeObject:timestamp];
@@ -44,7 +46,7 @@
 }
 
 - (void)invalidateExecutors {
-    DDLogVerbose(@"Invalidating all pending executors");
+    WLXLogVerbose(@"Invalidating all pending executors");
     [self.executorsTimestamps removeAllObjects];
 }
 

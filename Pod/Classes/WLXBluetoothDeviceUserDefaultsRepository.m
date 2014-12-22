@@ -20,6 +20,8 @@ NSString * const WLXBluetoothDeviceLastConnectionRecord = @"ar.com.wolox.WLXBlue
 
 @implementation WLXBluetoothDeviceUserDefaultsRepository
 
+DYNAMIC_LOGGER_METHODS
+
 - (instancetype)initWithUserDefaults:(NSUserDefaults *)userDefaults {
     self = [super init];
     if (self) {
@@ -29,13 +31,13 @@ NSString * const WLXBluetoothDeviceLastConnectionRecord = @"ar.com.wolox.WLXBlue
 }
 
 - (WLXBluetoothDeviceConnectionRecord *)fetchLastConnectionRecord {
-    DDLogDebug(@"Fetching last connection record from user defaults %@", self.userDefaults);
+    WLXLogDebug(@"Fetching last connection record from user defaults %@", self.userDefaults);
     NSData * encodedObject = [self.userDefaults objectForKey:WLXBluetoothDeviceLastConnectionRecord];
     return [NSKeyedUnarchiver unarchiveObjectWithData:encodedObject];
 }
 
 - (BOOL)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRercord {
-    DDLogDebug(@"Saving connection record %@ in user defaults %@", connectionRercord, self.userDefaults);
+    WLXLogDebug(@"Saving connection record %@ in user defaults %@", connectionRercord, self.userDefaults);
     id encodedObject = [NSKeyedArchiver archivedDataWithRootObject:connectionRercord];
     [self.userDefaults setObject:encodedObject forKey:WLXBluetoothDeviceLastConnectionRecord];
     [self.userDefaults synchronize];

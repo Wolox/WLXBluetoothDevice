@@ -39,6 +39,8 @@ static NSString * createQueueName(CBService * service) {
 
 @dynamic characteristics;
 
+DYNAMIC_LOGGER_METHODS
+
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral service:(CBService *)service {
     WLXAssertNotNil(peripheral);
     WLXAssertNotNil(service);
@@ -67,14 +69,14 @@ static NSString * createQueueName(CBService * service) {
 - (void)readValueFromCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *, NSData *))block {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
-    DDLogVerbose(@"Trying to read value for characteristic %@", characteristicUUID.UUIDString);
+    WLXLogVerbose(@"Trying to read value for characteristic %@", characteristicUUID.UUIDString);
     __block typeof(self) this = self;
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
         if (error) {
             DISPATCH(block(error, nil));
         } else {
             this.readHandlerBlockQueues[characteristicUUID] = [block copy];
-            DDLogDebug(@"Reading value for characteristic %@", characteristicUUID.UUIDString);
+            WLXLogDebug(@"Reading value for characteristic %@", characteristicUUID.UUIDString);
             [this.peripheral readValueForCharacteristic:characteristic];
         }
     } forCharacteristic:characteristicUUID];
@@ -84,14 +86,14 @@ static NSString * createQueueName(CBService * service) {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
     WLXAssertNotNil(data);
-    DDLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
+    WLXLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
     __block typeof(self) this = self;
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
         if (error) {
             DISPATCH(block(error));
         } else {
             this.writeHandlerBlockQueues[characteristicUUID] = [block copy];
-            DDLogDebug(@"Writting value for characteristic %@ with response", characteristicUUID);
+            WLXLogDebug(@"Writting value for characteristic %@ with response", characteristicUUID);
             [this.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
         }
     } forCharacteristic:characteristicUUID];
@@ -101,10 +103,10 @@ static NSString * createQueueName(CBService * service) {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(data);
     __block typeof(self) this = self;
-    DDLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
+    WLXLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
         if (!error) {
-            DDLogDebug(@"Writting value for characteristic %@ without response", characteristicUUID);
+            WLXLogDebug(@"Writting value for characteristic %@ without response", characteristicUUID);
             [this.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
         }
     } forCharacteristic:characteristicUUID];
@@ -123,7 +125,7 @@ static NSString * createQueueName(CBService * service) {
 - (id)addObserverForCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *, NSData *))block {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
-    DDLogVerbose(@"Adding observer for characteristic %@", characteristicUUID);
+    WLXLogVerbose(@"Adding observer for characteristic %@", characteristicUUID);
     return self.observers[characteristicUUID] = [block copy];
 }
 
@@ -142,12 +144,12 @@ static NSString * createQueueName(CBService * service) {
 }
 
 - (void)removeObserver:(id)observer {
-    DDLogVerbose(@"Removing observer %p.", observer);
+    WLXLogVerbose(@"Removing observer %p.", observer);
     for (CBUUID * characteristicUUID in [self.observers allKeys]) {
         NSMutableArray * observers = self.observers[characteristicUUID];
         if ([observers containsObject:observer]) {
             [observers removeObject:observer];
-            DDLogVerbose(@"Observer %p successfully removed.", observer);
+            WLXLogVerbose(@"Observer %p successfully removed.", observer);
             break;
         }
     }
@@ -160,7 +162,7 @@ static NSString * createQueueName(CBService * service) {
 }
 
 - (void)discoverCharacteristics:(NSArray *)characteristicUUIDs {
-    DDLogDebug(@"Discovering characteristics with UUIDs %@ for service %@", characteristicUUIDs, self.service.UUID.UUIDString);
+    WLXLogDebug(@"Discovering characteristics with UUIDs %@ for service %@", characteristicUUIDs, self.service.UUID.UUIDString);
     [self.peripheral discoverCharacteristics:characteristicUUIDs forService:self.service];
 }
 
@@ -172,33 +174,33 @@ static NSString * createQueueName(CBService * service) {
 #pragma mark - WLXServicesManagerDelegate methods
 
 - (void)didDiscoverCharacteristics {
-    DDLogDebug(@"Characterisctics successfully discovered %@", self.characteristics);
+    WLXLogDebug(@"Characterisctics successfully discovered %@", self.characteristics);
     [self cacheDiscoveredCharacteristics];
     [self.asyncExecutor flushPendingOperations];
 }
 
 - (void)failToDiscoverCharacteristics:(NSError *)error {
     WLXAssertNotNil(error);
-    DDLogDebug(@"Characteristics could not be discovered: %@", error);
+    WLXLogDebug(@"Characteristics could not be discovered: %@", error);
     [self.asyncExecutor flushPendingOperationsWithError:error];
 }
 
 - (void)didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     WLXAssertNotNil(characteristic);
     if (error) {
-        DDLogVerbose(@"Value for characteristic %@ could not be updated: %@", characteristic.UUID.UUIDString, error);
+        WLXLogVerbose(@"Value for characteristic %@ could not be updated: %@", characteristic.UUID.UUIDString, error);
     } else {
-        DDLogVerbose(@"Value for characteristic %@ has been updated", characteristic.UUID.UUIDString);
+        WLXLogVerbose(@"Value for characteristic %@ has been updated", characteristic.UUID.UUIDString);
     }
     NSMutableArray * blocks = self.readHandlerBlockQueues[characteristic.UUID];
     void (^block)(NSError *, NSData *) = [blocks firstObject];
     NSData * data = (error) ? nil : characteristic.value;
     if (block) {
-        DDLogVerbose(@"Dispatching value for characteristic %@ to registered block", characteristic.UUID.UUIDString);
+        WLXLogVerbose(@"Dispatching value for characteristic %@ to registered block", characteristic.UUID.UUIDString);
         DISPATCH(block(error, data));
         [blocks removeObject:block];
     } else {
-        DDLogVerbose(@"Dispatching value for characteristic %@ to observers", characteristic.UUID.UUIDString);
+        WLXLogVerbose(@"Dispatching value for characteristic %@ to observers", characteristic.UUID.UUIDString);
         for (void(^observer)(NSError *, NSData *) in self.observers[characteristic.UUID]) {
             DISPATCH(observer(error, data));
         }
@@ -208,9 +210,9 @@ static NSString * createQueueName(CBService * service) {
 - (void)didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     WLXAssertNotNil(characteristic);
     if (error) {
-        DDLogVerbose(@"Value for characteristic %@ could not be written: %@", characteristic.UUID.UUIDString, error);
+        WLXLogVerbose(@"Value for characteristic %@ could not be written: %@", characteristic.UUID.UUIDString, error);
     } else {
-        DDLogVerbose(@"Value for characteristic %@ has been written", characteristic.UUID.UUIDString);
+        WLXLogVerbose(@"Value for characteristic %@ has been written", characteristic.UUID.UUIDString);
     }
     NSMutableArray * blocks = self.writeHandlerBlockQueues[characteristic.UUID];
     void (^block)(NSError *) = [blocks firstObject];
@@ -218,7 +220,7 @@ static NSString * createQueueName(CBService * service) {
         DISPATCH(block(error));
         [blocks removeObject:block];
     } else {
-        DDLogWarn(@"Write success notification for characteristic %@ could not be dispatched. There is no registered block",
+        WLXLogWarn(@"Write success notification for characteristic %@ could not be dispatched. There is no registered block",
                   characteristic.UUID.UUIDString);
     }
 }
@@ -226,9 +228,9 @@ static NSString * createQueueName(CBService * service) {
 - (void)didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     WLXAssertNotNil(characteristic);
     if (error) {
-        DDLogVerbose(@"Notification state for characteristic %@ could not be updated: %@", characteristic.UUID.UUIDString, error);
+        WLXLogVerbose(@"Notification state for characteristic %@ could not be updated: %@", characteristic.UUID.UUIDString, error);
     } else {
-        DDLogVerbose(@"Notification state for characteristic %@ has been updated", characteristic.UUID.UUIDString);
+        WLXLogVerbose(@"Notification state for characteristic %@ has been updated", characteristic.UUID.UUIDString);
     }
     NSMutableArray * blocks = self.stateChangeHandlerBlockQueues[characteristic.UUID];
     void (^block)(NSError *) = [blocks firstObject];
@@ -236,7 +238,7 @@ static NSString * createQueueName(CBService * service) {
         DISPATCH(block(error));
         [blocks removeObject:block];
     } else {
-        DDLogWarn(@"Notification state change for characteristic %@ could not be dispatched. There is no registered block",
+        WLXLogWarn(@"Notification state change for characteristic %@ could not be dispatched. There is no registered block",
                   characteristic.UUID.UUIDString);
     }
 }
@@ -247,13 +249,13 @@ static NSString * createQueueName(CBService * service) {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
     __block typeof(self) this = self;
-    DDLogVerbose(@"Trying to set notification state for characteristic %@ to %@", characteristicUUID.UUIDString, (enabled) ? @"YES" : @"NO");
+    WLXLogVerbose(@"Trying to set notification state for characteristic %@ to %@", characteristicUUID.UUIDString, (enabled) ? @"YES" : @"NO");
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
         if (error) {
             DISPATCH(block(error));
         } else {
             this.stateChangeHandlerBlockQueues[characteristicUUID] = [block copy];
-            DDLogDebug(@"Setting notification state for characteristic %@ to %@", characteristicUUID.UUIDString, (enabled) ? @"YES" : @"NO");
+            WLXLogDebug(@"Setting notification state for characteristic %@ to %@", characteristicUUID.UUIDString, (enabled) ? @"YES" : @"NO");
             [this.peripheral setNotifyValue:enabled forCharacteristic:characteristic];
         }
     } forCharacteristic:characteristicUUID];
@@ -261,7 +263,7 @@ static NSString * createQueueName(CBService * service) {
 
 - (void)cacheDiscoveredCharacteristics {
     for (CBCharacteristic * characteristic in self.service.characteristics) {
-        DDLogDebug(@"Caching characteristic %@", characteristic.UUID.UUIDString);
+        WLXLogDebug(@"Caching characteristic %@", characteristic.UUID.UUIDString);
         self.characteristicByUUID[characteristic.UUID] = characteristic;
     }
 }
