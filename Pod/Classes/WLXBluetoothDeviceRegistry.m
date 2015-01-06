@@ -84,13 +84,14 @@
 }
 
 - (void)registerNotificationHandlers {
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     self.notificationHandlers = @[
         [self.notificationCenter addObserverForName:WLXBluetoothDeviceConnectionEstablished
                                              object:nil
                                               queue:nil
                                          usingBlock:^(NSNotification * notification){
                                              CBPeripheral * peripheral = notification.userInfo[WLXBluetoothDevicePeripheral];
+                                             __strong typeof(self) this = wself;
                                              [this saveLastConnectedPeripheral:peripheral];
                                          }]
     ];

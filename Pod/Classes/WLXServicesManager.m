@@ -186,8 +186,11 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (void)registerNotificationHandlers {
-    __block typeof(self) this = self;
-    id handler = ^(NSNotification * notification) { [this stopDiscoveringServices]; };
+    __weak typeof(self) wself = self;
+    id handler = ^(NSNotification * notification) {
+        __strong typeof(self) this = wself;
+        [this stopDiscoveringServices];
+    };
     [self registerHandler:handler forNotifications:@[
         WLXBluetoothDeviceBluetoothIsOff,
         WLXBluetoothDeviceConnectionTerminated,

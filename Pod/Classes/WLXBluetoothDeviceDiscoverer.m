@@ -144,8 +144,9 @@ DYNAMIC_LOGGER_METHODS
 
 - (void)startDiscoveryTerminationTimerWithTimeout:(NSUInteger)timeout {
     WLXLogVerbose(@"Discovery timer started with timeout %lu", (unsigned long)timeout);
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     [self.discoveryTimerExecutor after:timeout dispatchBlock:^(){
+        __strong typeof(self) this = wself;
         WLXLogDebug(@"Discovery timer has experied");
         if (this.discovering) {
             [this stopDiscoveringDevices];
@@ -164,18 +165,20 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (void)registerNotificationHandlers {
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     self.handlers = @[
         [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOn
                                              object:nil
                                               queue:nil
                                          usingBlock:^(NSNotification * notification) {
+                                             __strong typeof(self) this = wself;
                                              this.bluetoothOn = YES;
                                          }],
         [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOff
                                              object:nil
                                               queue:nil
                                          usingBlock:^(NSNotification * notification) {
+                                             __strong typeof(self) this = wself;
                                              this.bluetoothOn = NO;
                                              [this stopDiscoveringDevices];
                                          }]

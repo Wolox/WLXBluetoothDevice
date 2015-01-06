@@ -199,8 +199,9 @@ DYNAMIC_LOGGER_METHODS
                  (unsigned long)timeout, (self.connected) ? @"YES" : @"NO", (self.connecting) ? @"YES" : @"NO",
                  (self.reconnecting) ? @"YES" : @"NO");
     
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     [self.connectionTimerExecutor after:timeout dispatchBlock:^{
+        __strong typeof(self) this = wself;
         WLXLogDebug(@"Connection timer has expired. Connected '%@'. Connecting '%@'. Reconnecting '%@'.",
                    (self.connected) ? @"YES" : @"NO", (self.connecting) ? @"YES" : @"NO",
                    (self.reconnecting) ? @"YES" : @"NO");
@@ -261,8 +262,9 @@ DYNAMIC_LOGGER_METHODS
 
 - (void)tryToReconnect:(NSError *)error {
     _reconnecting = YES;
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     BOOL willTryToReconnect = [self.reconnectionStrategy tryToReconnectUsingConnectionBlock:^{
+        __strong typeof(self) this = wself;
         [this connectWithTimeout:this.reconnectionStrategy.connectionTimeout usingBlock:nil];
     }];
     if (!willTryToReconnect) {
@@ -275,7 +277,7 @@ DYNAMIC_LOGGER_METHODS
         NSDictionary * userInfo = @{
             WLXBluetoothDeviceRemainingReconnectionAttemps : @(remainingAttemps)
         };
-        [self.notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:this userInfo:userInfo];
+        [self.notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:self userInfo:userInfo];
         if ([self.delegate respondsToSelector:@selector(connectionManager:willAttemptToReconnect:)]) {
             [self.delegate connectionManager:self willAttemptToReconnect:remainingAttemps];
         }
@@ -283,18 +285,20 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (void)registerNotificationHandlers {
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     self.handlers = @[
         [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOn
                                              object:nil
                                               queue:nil
                                          usingBlock:^(NSNotification * notification){
+                                             __strong typeof(self) this = wself;
                                              this.bluetoothOn = YES;
                                          }],
         [self.notificationCenter addObserverForName:WLXBluetoothDeviceBluetoothIsOff
                                              object:nil
                                               queue:nil
                                          usingBlock:^(NSNotification * notification){
+                                             __strong typeof(self) this = wself;
                                              this.bluetoothOn = NO;
                                          }]
     ];

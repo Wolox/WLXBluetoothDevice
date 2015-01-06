@@ -70,8 +70,9 @@ DYNAMIC_LOGGER_METHODS
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
     WLXLogVerbose(@"Trying to read value for characteristic %@", characteristicUUID.UUIDString);
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
+        __strong typeof(self) this = wself;
         if (error) {
             DISPATCH(block(error, nil));
         } else {
@@ -87,8 +88,9 @@ DYNAMIC_LOGGER_METHODS
     WLXAssertNotNil(block);
     WLXAssertNotNil(data);
     WLXLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
+        __strong typeof(self) this = wself;
         if (error) {
             DISPATCH(block(error));
         } else {
@@ -102,9 +104,10 @@ DYNAMIC_LOGGER_METHODS
 - (void)writeValue:(NSData *)data toCharacteristic:(CBUUID *)characteristicUUID {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(data);
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     WLXLogVerbose(@"Trying to write value for characteristic %@", characteristicUUID.UUIDString);
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
+        __strong typeof(self) this = wself;
         if (!error) {
             WLXLogDebug(@"Writting value for characteristic %@ without response", characteristicUUID);
             [this.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
@@ -248,9 +251,10 @@ DYNAMIC_LOGGER_METHODS
 - (void)setNotification:(BOOL)enabled forCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block {
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
-    __block typeof(self) this = self;
+    __weak typeof(self) wself = self;
     WLXLogVerbose(@"Trying to set notification state for characteristic %@ to %@", characteristicUUID.UUIDString, (enabled) ? @"YES" : @"NO");
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
+        __strong typeof(self) this = wself;
         if (error) {
             DISPATCH(block(error));
         } else {
