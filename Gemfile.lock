@@ -55,6 +55,8 @@ GEM
     thread_safe (0.3.4)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    xbuild (0.1.0)
+      clamp (~> 0.6.3)
     xcodeproj (0.20.2)
       activesupport (>= 3)
       colored (~> 1.2)
@@ -67,4 +69,5 @@ DEPENDENCIES
   cocoapods (~> 0.35.0)
   rake
   slather
+  xbuild
   xcpretty
