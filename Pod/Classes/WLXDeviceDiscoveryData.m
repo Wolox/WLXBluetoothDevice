@@ -33,4 +33,25 @@
     return self.peripheral.identifier.UUIDString;
 }
 
+- (BOOL)isEqual:(id)object {
+    if (object == self) {
+        return YES;
+    }
+
+    if (!object) {
+        return NO;
+    }
+
+    if (![object isKindOfClass:[self class]]) {
+        return NO;
+    }
+
+    WLXDeviceDiscoveryData *deviceData = object;
+    return ([deviceData.deviceUUID isEqualToString:self.deviceUUID]);
+}
+
+- (NSUInteger)hash {
+    return self.deviceUUID.hash;
+}
+
 @end
