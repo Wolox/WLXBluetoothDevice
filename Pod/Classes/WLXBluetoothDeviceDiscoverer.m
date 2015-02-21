@@ -131,9 +131,13 @@ DYNAMIC_LOGGER_METHODS
     BOOL matchesName = YES;
     if (self.deviceNameRegex) {
         NSString * deviceName = discoveryData.deviceName;
-        NSRange range = NSMakeRange(0, [deviceName length]);
-        NSTextCheckingResult * match = [self.deviceNameRegex firstMatchInString:deviceName options:0 range:range];
-        matchesName = match != nil;
+        if (deviceName) {
+            NSRange range = NSMakeRange(0, [deviceName length]);
+            NSTextCheckingResult * match = [self.deviceNameRegex firstMatchInString:deviceName options:0 range:range];
+            matchesName = match != nil;
+        } else {
+            matchesName = NO;
+        }
     }
     return matchesName;
 }
