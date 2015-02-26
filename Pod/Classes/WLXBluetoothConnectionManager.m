@@ -176,8 +176,7 @@ DYNAMIC_LOGGER_METHODS
     BOOL reconnecting = _reconnecting;
     
     _connected = YES;
-    _connecting = NO;
-    _reconnecting = NO;
+
     // We don't want to create a service manager every time a connection is made
     // because all the cached data will be lost if we do so. Using the same instance every time
     // is not a problem because an instance of connection manager always handles the same
@@ -197,6 +196,9 @@ DYNAMIC_LOGGER_METHODS
     } else if (!reconnecting) {
         [self.delegate connectionManagerDidConnect:self];
     }
+
+    _connecting = NO;
+    _reconnecting = NO;
 }
 
 #pragma mark - Private methods
