@@ -11,6 +11,7 @@
 #import <WLXBluetoothDevice/WLXBluetoothConnectionManager.h>
 #import <WLXBluetoothDevice/WLXBluetoothDeviceConnectionError.h>
 #import <WLXBluetoothDevice/WLXBluetoothDeviceNotifications.h>
+#import <WLXBluetoothDevice/WLXLinearReconnectionStrategy.h>
 
 
 SpecBegin(WLXBluetoothConnectionManager)
@@ -21,13 +22,14 @@ SpecBegin(WLXBluetoothConnectionManager)
     __block id<WLXReconnectionStrategy> mockReconnectionStrategy;
     __block WLXBluetoothConnectionManager * connectionManager;
     __block id<WLXConnectionManagerDelegate> connectionManagerDelegate;
+    __block dispatch_queue_t queue;
 
     beforeEach(^{
         mockPeripheral = mock([CBPeripheral class]);
         mockCentralManager = mock([CBCentralManager class]);
         notificationCenter = [NSNotificationCenter defaultCenter];
         mockReconnectionStrategy = mockProtocol(@protocol(WLXReconnectionStrategy));
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         connectionManager = [[WLXBluetoothConnectionManager alloc] initWithPeripheral:mockPeripheral
                                                                        centralManager:mockCentralManager
                                                                    notificationCenter:notificationCenter
@@ -287,6 +289,59 @@ SpecBegin(WLXBluetoothConnectionManager)
                     done();
                 }];
                 [connectionManager didConnect];
+            });
+            
+        });
+        
+        context(@"when the connection manager is reconecting", ^{
+            
+            beforeEach(^{
+                NSError * error = [NSError errorWithDomain:@"ar.com.wolox.WLXBluetoothDevice.Test" code:0 userInfo:nil];
+                id<WLXReconnectionStrategy> rs = [[WLXLinearReconnectionStrategy alloc] initWithWaitTime:0
+                                                                                 maxReconnectionAttempts:10
+                                                                                       connectionTimeout:0
+                                                                                                   queue:queue];
+                connectionManager = [[WLXBluetoothConnectionManager alloc] initWithPeripheral:mockPeripheral
+                                                                               centralManager:mockCentralManager
+                                                                           notificationCenter:notificationCenter
+                                                                                        queue:queue
+                                                                         reconnectionStrategy:rs
+                                                                                   bluetoohOn:NO];
+                connectionManager.delegate = connectionManagerDelegate;
+                [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
+                [MKTGiven([mockReconnectionStrategy remainingConnectionAttempts]) willReturnUnsignedInteger:1];
+                [MKTGiven([mockReconnectionStrategy connectionTimeout]) willReturnUnsignedInteger:0];
+                [connectionManager connectWithTimeout:0 usingBlock:nil];
+                [connectionManager didConnect];
+                [connectionManager didDisconnect:error];
+                // This simulates the reconnection executed by the mock reconnection strategy
+                [connectionManager connectWithTimeout:0 usingBlock:nil];
+            });
+            
+            it(@"invokes the delegate's connectionManagerDidReconnect:", ^{
+                [connectionManager didConnect];
+                [MKTVerify(connectionManagerDelegate) connecitonManagerDidReconnect:connectionManager];
+            });
+            
+            it(@"changes the connecting attribute", ^{
+                [connectionManager connectWithTimeout:0 usingBlock:nil];
+                expect(connectionManager.connecting).to.beTruthy;
+                [connectionManager didConnect];
+                expect(connectionManager.connecting).to.beFalsy;
+            });
+            
+            it(@"changes the connected attribute", ^{
+                [connectionManager connectWithTimeout:0 usingBlock:nil];
+                expect(connectionManager.connecting).to.beFalsy;
+                [connectionManager didConnect];
+                expect(connectionManager.connecting).to.beTruthy;
+            });
+            
+            it(@"changes the reconnecting attribute", ^{
+                [connectionManager connectWithTimeout:0 usingBlock:nil];
+                expect(connectionManager.reconnecting).to.beTruthy;
+                [connectionManager didConnect];
+                expect(connectionManager.reconnecting).to.beFalsy;
             });
             
         });

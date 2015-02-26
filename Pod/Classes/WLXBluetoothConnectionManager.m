@@ -163,6 +163,18 @@ DYNAMIC_LOGGER_METHODS
         notificationName = WLXBluetoothDeviceConnectionEstablished;
     }
     [self.reconnectionStrategy reset];
+    
+    // A local variable is used to be able
+    // to decide which method to invoke
+    // on the delegate a the end of this
+    // method.
+    //
+    // The reconnecting property is not used
+    // because we want to make sure that when
+    // the delegate's method is invoked the
+    // properties have the expected value.
+    BOOL reconnecting = _reconnecting;
+    
     _connected = YES;
     _connecting = NO;
     _reconnecting = NO;
@@ -180,9 +192,9 @@ DYNAMIC_LOGGER_METHODS
     }
     NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
     [self.notificationCenter postNotificationName:notificationName object:self userInfo:userInfo];
-    if (self.reconnecting && [self.delegate respondsToSelector:@selector(connecitonManagerDidReconnect:)]) {
+    if (reconnecting && [self.delegate respondsToSelector:@selector(connecitonManagerDidReconnect:)]) {
         [self.delegate connecitonManagerDidReconnect:self];
-    } else if (!self.reconnecting) {
+    } else if (!reconnecting) {
         [self.delegate connectionManagerDidConnect:self];
     }
 }
