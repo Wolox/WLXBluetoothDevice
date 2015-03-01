@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "WLXBluetoothDevice"
-  s.version          = "0.1.0-beta2"
+  s.version          = "0.1.0-rc"
   s.summary          = "A block-based wrapper of CoreBluetooth"
   s.description      = <<-DESC
                        WLXBluetoothDevice provides a better, more modular
