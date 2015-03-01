@@ -43,13 +43,13 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
                 [MKTGiven([mockLocator characteristicFromUUID:characteristicUUID]) willReturn:mockCharacteristic];
             });
             
-            it(@"executes the block immediately", ^AsyncBlock{
+            it(@"executes the block immediately", ^{ waitUntil(^(DoneCallback done) {
                 [asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic){
                     expect(error).to.beNil;
                     expect(characteristic).to.equal(mockCharacteristic);
                     done();
                 } forCharacteristic:characteristicUUID];
-            });
+            });});
             
         });
         

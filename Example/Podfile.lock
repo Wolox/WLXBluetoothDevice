@@ -11,7 +11,7 @@ PODS:
   - OCHamcrest (4.1.1)
   - OCMockito (1.4.0):
     - OCHamcrest (~> 4.0)
-  - Specta (0.2.1)
+  - Specta (0.3.2)
   - WLXBluetoothDevice (0.1.0-beta2):
     - CocoaLumberjack (~> 2.0.0-rc)
 
@@ -19,7 +19,7 @@ DEPENDENCIES:
   - CocoaLumberjack (~> 2.0.0-rc)
   - Expecta
   - OCMockito (~> 1.0)
-  - Specta (~> 0.2.1)
+  - Specta (~> 0.3.2)
   - WLXBluetoothDevice (from `../`)
 
 EXTERNAL SOURCES:
@@ -31,7 +31,7 @@ SPEC CHECKSUMS:
   Expecta: 03aabd0a89d8dea843baecb19a7fd7466a69a31d
   OCHamcrest: af1c7c5ea345de69ea6c9c2958f65f3044e5c420
   OCMockito: 991936bb775cc4c27f063d38f5e17b9161fbd21c
-  Specta: 9141310f46b1f68b676650ff2854e1ed0b74163a
+  Specta: 698a58ffa5ec948327d3b92eab50ca58d7f4fbe8
   WLXBluetoothDevice: b8715f0e074bcc3e5b88073d06c5f592d8d2ea21
 
 COCOAPODS: 0.35.0

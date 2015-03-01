@@ -112,7 +112,7 @@ SpecBegin(WLXServiceManager)
                 [MKTGiven(mockCharacteristic.value) willReturn:data];
             });
             
-            it(@"calls the block with the read data", ^AsyncBlock{
+            it(@"calls the block with the read data", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     expect(error).to.beNil;
@@ -120,15 +120,15 @@ SpecBegin(WLXServiceManager)
                     done();
                 }];
                 ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil]);
-            });
+            });});
             
-            it(@"calls the peripheral's readValueForCharacteristic", ^AsyncBlock{
+            it(@"calls the peripheral's readValueForCharacteristic", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     done();
                 }];
                 ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil]);
-            });
+            });});
         
         });
         
@@ -138,7 +138,7 @@ SpecBegin(WLXServiceManager)
                 error = [NSError errorWithDomain:@"ar.com.wolox.Test" code:0 userInfo:nil];
             });
             
-            it(@"call the block with an error", ^AsyncBlock{
+            it(@"call the block with an error", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     expect(error).notTo.beNil;
@@ -146,15 +146,15 @@ SpecBegin(WLXServiceManager)
                     done();
                 }];
                 ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error]);
-            });
+            });});
             
-            it(@"calls the peripheral's readValueForCharacteristic", ^AsyncBlock{
+            it(@"calls the peripheral's readValueForCharacteristic", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager readValueFromCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * data) {
                     [MKTVerify(mockPeripheral) readValueForCharacteristic:mockCharacteristic];
                     done();
                 }];
                 ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error]);
-            });
+            });});
             
         });
     
@@ -200,41 +200,41 @@ SpecBegin(WLXServiceManager)
         
         context(@"when the characteristic's value is successfully writen", ^{
         
-            it(@"calls the block with a nil error", ^AsyncBlock{
+            it(@"calls the block with a nil error", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     expect(error).to.beNil;
                     done();
                 }];
                 ASYNC([serviceManager didWriteValueForCharacteristic:mockCharacteristic error:nil]);
-            });
+            });});
             
-            it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^AsyncBlock{
+            it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     [MKTVerify(mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithResponse];
                     done();
                 }];
                 ASYNC([serviceManager didWriteValueForCharacteristic:mockCharacteristic error:nil]);
-            });
+            });});
         
         });
         
         context(@"when the characteristic's value could not be writen", ^{
         
-            it(@"calls the block with an error", ^AsyncBlock{
+            it(@"calls the block with an error", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     expect(error).notTo.beNil;
                     done();
                 }];
                 ASYNC([serviceManager didWriteValueForCharacteristic:mockCharacteristic error:error]);
-            });
+            });});
             
-            it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^AsyncBlock{
+            it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager writeValue:data toCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     [MKTVerify(mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithResponse];
                     done();
                 }];
                 ASYNC([serviceManager didWriteValueForCharacteristic:mockCharacteristic error:error]);
-            });
+            });});
             
         });
         
@@ -267,13 +267,13 @@ SpecBegin(WLXServiceManager)
             
         });
         
-        it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^AsyncBlock {
+        it(@"calls the peripheral's writeValue:forCharacteristic:type: method", ^{ waitUntil(^(DoneCallback done) {
             [serviceManager writeValue:data toCharacteristic:characteristicUUID];
             ASYNC({
                 [MKTVerify(mockPeripheral) writeValue:data forCharacteristic:mockCharacteristic type:CBCharacteristicWriteWithoutResponse];
                 done();
             });
-        });
+        });});
         
     });
 
@@ -301,41 +301,41 @@ SpecBegin(WLXServiceManager)
         
         context(@"when the notifications are successfully enabled", ^{
         
-            it(@"calls the block", ^AsyncBlock{
+            it(@"calls the block", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager enableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     expect(error).to.beNil;
                     done();
                 }];
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil]);
-            });
+            });});
             
-            it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^AsyncBlock{
+            it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager enableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     [MKTVerify(mockPeripheral) setNotifyValue:YES forCharacteristic:mockCharacteristic];
                     done();
                 }];
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil]);
-            });
+            });});
             
         });
         
         context(@"when the notifications could not be enabled", ^{
         
-            it(@"calls the block witn an error", ^AsyncBlock{
+            it(@"calls the block witn an error", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager enableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     expect(error).notTo.beNil;
                     done();
                 }];
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
-            });
+            });});
             
-            it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^AsyncBlock{
+            it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager enableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     [MKTVerify(mockPeripheral) setNotifyValue:YES forCharacteristic:mockCharacteristic];
                     done();
                 }];
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
-            });
+            });});
         
         });
         
@@ -365,41 +365,41 @@ SpecBegin(WLXServiceManager)
         
         context(@"when the notifications are successfully enabled", ^{
             
-            it(@"calls the block", ^AsyncBlock{
+            it(@"calls the block", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager disableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     expect(error).to.beNil;
                     done();
                 }];
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil]);
-            });
+            });});
             
-            it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^AsyncBlock{
+            it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager disableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     [MKTVerify(mockPeripheral) setNotifyValue:NO forCharacteristic:mockCharacteristic];
                     done();
                 }];
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:nil]);
-            });
+            });});
             
         });
         
         context(@"when the notifications could not be enabled", ^{
             
-            it(@"calls the block witn an error", ^AsyncBlock{
+            it(@"calls the block witn an error", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager disableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     expect(error).notTo.beNil;
                     done();
                 }];
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
-            });
+            });});
             
-            it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^AsyncBlock{
+            it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager disableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     [MKTVerify(mockPeripheral) setNotifyValue:YES forCharacteristic:mockCharacteristic];
                     done();
                 }];
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
-            });
+            });});
             
         });
         
@@ -435,27 +435,27 @@ SpecBegin(WLXServiceManager)
                 [MKTGiven(mockCharacteristic.value) willReturn:data];
             });
         
-            it(@"calls the block with the updated data", ^AsyncBlock{
+            it(@"calls the block with the updated data", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager addObserverForCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * aData) {
                     expect(error).to.beNil;
                     expect(aData).to.equal(data);
                     done();
                 }];
                 ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:nil]);
-            });
+            });});
             
         });
         
         context(@"when a notification error is received for the observed characteristic", ^{
         
-            it(@"calls the block with an error", ^AsyncBlock{
+            it(@"calls the block with an error", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager addObserverForCharacteristic:characteristicUUID usingBlock:^(NSError * error, NSData * aData) {
                     expect(error).notTo.beNil;
                     expect(aData).to.beNil;
                     done();
                 }];
                 ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error]);
-            });
+            });});
             
         });
         

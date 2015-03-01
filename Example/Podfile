@@ -8,7 +8,7 @@ end
 target 'Tests', :exclusive => true do
   pod "WLXBluetoothDevice", :path => "../"
 
-  pod 'Specta', '~> 0.2.1'
+  pod 'Specta', '~> 0.3.2'
   pod 'Expecta'
   pod 'OCMockito', '~> 1.0'
 end

@@ -228,13 +228,13 @@ SpecBegin(WLXBluetoothConnectionManager)
                 [MKTVerify(connectionManagerDelegate) connectionManager:connectionManager didFailToConnect:error];
             });
             
-            it(@"passes the error to the connection block", ^AsyncBlock{
+            it(@"passes the error to the connection block", ^{ waitUntil(^(DoneCallback done) {
                 [connectionManager connectWithTimeout:0 usingBlock:^(NSError * anError){
                     expect(anError).to.equal(error);
                     done();
                 }];
                 [connectionManager didFailToConnect:error];
-            });
+            });});
             
         });
         
@@ -283,13 +283,13 @@ SpecBegin(WLXBluetoothConnectionManager)
                 [MKTVerify(connectionManagerDelegate) connectionManagerDidConnect:connectionManager];
             });
             
-            it(@"calls the connection block", ^AsyncBlock{
+            it(@"calls the connection block", ^{ waitUntil(^(DoneCallback done) {
                 [connectionManager connectWithTimeout:0 usingBlock:^(NSError * error){
                     expect(error).to.beNil;
                     done();
                 }];
                 [connectionManager didConnect];
-            });
+            });});
             
         });
         
