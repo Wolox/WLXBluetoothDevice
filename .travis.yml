@@ -1,5 +1,7 @@
 # reference: http://www.objc.io/issue-6/travis-ci.html
 
+rvm:
+  - 2.1.2
 language: objective-c
 podfile: Example/Podfile
 before_install:
