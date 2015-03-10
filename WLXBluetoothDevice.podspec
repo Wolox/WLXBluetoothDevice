@@ -38,4 +38,14 @@ Pod::Spec.new do |s|
     cs.dependency 'CocoaLumberjack', '~>2.0.0-rc'
   end
 
+  s.subspec 'ReactiveCocoa' do |cs|
+    cs.source_files = 'Pod/Classes/ReactiveCocoa'
+    cs.resource_bundles = {
+      'WLXBluetoothDevice' => ['Pod/Assets/*.png']
+    }
+
+    cs.dependency 'WLXBluetoothDevice/Core'
+    cs.dependency 'ReactiveCocoa', '2.4.4'
+  end
+
 end
