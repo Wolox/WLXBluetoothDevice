@@ -37,6 +37,7 @@
 		9DF7DC781AAF88F700278084 /* WLXLinearReconnectionStrategySpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DF7DC6F1AAF88F700278084 /* WLXLinearReconnectionStrategySpec.m */; };
 		9DF7DC791AAF88F700278084 /* WLXServiceManagerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DF7DC701AAF88F700278084 /* WLXServiceManagerSpec.m */; };
 		9DF7DC7A1AAF88F700278084 /* WLXServicesManagerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DF7DC711AAF88F700278084 /* WLXServicesManagerSpec.m */; };
+		9DF7DC7D1AAF89D400278084 /* WLXReactiveDeviceDiscovererDelegateSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9DF7DC7C1AAF89D400278084 /* WLXReactiveDeviceDiscovererDelegateSpec.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 		9DF7DC6F1AAF88F700278084 /* WLXLinearReconnectionStrategySpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLXLinearReconnectionStrategySpec.m; path = Core/WLXLinearReconnectionStrategySpec.m; sourceTree = "<group>"; };
 		9DF7DC701AAF88F700278084 /* WLXServiceManagerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLXServiceManagerSpec.m; path = Core/WLXServiceManagerSpec.m; sourceTree = "<group>"; };
 		9DF7DC711AAF88F700278084 /* WLXServicesManagerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLXServicesManagerSpec.m; path = Core/WLXServicesManagerSpec.m; sourceTree = "<group>"; };
+		9DF7DC7C1AAF89D400278084 /* WLXReactiveDeviceDiscovererDelegateSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLXReactiveDeviceDiscovererDelegateSpec.m; path = ReactiveCocoa/WLXReactiveDeviceDiscovererDelegateSpec.m; sourceTree = "<group>"; };
 		A2887F621891F6A15A9626BB /* WLXBluetoothDevice.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = WLXBluetoothDevice.podspec; path = ../WLXBluetoothDevice.podspec; sourceTree = "<group>"; };
 		CD9F907B60A98A166470E4E8 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		DD05162AA0DB0986F63BB7EA /* libPods-Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -201,6 +203,7 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				9DF7DC7B1AAF89B300278084 /* ReactiveCocoa */,
 				9DF7DC681AAF88B100278084 /* Core */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
@@ -241,6 +244,14 @@
 				9DF7DC711AAF88F700278084 /* WLXServicesManagerSpec.m */,
 			);
 			name = Core;
+			sourceTree = "<group>";
+		};
+		9DF7DC7B1AAF89B300278084 /* ReactiveCocoa */ = {
+			isa = PBXGroup;
+			children = (
+				9DF7DC7C1AAF89D400278084 /* WLXReactiveDeviceDiscovererDelegateSpec.m */,
+			);
+			name = ReactiveCocoa;
 			sourceTree = "<group>";
 		};
 		C4F2E837321794A0417727B9 /* Pods */ = {
@@ -441,6 +452,7 @@
 				9DF7DC721AAF88F700278084 /* WLXBluetoothConnectionManagerSpec.m in Sources */,
 				9DF7DC791AAF88F700278084 /* WLXServiceManagerSpec.m in Sources */,
 				9DF7DC771AAF88F700278084 /* WLXCharacteristicAsyncExecutorSpec.m in Sources */,
+				9DF7DC7D1AAF89D400278084 /* WLXReactiveDeviceDiscovererDelegateSpec.m in Sources */,
 				9DF7DC7A1AAF88F700278084 /* WLXServicesManagerSpec.m in Sources */,
 				9DF7DC761AAF88F700278084 /* WLXBluetoothDeviceUserDefaultsRepositorySpec.m in Sources */,
 				9DF7DC741AAF88F700278084 /* WLXBluetoothDeviceDiscovererSpec.m in Sources */,

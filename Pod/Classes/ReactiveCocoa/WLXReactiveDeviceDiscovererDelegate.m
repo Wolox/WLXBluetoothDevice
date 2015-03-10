@@ -37,7 +37,7 @@
 }
 
 - (RACSignal *)stopDiscoveringDevices {
-    return self.stopDiscoveringDevices;
+    return self.stopDiscoveringDevicesSubject;
 }
 
 - (RACSignal *)discoveredDevice {
