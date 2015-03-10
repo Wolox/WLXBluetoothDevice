@@ -46,13 +46,6 @@ is a great library and you should use it. Also if you need to debug what
 is happening with the Bluetooth connection you can turn our logger on and you
 will get a lot of information about what the library is doing.
 
-### Current status
-
-Although we have been using this code in several projects this library
-is in beta state because we have refactored it to make it more general
-so there might be some bugs that we haven't catch yet. The API is stable
-and probably this will be final `0.1.0` version.
-
 ### Future versions
 
 We want version `0.1.0` to be the core base set of features and then build
