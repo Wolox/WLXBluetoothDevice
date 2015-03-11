@@ -21,12 +21,17 @@
 
 - (instancetype)init {
     self = [super init];
-    if (self) {
+    if (self && ![self isTestMode]) {
         _bluetoothDeviceManager = [WLXBluetoothDeviceManager deviceManager];
         id repository = [[WLXBluetoothDeviceUserDefaultsRepository alloc] initWithUserDefaults:[NSUserDefaults standardUserDefaults]];
         _bluetoothDeviceRegistry = [_bluetoothDeviceManager deviceRegistryWithRepository:repository];
     }
     return self;
+}
+
+- (BOOL)isTestMode {
+    NSDictionary* environment = [[NSProcessInfo processInfo] environment];
+    return [environment objectForKey:@"TEST"] != nil;
 }
 
 @end

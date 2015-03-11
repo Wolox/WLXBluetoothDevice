@@ -32,6 +32,9 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
 @implementation WLXConnectViewController
 
 - (void)viewDidLoad {
+    if ([self isTestMode]) {
+        return;
+    }
     self.notificationCenter = [NSNotificationCenter defaultCenter];
     self.deviceManager = [WLXApplication sharedInstance].bluetoothDeviceManager;
     self.deviceRegistry = [WLXApplication sharedInstance].bluetoothDeviceRegistry;
@@ -43,11 +46,17 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    if ([self isTestMode]) {
+        return;
+    }
     [self reloadUI];
     [self registerNotificationHandlers];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    if ([self isTestMode]) {
+        return;
+    }
     [self unregisterNotificationHandlers];
 }
 
@@ -248,5 +257,11 @@ static NSUInteger MAX_RECONNECTION_ATTEMPS = 3;
                       cancelButtonTitle:@"OK"
                       otherButtonTitles:nil] show];
 }
+
+- (BOOL)isTestMode {
+    NSDictionary* environment = [[NSProcessInfo processInfo] environment];
+    return [environment objectForKey:@"TEST"] != nil;
+}
+
 
 @end
