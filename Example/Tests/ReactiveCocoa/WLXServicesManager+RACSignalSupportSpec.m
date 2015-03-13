@@ -27,7 +27,6 @@ describe(@"#rac_discoverServices", ^{
     afterEach(^{
         signal = nil;
         servicesManager = nil;
-        NSLog(@"GATO");
     });
     
     context(@"when the services discovery process succeeds", ^{
