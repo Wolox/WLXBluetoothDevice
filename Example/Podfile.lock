@@ -46,6 +46,6 @@ SPEC CHECKSUMS:
   OCMockito: 991936bb775cc4c27f063d38f5e17b9161fbd21c
   ReactiveCocoa: 31119068e3dde866bd257cf74e1f06b4023bf387
   Specta: 698a58ffa5ec948327d3b92eab50ca58d7f4fbe8
-  WLXBluetoothDevice: 1c667de0dd824d09ca917aebdedb5c1b619a1226
+  WLXBluetoothDevice: 6bed175417cefea86addd8a07ffd2eb9f84bae08
 
 COCOAPODS: 0.35.0
