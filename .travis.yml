@@ -9,6 +9,6 @@ before_install:
   - brew update
   - brew outdated xctool || brew upgrade xctool
 script:
-  - cd Example && xbuild clean && xbuild test
+  - cd Example && bundle exec xbuild clean && bundle exec xbuild test && cd .. && bundle exec pod lib lint
 after_success:
   - cd .. && slather
