@@ -74,7 +74,6 @@
                 [subscriber sendError:error];
             } else {
                 [subscriber sendNext:data];
-                [subscriber sendCompleted];
             }
         }];
         return [RACDisposable disposableWithBlock:^{
