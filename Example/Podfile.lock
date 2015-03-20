@@ -1,11 +1,11 @@
 PODS:
-  - CocoaLumberjack (2.0.0-rc2):
-    - CocoaLumberjack/Default (= 2.0.0-rc2)
-    - CocoaLumberjack/Extensions (= 2.0.0-rc2)
-  - CocoaLumberjack/Core (2.0.0-rc2)
-  - CocoaLumberjack/Default (2.0.0-rc2):
+  - CocoaLumberjack (2.0.0):
+    - CocoaLumberjack/Default (= 2.0.0)
+    - CocoaLumberjack/Extensions (= 2.0.0)
+  - CocoaLumberjack/Core (2.0.0)
+  - CocoaLumberjack/Default (2.0.0):
     - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (2.0.0-rc2):
+  - CocoaLumberjack/Extensions (2.0.0):
     - CocoaLumberjack/Default
   - Expecta (0.3.2)
   - OCHamcrest (4.1.1)
@@ -19,12 +19,12 @@ PODS:
   - ReactiveCocoa/UI (2.4.4):
     - ReactiveCocoa/Core
   - Specta (0.3.2)
-  - WLXBluetoothDevice (0.2.0-alpha):
-    - WLXBluetoothDevice/Core (= 0.2.0-alpha)
-    - WLXBluetoothDevice/ReactiveCocoa (= 0.2.0-alpha)
-  - WLXBluetoothDevice/Core (0.2.0-alpha):
+  - WLXBluetoothDevice (0.2.0-alpha1):
+    - WLXBluetoothDevice/Core (= 0.2.0-alpha1)
+    - WLXBluetoothDevice/ReactiveCocoa (= 0.2.0-alpha1)
+  - WLXBluetoothDevice/Core (0.2.0-alpha1):
     - CocoaLumberjack (~> 2.0.0-rc)
-  - WLXBluetoothDevice/ReactiveCocoa (0.2.0-alpha):
+  - WLXBluetoothDevice/ReactiveCocoa (0.2.0-alpha1):
     - ReactiveCocoa (= 2.4.4)
     - WLXBluetoothDevice/Core
 
@@ -40,12 +40,12 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  CocoaLumberjack: 6027cd9a0665203a7df456c526e137f02cd547e1
+  CocoaLumberjack: fd2b1031c6c4e0f08b5ea928ef677fa0a5de517d
   Expecta: ee641011fe10aa1855d487b40e4976dac50ec342
   OCHamcrest: af1c7c5ea345de69ea6c9c2958f65f3044e5c420
   OCMockito: 991936bb775cc4c27f063d38f5e17b9161fbd21c
   ReactiveCocoa: 31119068e3dde866bd257cf74e1f06b4023bf387
   Specta: 698a58ffa5ec948327d3b92eab50ca58d7f4fbe8
-  WLXBluetoothDevice: 6bed175417cefea86addd8a07ffd2eb9f84bae08
+  WLXBluetoothDevice: 2fb046f2611b0d8c89a3a79cc32ac2a2b2845b5f
 
 COCOAPODS: 0.35.0
