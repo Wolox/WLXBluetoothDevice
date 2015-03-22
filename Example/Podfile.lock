@@ -19,12 +19,12 @@ PODS:
   - ReactiveCocoa/UI (2.4.4):
     - ReactiveCocoa/Core
   - Specta (0.3.2)
-  - WLXBluetoothDevice (0.2.0-alpha1):
-    - WLXBluetoothDevice/Core (= 0.2.0-alpha1)
-    - WLXBluetoothDevice/ReactiveCocoa (= 0.2.0-alpha1)
-  - WLXBluetoothDevice/Core (0.2.0-alpha1):
+  - WLXBluetoothDevice (0.2.0-alpha2):
+    - WLXBluetoothDevice/Core (= 0.2.0-alpha2)
+    - WLXBluetoothDevice/ReactiveCocoa (= 0.2.0-alpha2)
+  - WLXBluetoothDevice/Core (0.2.0-alpha2):
     - CocoaLumberjack (~> 2.0.0-rc)
-  - WLXBluetoothDevice/ReactiveCocoa (0.2.0-alpha1):
+  - WLXBluetoothDevice/ReactiveCocoa (0.2.0-alpha2):
     - ReactiveCocoa (= 2.4.4)
     - WLXBluetoothDevice/Core
 
@@ -46,6 +46,6 @@ SPEC CHECKSUMS:
   OCMockito: 991936bb775cc4c27f063d38f5e17b9161fbd21c
   ReactiveCocoa: 31119068e3dde866bd257cf74e1f06b4023bf387
   Specta: 698a58ffa5ec948327d3b92eab50ca58d7f4fbe8
-  WLXBluetoothDevice: 4344b19991912cc2c1d30eb9635e32846a6b70d0
+  WLXBluetoothDevice: d2f5d39d0f0b4c23e22f2e68c4349f6110a2cdfe
 
 COCOAPODS: 0.36.0
