@@ -163,7 +163,7 @@ DYNAMIC_LOGGER_METHODS
     NSRegularExpression * regexp = [NSRegularExpression regularExpressionWithPattern:pattern
                                                                              options:0
                                                                                error:&error];
-    NSString * errorMessage = [NSString stringWithFormat:@"Invalid device name regexp: %@", error];
+    NSString * __attribute__((unused)) errorMessage = [NSString stringWithFormat:@"Invalid device name regexp: %@", error];
     NSAssert(error == nil, errorMessage);
     return regexp;
 }
