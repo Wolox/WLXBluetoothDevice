@@ -1,4 +1,4 @@
 verbose: true
 scheme: WLXBluetoothDeviceShared
 workspace: WLXBluetoothDevice.xcworkspace
-xctool: false
+xctool: true
