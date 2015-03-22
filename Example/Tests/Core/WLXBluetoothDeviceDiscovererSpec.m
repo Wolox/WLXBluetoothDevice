@@ -234,7 +234,7 @@ SpecBegin(WLXBluetoothDeviceDiscoverer)
         context(@"when a regular expression has been provided as name", ^{
             
             beforeEach(^{
-                [discoverer discoverDevicesNamed:@"Test device (\d+)" withServices:nil andTimeout:5000];
+                [discoverer discoverDevicesNamed:@"Test device (\\d+)" withServices:nil andTimeout:5000];
             });
             
             it(@"accepts only devices with a name that matches the specified regexp", ^{
