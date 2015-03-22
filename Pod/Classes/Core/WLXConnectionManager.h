@@ -24,6 +24,7 @@
 @property (nonatomic) NSDictionary * connectionOptions;
 @property (nonatomic, weak) id<WLXConnectionManagerDelegate> delegate;
 @property (nonatomic, readonly) WLXServicesManager * servicesManager;
+@property (nonatomic) BOOL allowReconnection;
 
 - (BOOL)connectWithTimeout:(NSUInteger)timeout usingBlock:(void(^)(NSError *))block ;
 

@@ -57,6 +57,7 @@ DYNAMIC_LOGGER_METHODS
         _disconnecting = NO;
         _bluetoothOn = bluetoothOn;
         _connectionTimerExecutor = [[WLXManagedDelayedExecutor alloc] initWithQueue:queue];
+        _allowReconnection = YES;
         [self registerNotificationHandlers];
     }
     return self;
@@ -273,9 +274,12 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (void)tryToReconnect:(NSError *)error {
+    if (!self.allowReconnection) {
+        WLXLogDebug(@"Reconnection is not allowed");
+    }
     _reconnecting = YES;
     __weak typeof(self) wself = self;
-    BOOL willTryToReconnect = [self.reconnectionStrategy tryToReconnectUsingConnectionBlock:^{
+    BOOL willTryToReconnect = self.allowReconnection && [self.reconnectionStrategy tryToReconnectUsingConnectionBlock:^{
         __strong typeof(self) this = wself;
         [this connectWithTimeout:this.reconnectionStrategy.connectionTimeout usingBlock:nil];
     }];

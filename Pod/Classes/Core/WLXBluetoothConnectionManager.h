@@ -26,6 +26,7 @@
 @property (nonatomic) NSDictionary * connectionOptions;
 @property (nonatomic, weak) id<WLXConnectionManagerDelegate> delegate;
 @property (nonatomic, readonly) WLXServicesManager * servicesManager;
+@property (nonatomic) BOOL allowReconnection;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                     centralManager:(CBCentralManager *)centralManager

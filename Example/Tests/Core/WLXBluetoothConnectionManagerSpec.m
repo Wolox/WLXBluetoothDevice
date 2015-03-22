@@ -421,6 +421,40 @@ SpecBegin(WLXBluetoothConnectionManager)
                     connectionBlockCaptor = nil;
                 });
             
+                context(@"when reconnection is not allowed", ^{
+                    
+                    beforeEach(^{
+                        [[MKTGiven([mockReconnectionStrategy tryToReconnectUsingConnectionBlock:^{}]) withMatcher:anything()] willReturnBool:YES];
+                        connectionManager.allowReconnection = NO;
+                    });
+                    
+                    it(@"changes the connected attribute", ^{
+                        expect(connectionManager.connected).to.beTruthy;
+                        [connectionManager didDisconnect:error];
+                        expect(connectionManager.connected).to.beFalsy;
+                    });
+                    
+                    it(@"notifies about the connection being terminated", ^{
+                        NSDictionary * userInfo = @{
+                                                    WLXBluetoothDevicePeripheral : mockPeripheral,
+                                                    WLXBluetoothDeviceError : error
+                                                    };
+                        NSNotification * notification = [NSNotification notificationWithName:WLXBluetoothDeviceConnectionLost
+                                                                                      object:connectionManager
+                                                                                    userInfo:userInfo];
+                        expect(^{
+                            [connectionManager didDisconnect:error];
+                        }).to.notify(notification);
+                    });
+                    
+                    it(@"invokes the delegate's connectionManager:didLostConnection:", ^{
+                        [connectionManager didDisconnect:error];
+                        [MKTVerify(connectionManagerDelegate) connectionManager:connectionManager didLostConnection:error];
+                    });
+                    
+                    
+                });
+                
                 context(@"when there still are reconnection attemps left", ^{
                 
                     beforeEach(^{
