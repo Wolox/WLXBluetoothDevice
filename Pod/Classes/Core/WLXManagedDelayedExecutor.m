@@ -33,7 +33,7 @@ DYNAMIC_LOGGER_METHODS
 - (void)after:(NSInteger)delay dispatchBlock:(void(^)())block {
     id timestamp = @([NSDate timeIntervalSinceReferenceDate]);
     [self.executorsTimestamps addObject:timestamp];
-    WLXLogDebug(@"Enqueing block with timestamp %@ to be executed in %d ms", timestamp, (int)delay);
+    WLXLogDebug(@"Enqueueing block with timestamp %@ to be executed in %d ms", timestamp, (int)delay);
     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_MSEC));
     dispatch_after(delayTime, self.queue, ^{
         if (![self.executorsTimestamps containsObject:timestamp]) {

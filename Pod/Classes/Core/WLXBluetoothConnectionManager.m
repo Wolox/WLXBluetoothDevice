@@ -134,7 +134,7 @@ DYNAMIC_LOGGER_METHODS
         NSAssert(error == nil, @"Cannot be an error if disconnecting is YES");
         self.disconnecting = NO;
         if (self.reconnecting) {
-            WLXLogDebug(@"Reconnection attemp has been terminated.");
+            WLXLogDebug(@"Reconnection attempt has been terminated.");
         } else {
             WLXLogInfo(@"Connection with device '%@' has been terminated.", self.peripheral.name);
             NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
