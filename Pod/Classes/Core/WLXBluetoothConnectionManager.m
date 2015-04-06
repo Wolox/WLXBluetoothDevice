@@ -179,19 +179,20 @@ DYNAMIC_LOGGER_METHODS
     _connected = YES;
     _connecting = NO;
     _reconnecting = NO;
-    // We don't want to create a service manager every time a connection is made
-    // because all the cached data will be lost if we do so. Using the same instance every time
-    // is not a problem because an instance of connection manager always handles the same
-    // peripheral therefor the service manager is guaranted to manage the same peripheral.
-    if (_servicesManager == nil) {
-        _servicesManager = [[WLXServicesManager alloc] initWithPeripheral:self.peripheral
-                                                       notificationCenter:self.notificationCenter];
-    }
+
+    // After a reconnection services and characteristic must be re-discovered
+    // because CBService and CBCharacteristic can only be used while the
+    // connection is alive.
+    _servicesManager = [[WLXServicesManager alloc] initWithPeripheral:self.peripheral
+                                                   notificationCenter:self.notificationCenter];
     if (self.connectionBlock) {
         self.connectionBlock(nil);
         self.connectionBlock = nil;
     }
-    NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral };
+    NSDictionary * userInfo = @{
+        WLXBluetoothDevicePeripheral : self.peripheral,
+        WLXBluetoothDeviceServicesManager : self.servicesManager
+    };
     [self.notificationCenter postNotificationName:notificationName object:self userInfo:userInfo];
     if (reconnecting && [self.delegate respondsToSelector:@selector(connecitonManagerDidReconnect:)]) {
         [self.delegate connecitonManagerDidReconnect:self];

@@ -32,3 +32,4 @@ NSString * const WLXBluetoothDevicePeripheral = @"ar.com.wolox.WLXBluetoothDevic
 NSString * const WLXBluetoothDeviceError = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.Error";
 NSString * const WLXBluetoothDeviceRemainingReconnectionAttemps = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.RemainingReconnectionAttemps";
 NSString * const WLXBluetoothEnabled = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.BluetoothEnabled";
+NSString * const WLXBluetoothDeviceServicesManager = @"ar.com.wolox.WLXBluetoothDevice.UserInfo.ServicesManager";

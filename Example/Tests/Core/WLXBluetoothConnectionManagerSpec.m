@@ -268,14 +268,19 @@ SpecBegin(WLXBluetoothConnectionManager)
                 expect(connectionManager.connecting).to.beTruthy;
             });
             
-            it(@"notifies about the established connection", ^{
+            it(@"notifies about the established connection", ^{ waitUntil(^(DoneCallback done) {
+                id observer = [notificationCenter addObserverForName:WLXBluetoothDeviceConnectionEstablished
+                                                              object:connectionManager
+                                                               queue:nil
+                                                          usingBlock:^(NSNotification * note) {
+                                                              expect(note.userInfo[WLXBluetoothDevicePeripheral]).to.equal(mockPeripheral);
+                                                              expect(note.userInfo[WLXBluetoothDeviceServicesManager]).to.beInstanceOf([WLXServicesManager class]);
+                                                              [[NSNotificationCenter defaultCenter] removeObserver:observer];
+                                                              done();
+                                                          }];
                 [connectionManager connectWithTimeout:0 usingBlock:nil];
-                NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : mockPeripheral };
-                NSNotification * notification = [NSNotification notificationWithName:WLXBluetoothDeviceConnectionEstablished
-                                                                              object:connectionManager
-                                                                            userInfo:userInfo];
-                expect(^{ [connectionManager didConnect]; }).to.notify(notification);
-            });
+                [connectionManager didConnect];
+            });});
             
             it(@"invokes the delegate's connectionManagerDidConnect", ^{
                 [connectionManager connectWithTimeout:0 usingBlock:nil];
@@ -343,6 +348,20 @@ SpecBegin(WLXBluetoothConnectionManager)
                 [connectionManager didConnect];
                 expect(connectionManager.reconnecting).to.beFalsy;
             });
+            
+            it(@"notifies about the established connection", ^{ waitUntil(^(DoneCallback done) {
+                id observer = [notificationCenter addObserverForName:WLXBluetoothDeviceReconnectionEstablished
+                                                              object:connectionManager
+                                                               queue:nil
+                                                          usingBlock:^(NSNotification * note) {
+                                                              expect(note.userInfo[WLXBluetoothDevicePeripheral]).to.equal(mockPeripheral);
+                                                              expect(note.userInfo[WLXBluetoothDeviceServicesManager]).to.beInstanceOf([WLXServicesManager class]);
+                                                              [[NSNotificationCenter defaultCenter] removeObserver:observer];
+                                                              done();
+                                                          }];
+                [connectionManager didConnect];
+                
+            });});
             
         });
         

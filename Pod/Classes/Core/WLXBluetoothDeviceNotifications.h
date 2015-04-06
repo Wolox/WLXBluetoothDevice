@@ -32,3 +32,4 @@ extern NSString * const WLXBluetoothDevicePeripheral;
 extern NSString * const WLXBluetoothDeviceError;
 extern NSString * const WLXBluetoothDeviceRemainingReconnectionAttemps;
 extern NSString * const WLXBluetoothEnabled;
+extern NSString * const WLXBluetoothDeviceServicesManager;
