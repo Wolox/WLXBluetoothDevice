@@ -8,12 +8,16 @@
 
 #import "WLXServiceManager.h"
 
+#import "WLXBluetoothDeviceNotifications.h"
 #import "WLXBluetoothDeviceHelpers.h"
 #import "WLXBluetoothDeviceLogger.h"
 #import "WLXDictionaryOfArrays.h"
 
 #define DISPATCH(line)  \
     dispatch_async(_queue, ^{ line; })
+
+#define ASSERT_IF_VALID NSAssert(self.invalidated == NO, @"The service manager has been invalidated. Obtain a new service manager from the WLXServicesManager#managerForService: method")
+
 
 
 static NSString * createQueueName(CBService * service) {
@@ -23,6 +27,7 @@ static NSString * createQueueName(CBService * service) {
 
 @interface WLXServiceManager ()
 
+@property (nonatomic) NSNotificationCenter * notificationCenter;
 @property (nonatomic) CBPeripheral * peripheral;
 @property (nonatomic) CBService * service;
 @property (nonatomic) NSMutableDictionary * characteristicByUUID;
@@ -41,13 +46,17 @@ static NSString * createQueueName(CBService * service) {
 
 DYNAMIC_LOGGER_METHODS
 
-- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral service:(CBService *)service {
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
+                           service:(CBService *)service
+                notificationCenter:(NSNotificationCenter *)notificationCenter {
     WLXAssertNotNil(peripheral);
     WLXAssertNotNil(service);
+    WLXAssertNotNil(notificationCenter);
     self = [super init];
     if (self) {
         _peripheral = peripheral;
         _service = service;
+        _notificationCenter = notificationCenter;
         _characteristicByUUID = [[NSMutableDictionary alloc] init];
         _observers = [[WLXDictionaryOfArrays alloc] init];
         _queueName = createQueueName(service);
@@ -56,8 +65,14 @@ DYNAMIC_LOGGER_METHODS
         _writeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _stateChangeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:self queue:self.queue];
+        _invalidated = NO;
+        [self invalidateServiceManagerOnConnectionLost];
     }
     return self;
+}
+
+- (void)dealloc {
+    [self removeInvalidateServiceManagerObservers];
 }
 
 - (NSArray *)characteristics {
@@ -67,6 +82,7 @@ DYNAMIC_LOGGER_METHODS
 #pragma mark - Reading & writing characteristic value
 
 - (void)readValueFromCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *, NSData *))block {
+    ASSERT_IF_VALID;
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
     WLXLogVerbose(@"Trying to read value for characteristic %@", characteristicUUID.UUIDString);
@@ -84,6 +100,7 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (void)writeValue:(NSData *)data toCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block {
+    ASSERT_IF_VALID;
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
     WLXAssertNotNil(data);
@@ -102,6 +119,7 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (void)writeValue:(NSData *)data toCharacteristic:(CBUUID *)characteristicUUID {
+    ASSERT_IF_VALID;
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(data);
     __weak typeof(self) wself = self;
@@ -118,14 +136,17 @@ DYNAMIC_LOGGER_METHODS
 #pragma mark - Handling characteristic notifications
 
 - (void)enableNotificationsForCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block {
+    ASSERT_IF_VALID;
     [self setNotification:YES forCharacteristic:characteristicUUID usingBlock:block];
 }
 
 - (void)disableNotificationsForCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block {
+    ASSERT_IF_VALID;
     [self setNotification:NO forCharacteristic:characteristicUUID usingBlock:block];
 }
 
 - (id)addObserverForCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *, NSData *))block {
+    ASSERT_IF_VALID;
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(block);
     WLXLogVerbose(@"Adding observer for characteristic %@", characteristicUUID);
@@ -133,6 +154,7 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (id)addObserverForCharacteristic:(CBUUID *)characteristicUUID selector:(SEL)selector target:(id)target {
+    ASSERT_IF_VALID;
     WLXAssertNotNil(characteristicUUID);
     WLXAssertNotNil(selector);
     WLXAssertNotNil(target);
@@ -147,6 +169,7 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (void)removeObserver:(id)observer {
+    ASSERT_IF_VALID;
     WLXLogVerbose(@"Removing observer %p.", observer);
     for (CBUUID * characteristicUUID in [self.observers allKeys]) {
         NSMutableArray * observers = self.observers[characteristicUUID];
@@ -161,15 +184,19 @@ DYNAMIC_LOGGER_METHODS
 #pragma mark - WLXCharacteristicLocator methods
 
 - (CBCharacteristic *)characteristicFromUUID:(CBUUID *)characteristicUUID {
+    ASSERT_IF_VALID;
     return self.characteristicByUUID[characteristicUUID];
 }
 
 - (void)discoverCharacteristics:(NSArray *)characteristicUUIDs {
+    ASSERT_IF_VALID;
+    NSAssert(self.invalidated == NO, @"The service manager has been invalidated. Obtain a new service manager from the WLXServicesManager#managerForService: method");
     WLXLogDebug(@"Discovering characteristics with UUIDs %@ for service %@", characteristicUUIDs, self.service.UUID.UUIDString);
     [self.peripheral discoverCharacteristics:characteristicUUIDs forService:self.service];
 }
 
 - (void)discoverCharacteristics {
+    ASSERT_IF_VALID;
     [self discoverCharacteristics:nil];
 }
 
@@ -247,6 +274,35 @@ DYNAMIC_LOGGER_METHODS
 }
 
 #pragma mark - Private methods
+
+- (void)invalidateServiceManagerOnConnectionLost {
+    [self invalidateServiceManagerOnNotification:WLXBluetoothDeviceConnectionLost];
+    [self invalidateServiceManagerOnNotification:WLXBluetoothDeviceReconnecting];
+    [self invalidateServiceManagerOnNotification:WLXBluetoothDeviceConnectionTerminated];
+}
+
+- (void)invalidateServiceManagerOnNotification:(NSString *)notificationName {
+    [self.notificationCenter addObserver:self
+                                selector:@selector(invalidateServiceManager:)
+                                    name:notificationName
+                                  object:nil];
+}
+
+- (void)removeInvalidateServiceManagerObservers {
+    [self.notificationCenter removeObserver:self name:WLXBluetoothDeviceConnectionTerminated object:nil];
+    [self.notificationCenter removeObserver:self name:WLXBluetoothDeviceConnectionLost object:nil];
+    [self.notificationCenter removeObserver:self name:WLXBluetoothDeviceReconnecting object:nil];
+}
+
+- (NSString *)serviceUUID {
+    return self.service.UUID.UUIDString;
+}
+
+- (void)invalidateServiceManager:(NSNotification *)notifiation {
+    WLXLogDebug(@"Service manager for service '%@' has been invalidated", self.serviceUUID);
+    _invalidated = YES;
+    [self removeInvalidateServiceManagerObservers];
+}
 
 - (void)setNotification:(BOOL)enabled forCharacteristic:(CBUUID *)characteristicUUID usingBlock:(void(^)(NSError *))block {
     WLXAssertNotNil(characteristicUUID);

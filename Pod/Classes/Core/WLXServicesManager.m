@@ -13,6 +13,9 @@
 #import "WLXServicesManager.h"
 #import "WLXBluetoothDeviceNotifications.h"
 
+#define ASSERT_IF_VALID NSAssert(self.invalidated == NO, @"The services manager has been invalidated. Obtain a new services manager from the WLXConnectionManager#servicesManager method")
+#define IGNORE_IF_INVALID WLXLogVerbose(@"Ignoring call to '%s' because services manager has been invalidated", __PRETTY_FUNCTION__)
+
 NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBluetoothDevice.ServiceErrorDomain";
 
 
@@ -48,6 +51,7 @@ DYNAMIC_LOGGER_METHODS
         _managersByCharacteristic = [[NSMutableDictionary alloc] init];
         _discovering = NO;
         _observers = [[NSMutableArray alloc] init];
+        _invalidated = NO;
         [self registerNotificationHandlers];
     }
     return self;
@@ -67,6 +71,7 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (BOOL)discoverServicesUsingBlock:(void(^)(NSError *))block {
+    ASSERT_IF_VALID;
     if (self.discovering) {
         if (block) {
             NSError * error = [NSError errorWithDomain:WLXBluetoothDeviceServiceErrorDomain
@@ -92,11 +97,13 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (CBService *)serviceFromUUID:(CBUUID *)serviceUUID {
+    ASSERT_IF_VALID;
     WLXAssertNotNil(serviceUUID);
     return self.servicesByUUID[serviceUUID];
 }
 
 - (WLXServiceManager *)managerForService:(CBUUID *)serviceUUID {
+    ASSERT_IF_VALID;
     WLXAssertNotNil(serviceUUID);
     return self.managers[serviceUUID];
 }
@@ -174,7 +181,9 @@ DYNAMIC_LOGGER_METHODS
         } else {
             WLXLogDebug(@"Creating service manager for service %@ and peripheral %@", service.UUID.UUIDString,
                        self.peripheral.identifier.UUIDString);
-            WLXServiceManager * manager = [[WLXServiceManager alloc] initWithPeripheral:self.peripheral service:service];
+            WLXServiceManager * manager = [[WLXServiceManager alloc] initWithPeripheral:self.peripheral
+                                                                                service:service
+                                                                     notificationCenter:self.notificationCenter];
             self.managers[service.UUID] = manager;
         }
     }
@@ -185,14 +194,26 @@ DYNAMIC_LOGGER_METHODS
     WLXLogDebug(@"Stopped discovering services for peripheral %@", self.peripheral.identifier.UUIDString);
 }
 
+
 - (void)registerNotificationHandlers {
     __weak typeof(self) wself = self;
-    id handler = ^(NSNotification * notification) {
+    id stopDiscoveringServicesHandler = ^(NSNotification * notification) {
         __strong typeof(self) this = wself;
         [this stopDiscoveringServices];
     };
-    [self registerHandler:handler forNotifications:@[
+    [self registerHandler:stopDiscoveringServicesHandler forNotifications:@[
         WLXBluetoothDeviceBluetoothIsOff,
+        WLXBluetoothDeviceConnectionTerminated,
+        WLXBluetoothDeviceConnectionLost,
+        WLXBluetoothDeviceReconnecting
+    ]];
+    
+    id invalidateServicesManagerHandler = ^(NSNotification * notification) {
+        __strong typeof(self) this = wself;
+        _invalidated = YES;
+        WLXLogDebug(@"Services manager for peripheral '%@' has been invalidated", this.peripheral.identifier.UUIDString);
+    };
+    [self registerHandler:invalidateServicesManagerHandler forNotifications:@[
         WLXBluetoothDeviceConnectionTerminated,
         WLXBluetoothDeviceConnectionLost,
         WLXBluetoothDeviceReconnecting

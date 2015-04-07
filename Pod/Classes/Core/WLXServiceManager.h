@@ -18,8 +18,11 @@
 
 @property (nonatomic) WLXCharacteristicAsyncExecutor * asyncExecutor;
 @property (nonatomic, readonly) NSArray * characteristics;
+@property (nonatomic, readonly) BOOL invalidated;
 
-- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral service:(CBService *)service;
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
+                           service:(CBService *)service
+                notificationCenter:(NSNotificationCenter *)notificationCenter;
 
 #pragma mark - Reading & writing characteristic value
 

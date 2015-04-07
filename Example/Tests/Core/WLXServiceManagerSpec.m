@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import <WLXBluetoothDevice/WLXServiceManager.h>
+#import <WLXBluetoothDevice/WLXBluetoothDeviceNotifications.h>
 
 #define ASYNC(code)                     \
     dispatch_async(specQueue, ^{ code; })
@@ -41,6 +42,7 @@ SpecBegin(WLXServiceManager)
     __block CBService * mockService;
     __block WLXCharacteristicAsyncExecutor * asyncExecutor;
     __block WLXServiceManager * serviceManager;
+    __block NSNotificationCenter * notificationCenter;
 
     __block CBUUID * characteristicUUID;
     __block CBCharacteristic * mockCharacteristic;
@@ -63,12 +65,15 @@ SpecBegin(WLXServiceManager)
         mockPeripheral = mock([CBPeripheral class]);
         mockService = mock([CBService class]);
         mockCharacteristic = mock([CBCharacteristic class]);
+        notificationCenter = [NSNotificationCenter defaultCenter];
         [MKTGiven(mockCharacteristic.UUID) willReturn:characteristicUUID];
         [MKTGiven([mockLocator characteristicFromUUID:characteristicUUID]) willReturn:mockCharacteristic];
         [MKTGiven(mockService.UUID) willReturn:serviceUUID];
         
         asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:mockLocator queue:specQueue];
-        serviceManager = [[WLXServiceManager alloc] initWithPeripheral:mockPeripheral service:mockService];
+        serviceManager = [[WLXServiceManager alloc] initWithPeripheral:mockPeripheral
+                                                               service:mockService
+                                                    notificationCenter:notificationCenter];
         serviceManager.asyncExecutor = asyncExecutor;
     });
 
@@ -81,6 +86,54 @@ SpecBegin(WLXServiceManager)
         characteristicUUID = nil;
         data = nil;
         error = nil;
+    });
+
+    describe(@"#invalidated", ^{
+        
+        context(@"when the service manager has just been created", ^{
+            
+            it(@"is not invalidated", ^{
+                expect(serviceManager.invalidated).to.beFalsy;
+            });
+            
+        });
+        
+        context(@"when a WLXBluetoothDeviceReconnecting notification is triggered", ^{
+            
+            beforeEach(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
+            });
+            
+            it(@"is invalidated", ^{
+                expect(serviceManager.invalidated).to.beTruthy;
+            });
+            
+        });
+        
+        context(@"when a WLXBluetoothDeviceConnectionLost notification is triggered", ^{
+            
+            beforeEach(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceConnectionLost object:nil];
+            });
+            
+            it(@"is invalidated", ^{
+                expect(serviceManager.invalidated).to.beTruthy;
+            });
+            
+        });
+        
+        context(@"when a WLXBluetoothDeviceConnectionTerminated notification is triggered", ^{
+            
+            beforeEach(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceConnectionTerminated object:nil];
+            });
+            
+            it(@"is invalidated", ^{
+                expect(serviceManager.invalidated).to.beTruthy;
+            });
+            
+        });
+        
     });
 
     describe(@"#readValueFromCharacteristic:usingBlock:", ^{
@@ -158,6 +211,20 @@ SpecBegin(WLXServiceManager)
             
         });
     
+        context(@"when the service manager has been invalidated", ^{
+            
+            before(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
+            });
+            
+            it(@"raises an exepction", ^{
+                expect(^{
+                    [serviceManager readValueFromCharacteristic:characteristicUUID
+                                                     usingBlock:^(NSError * error, NSData * data) {}];
+                }).to.raise(NSInternalInconsistencyException);
+            });
+            
+        });
         
     });
 
@@ -238,6 +305,22 @@ SpecBegin(WLXServiceManager)
             
         });
         
+        context(@"when the service manager has been invalidated", ^{
+            
+            before(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
+            });
+            
+            it(@"raises an exepction", ^{
+                expect(^{
+                    [serviceManager writeValue:data
+                              toCharacteristic:characteristicUUID
+                                    usingBlock:^(NSError * error) {}];
+                }).to.raise(NSInternalInconsistencyException);
+            });
+            
+        });
+        
     });
 
     describe(@"#writeValue:toCharacteristic:", ^{
@@ -274,6 +357,21 @@ SpecBegin(WLXServiceManager)
                 done();
             });
         });});
+        
+        context(@"when the service manager has been invalidated", ^{
+            
+            before(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
+            });
+            
+            it(@"raises an exepction", ^{
+                expect(^{
+                    [serviceManager writeValue:data
+                              toCharacteristic:characteristicUUID];
+                }).to.raise(NSInternalInconsistencyException);
+            });
+            
+        });
         
     });
 
@@ -337,6 +435,21 @@ SpecBegin(WLXServiceManager)
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
             });});
         
+        });
+        
+        context(@"when the service manager has been invalidated", ^{
+            
+            before(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
+            });
+            
+            it(@"raises an exepction", ^{
+                expect(^{
+                    [serviceManager enableNotificationsForCharacteristic:characteristicUUID
+                                                              usingBlock:^(NSError * error) {}];
+                }).to.raise(NSInternalInconsistencyException);
+            });
+            
         });
         
     });
@@ -403,6 +516,21 @@ SpecBegin(WLXServiceManager)
             
         });
         
+        context(@"when the service manager has been invalidated", ^{
+            
+            before(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
+            });
+            
+            it(@"raises an exepction", ^{
+                expect(^{
+                    [serviceManager disableNotificationsForCharacteristic:characteristicUUID
+                                                               usingBlock:^(NSError * error) {}];
+                }).to.raise(NSInternalInconsistencyException);
+            });
+            
+        });
+        
     });
 
     describe(@"#addObserverForCharacteristic:usingBlock:", ^{
@@ -456,6 +584,21 @@ SpecBegin(WLXServiceManager)
                 }];
                 ASYNC([serviceManager didUpdateValueForCharacteristic:mockCharacteristic error:error]);
             });});
+            
+        });
+        
+        context(@"when the service manager has been invalidated", ^{
+            
+            before(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
+            });
+            
+            it(@"raises an exepction", ^{
+                expect(^{
+                    [serviceManager addObserverForCharacteristic:characteristicUUID
+                                                      usingBlock:^(NSError * error, NSData * aData) {}];
+                }).to.raise(NSInternalInconsistencyException);
+            });
             
         });
         
@@ -519,6 +662,23 @@ SpecBegin(WLXServiceManager)
             
         });
         
+        context(@"when the service manager has been invalidated", ^{
+            
+            before(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
+            });
+            
+            it(@"raises an exepction", ^{
+                expect(^{
+                    [serviceManager addObserverForCharacteristic:nil
+                                                        selector:@selector(updatedValue:error:)
+                                                          target:observer];
+                }).to.raise(NSInternalInconsistencyException);
+            });
+            
+        });
+        
+        
         it(@"returns the created observer", ^{
             expect([serviceManager addObserverForCharacteristic:characteristicUUID selector:@selector(updatedValue:error:) target:observer]).notTo.beNil;
         });
@@ -541,6 +701,18 @@ SpecBegin(WLXServiceManager)
     
         context(@"when the observer is nil", ^{
         
+        });
+        
+        context(@"when the service manager has been invalidated", ^{
+            
+            before(^{
+                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
+            });
+            
+            it(@"raises an exepction", ^{
+                expect(^{ [serviceManager removeObserver:@""]; }).to.raise(NSInternalInconsistencyException);
+            });
+            
         });
         
         it(@"stops notifying value updates to the removed observer", ^{

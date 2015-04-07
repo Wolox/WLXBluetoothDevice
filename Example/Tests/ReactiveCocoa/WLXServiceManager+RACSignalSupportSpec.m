@@ -25,14 +25,18 @@ __block WLXCharacteristicAsyncExecutor * asyncExecutor;
 __block CBCharacteristic * characteristic;
 __block CBUUID * characteristicUUID;
 __block WLXServiceManager * serviceManager;
+__block NSNotificationCenter * notificationCenter;
 
 beforeEach(^{
+    notificationCenter = [NSNotificationCenter defaultCenter];
     characteristicUUID = [CBUUID UUIDWithString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
     characteristic = mock([CBCharacteristic class]);
     peripheral = mock([CBPeripheral class]);
     service = mock([CBService class]);
     asyncExecutor = mock([WLXCharacteristicAsyncExecutor class]);
-    serviceManager = [[WLXServiceManager alloc] initWithPeripheral:peripheral service:service];
+    serviceManager = [[WLXServiceManager alloc] initWithPeripheral:peripheral
+                                                           service:service
+                                                notificationCenter:notificationCenter];
     serviceManager.asyncExecutor = asyncExecutor;
     [MKTGiven([characteristic UUID]) willReturn:characteristicUUID];
     
