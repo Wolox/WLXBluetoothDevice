@@ -169,7 +169,11 @@ DYNAMIC_LOGGER_METHODS
 }
 
 - (void)removeObserver:(id)observer {
-    ASSERT_IF_VALID;
+    if (self.invalidated) {
+        WLXLogVerbose(@"Service manager for service '%@' is invalidated. Call to removeObserver ignored.", self.serviceUUID);
+        return;
+    }
+    
     WLXLogVerbose(@"Removing observer %p.", observer);
     for (CBUUID * characteristicUUID in [self.observers allKeys]) {
         NSMutableArray * observers = self.observers[characteristicUUID];

@@ -703,18 +703,6 @@ SpecBegin(WLXServiceManager)
         
         });
         
-        context(@"when the service manager has been invalidated", ^{
-            
-            before(^{
-                [notificationCenter postNotificationName:WLXBluetoothDeviceReconnecting object:nil];
-            });
-            
-            it(@"raises an exepction", ^{
-                expect(^{ [serviceManager removeObserver:@""]; }).to.raise(NSInternalInconsistencyException);
-            });
-            
-        });
-        
         it(@"stops notifying value updates to the removed observer", ^{
             id opaqueObserver = [serviceManager addObserverForCharacteristic:characteristicUUID
                                                                     selector:@selector(updatedValue:error:)
