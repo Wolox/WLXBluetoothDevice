@@ -125,7 +125,7 @@ DYNAMIC_LOGGER_METHODS
 
 - (void)didDisconnect:(NSError *)error {
     if (!self.connected && !self.reconnecting) {
-        WLXLogDebug(@"Call to didDisconnect ignored because connection manager is neigher connected or reconnecting.");
+        WLXLogDebug(@"Call to didDisconnect ignored because connection manager is neither connected or reconnecting.");
         return;
     }
     _connected = NO;
@@ -224,7 +224,7 @@ DYNAMIC_LOGGER_METHODS
                                                   code:WLXBluetoothDeviceConnectionErrorConnectionTimeoutExpired
                                               userInfo:nil];
             if (self.reconnecting) {
-                [self tryToReconnect:error];
+                [self didDisconnect:error];
             } else {
                 [self failToConnectWithError:error];
             }
