@@ -10,5 +10,5 @@ before_install:
   - carthage bootstrap
 script:
   - scripts/test.sh && bundle exec pod lib lint
-after_success:
-  - bundle exec slather
+#after_success:
+#  - bundle exec slather
