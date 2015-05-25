@@ -74,6 +74,22 @@
 		9D44AB2D1B12DAE00009A4A6 /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D44AB2C1B12DAE00009A4A6 /* OCMockitoIOS.framework */; };
 		9D44AB2F1B12FFCA0009A4A6 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D44AB2E1B12FFCA0009A4A6 /* ReactiveCocoa.framework */; };
 		9D5CA5FF1B13092900356292 /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D5CA5FE1B13092900356292 /* OCHamcrestIOS.framework */; };
+		9D5CA6111B13127200356292 /* WLXBluetoothDeviceReactiveExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D5CA6061B13127200356292 /* WLXBluetoothDeviceReactiveExtensions.framework */; };
+		9D5CA6281B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6201B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.h */; };
+		9D5CA6291B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6211B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.m */; };
+		9D5CA62A1B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6221B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.h */; };
+		9D5CA62B1B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6231B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.m */; };
+		9D5CA62C1B1315CD00356292 /* WLXServiceManager+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6241B1315CD00356292 /* WLXServiceManager+RACSignalSupport.h */; };
+		9D5CA62D1B1315CD00356292 /* WLXServiceManager+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6251B1315CD00356292 /* WLXServiceManager+RACSignalSupport.m */; };
+		9D5CA62E1B1315CD00356292 /* WLXServicesManager+RACSignalSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6261B1315CD00356292 /* WLXServicesManager+RACSignalSupport.h */; };
+		9D5CA62F1B1315CD00356292 /* WLXServicesManager+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6271B1315CD00356292 /* WLXServicesManager+RACSignalSupport.m */; };
+		9D5CA6351B1315F800356292 /* WLXReactiveConnectionManagerDelegateSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6311B1315F800356292 /* WLXReactiveConnectionManagerDelegateSpec.m */; };
+		9D5CA6361B1315F800356292 /* WLXReactiveDeviceDiscovererDelegateSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6321B1315F800356292 /* WLXReactiveDeviceDiscovererDelegateSpec.m */; };
+		9D5CA6371B1315F800356292 /* WLXServiceManager+RACSignalSupportSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6331B1315F800356292 /* WLXServiceManager+RACSignalSupportSpec.m */; };
+		9D5CA6381B1315F800356292 /* WLXServicesManager+RACSignalSupportSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6341B1315F800356292 /* WLXServicesManager+RACSignalSupportSpec.m */; };
+		9D5CA6391B13162E00356292 /* WLXBluetoothDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D1FD7D31B12076C004A45F4 /* WLXBluetoothDevice.framework */; };
+		9D5CA63A1B13165000356292 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D44AB2E1B12FFCA0009A4A6 /* ReactiveCocoa.framework */; };
+		9D5CA63C1B1316FE00356292 /* WLXBluetoothDeviceReactiveExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA63B1B1316FE00356292 /* WLXBluetoothDeviceReactiveExtensions.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +99,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 9D1FD7D21B12076C004A45F4;
 			remoteInfo = WLXBluetoothDevice;
+		};
+		9D5CA6121B13127200356292 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9D1FD7CA1B12076C004A45F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9D5CA6051B13127200356292;
+			remoteInfo = WLXBluetoothDeviceReactiveExtensions;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -158,6 +181,21 @@
 		9D44AB2E1B12FFCA0009A4A6 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		9D5CA5FD1B1307EB00356292 /* SpecHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecHelper.h; sourceTree = "<group>"; };
 		9D5CA5FE1B13092900356292 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCHamcrestIOS.framework; path = Frameworks/OCHamcrestIOS.framework; sourceTree = "<group>"; };
+		9D5CA6061B13127200356292 /* WLXBluetoothDeviceReactiveExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WLXBluetoothDeviceReactiveExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D5CA6101B13127200356292 /* WLXBluetoothDeviceReactiveExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WLXBluetoothDeviceReactiveExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D5CA6201B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WLXReactiveConnectionManagerDelegate.h; sourceTree = "<group>"; };
+		9D5CA6211B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXReactiveConnectionManagerDelegate.m; sourceTree = "<group>"; };
+		9D5CA6221B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WLXReactiveDeviceDiscovererDelegate.h; sourceTree = "<group>"; };
+		9D5CA6231B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXReactiveDeviceDiscovererDelegate.m; sourceTree = "<group>"; };
+		9D5CA6241B1315CD00356292 /* WLXServiceManager+RACSignalSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WLXServiceManager+RACSignalSupport.h"; sourceTree = "<group>"; };
+		9D5CA6251B1315CD00356292 /* WLXServiceManager+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WLXServiceManager+RACSignalSupport.m"; sourceTree = "<group>"; };
+		9D5CA6261B1315CD00356292 /* WLXServicesManager+RACSignalSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WLXServicesManager+RACSignalSupport.h"; sourceTree = "<group>"; };
+		9D5CA6271B1315CD00356292 /* WLXServicesManager+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WLXServicesManager+RACSignalSupport.m"; sourceTree = "<group>"; };
+		9D5CA6311B1315F800356292 /* WLXReactiveConnectionManagerDelegateSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXReactiveConnectionManagerDelegateSpec.m; sourceTree = "<group>"; };
+		9D5CA6321B1315F800356292 /* WLXReactiveDeviceDiscovererDelegateSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WLXReactiveDeviceDiscovererDelegateSpec.m; sourceTree = "<group>"; };
+		9D5CA6331B1315F800356292 /* WLXServiceManager+RACSignalSupportSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WLXServiceManager+RACSignalSupportSpec.m"; sourceTree = "<group>"; };
+		9D5CA6341B1315F800356292 /* WLXServicesManager+RACSignalSupportSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WLXServicesManager+RACSignalSupportSpec.m"; sourceTree = "<group>"; };
+		9D5CA63B1B1316FE00356292 /* WLXBluetoothDeviceReactiveExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WLXBluetoothDeviceReactiveExtensions.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +220,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9D5CA6021B13127200356292 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D5CA63A1B13165000356292 /* ReactiveCocoa.framework in Frameworks */,
+				9D5CA6391B13162E00356292 /* WLXBluetoothDevice.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D5CA60D1B13127200356292 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D5CA6111B13127200356292 /* WLXBluetoothDeviceReactiveExtensions.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -200,6 +255,8 @@
 			children = (
 				9D1FD7D31B12076C004A45F4 /* WLXBluetoothDevice.framework */,
 				9D1FD7DE1B12076D004A45F4 /* WLXBluetoothDeviceTests.xctest */,
+				9D5CA6061B13127200356292 /* WLXBluetoothDeviceReactiveExtensions.framework */,
+				9D5CA6101B13127200356292 /* WLXBluetoothDeviceReactiveExtensionsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				9D1FD7F31B122560004A45F4 /* Core */,
+				9D5CA61F1B1315CD00356292 /* ReactiveCocoa */,
 				9D1FD7D61B12076C004A45F4 /* Supporting Files */,
 			);
 			path = WLXBluetoothDevice;
@@ -225,6 +283,7 @@
 			isa = PBXGroup;
 			children = (
 				9D1FD86B1B1225E3004A45F4 /* Core */,
+				9D5CA6301B1315F800356292 /* ReactiveCocoa */,
 				9D1FD7E31B12076D004A45F4 /* Supporting Files */,
 			);
 			path = WLXBluetoothDeviceTests;
@@ -326,6 +385,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9D5CA61F1B1315CD00356292 /* ReactiveCocoa */ = {
+			isa = PBXGroup;
+			children = (
+				9D5CA63B1B1316FE00356292 /* WLXBluetoothDeviceReactiveExtensions.h */,
+				9D5CA6201B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.h */,
+				9D5CA6211B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.m */,
+				9D5CA6221B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.h */,
+				9D5CA6231B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.m */,
+				9D5CA6241B1315CD00356292 /* WLXServiceManager+RACSignalSupport.h */,
+				9D5CA6251B1315CD00356292 /* WLXServiceManager+RACSignalSupport.m */,
+				9D5CA6261B1315CD00356292 /* WLXServicesManager+RACSignalSupport.h */,
+				9D5CA6271B1315CD00356292 /* WLXServicesManager+RACSignalSupport.m */,
+			);
+			path = ReactiveCocoa;
+			sourceTree = "<group>";
+		};
+		9D5CA6301B1315F800356292 /* ReactiveCocoa */ = {
+			isa = PBXGroup;
+			children = (
+				9D5CA6311B1315F800356292 /* WLXReactiveConnectionManagerDelegateSpec.m */,
+				9D5CA6321B1315F800356292 /* WLXReactiveDeviceDiscovererDelegateSpec.m */,
+				9D5CA6331B1315F800356292 /* WLXServiceManager+RACSignalSupportSpec.m */,
+				9D5CA6341B1315F800356292 /* WLXServicesManager+RACSignalSupportSpec.m */,
+			);
+			path = ReactiveCocoa;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -364,6 +450,18 @@
 				9D1FD8511B122560004A45F4 /* WLXDictionaryOfArrays.h in Headers */,
 				9D1FD8571B122560004A45F4 /* WLXManagedDelayedExecutor.h in Headers */,
 				9D1FD8471B122560004A45F4 /* WLXCharacteristicAsyncExecutor.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D5CA6031B13127200356292 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D5CA6281B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.h in Headers */,
+				9D5CA62E1B1315CD00356292 /* WLXServicesManager+RACSignalSupport.h in Headers */,
+				9D5CA62C1B1315CD00356292 /* WLXServiceManager+RACSignalSupport.h in Headers */,
+				9D5CA63C1B1316FE00356292 /* WLXBluetoothDeviceReactiveExtensions.h in Headers */,
+				9D5CA62A1B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,6 +504,42 @@
 			productReference = 9D1FD7DE1B12076D004A45F4 /* WLXBluetoothDeviceTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		9D5CA6051B13127200356292 /* WLXBluetoothDeviceReactiveExtensions */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9D5CA6191B13127200356292 /* Build configuration list for PBXNativeTarget "WLXBluetoothDeviceReactiveExtensions" */;
+			buildPhases = (
+				9D5CA6011B13127200356292 /* Sources */,
+				9D5CA6021B13127200356292 /* Frameworks */,
+				9D5CA6031B13127200356292 /* Headers */,
+				9D5CA6041B13127200356292 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WLXBluetoothDeviceReactiveExtensions;
+			productName = WLXBluetoothDeviceReactiveExtensions;
+			productReference = 9D5CA6061B13127200356292 /* WLXBluetoothDeviceReactiveExtensions.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9D5CA60F1B13127200356292 /* WLXBluetoothDeviceReactiveExtensionsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9D5CA61C1B13127200356292 /* Build configuration list for PBXNativeTarget "WLXBluetoothDeviceReactiveExtensionsTests" */;
+			buildPhases = (
+				9D5CA60C1B13127200356292 /* Sources */,
+				9D5CA60D1B13127200356292 /* Frameworks */,
+				9D5CA60E1B13127200356292 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9D5CA6131B13127200356292 /* PBXTargetDependency */,
+			);
+			name = WLXBluetoothDeviceReactiveExtensionsTests;
+			productName = WLXBluetoothDeviceReactiveExtensionsTests;
+			productReference = 9D5CA6101B13127200356292 /* WLXBluetoothDeviceReactiveExtensionsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -420,6 +554,12 @@
 						DevelopmentTeam = 7XS5GQGS29;
 					};
 					9D1FD7DD1B12076D004A45F4 = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+					9D5CA6051B13127200356292 = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+					9D5CA60F1B13127200356292 = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
 				};
@@ -438,6 +578,8 @@
 			targets = (
 				9D1FD7D21B12076C004A45F4 /* WLXBluetoothDevice */,
 				9D1FD7DD1B12076D004A45F4 /* WLXBluetoothDeviceTests */,
+				9D5CA6051B13127200356292 /* WLXBluetoothDeviceReactiveExtensions */,
+				9D5CA60F1B13127200356292 /* WLXBluetoothDeviceReactiveExtensionsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -451,6 +593,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9D1FD7DC1B12076D004A45F4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D5CA6041B13127200356292 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D5CA60E1B13127200356292 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -503,6 +659,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9D5CA6011B13127200356292 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D5CA62D1B1315CD00356292 /* WLXServiceManager+RACSignalSupport.m in Sources */,
+				9D5CA6291B1315CD00356292 /* WLXReactiveConnectionManagerDelegate.m in Sources */,
+				9D5CA62F1B1315CD00356292 /* WLXServicesManager+RACSignalSupport.m in Sources */,
+				9D5CA62B1B1315CD00356292 /* WLXReactiveDeviceDiscovererDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D5CA60C1B13127200356292 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D5CA6371B1315F800356292 /* WLXServiceManager+RACSignalSupportSpec.m in Sources */,
+				9D5CA6381B1315F800356292 /* WLXServicesManager+RACSignalSupportSpec.m in Sources */,
+				9D5CA6361B1315F800356292 /* WLXReactiveDeviceDiscovererDelegateSpec.m in Sources */,
+				9D5CA6351B1315F800356292 /* WLXReactiveConnectionManagerDelegateSpec.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -510,6 +688,11 @@
 			isa = PBXTargetDependency;
 			target = 9D1FD7D21B12076C004A45F4 /* WLXBluetoothDevice */;
 			targetProxy = 9D1FD7E01B12076D004A45F4 /* PBXContainerItemProxy */;
+		};
+		9D5CA6131B13127200356292 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9D5CA6051B13127200356292 /* WLXBluetoothDeviceReactiveExtensions */;
+			targetProxy = 9D5CA6121B13127200356292 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -678,6 +861,78 @@
 			};
 			name = Release;
 		};
+		9D5CA61A1B13127200356292 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = WLXBluetoothDeviceReactiveExtensions/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		9D5CA61B1B13127200356292 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = WLXBluetoothDeviceReactiveExtensions/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		9D5CA61D1B13127200356292 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = WLXBluetoothDeviceReactiveExtensionsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9D5CA61E1B13127200356292 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = WLXBluetoothDeviceReactiveExtensionsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -707,6 +962,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		9D5CA6191B13127200356292 /* Build configuration list for PBXNativeTarget "WLXBluetoothDeviceReactiveExtensions" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9D5CA61A1B13127200356292 /* Debug */,
+				9D5CA61B1B13127200356292 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		9D5CA61C1B13127200356292 /* Build configuration list for PBXNativeTarget "WLXBluetoothDeviceReactiveExtensionsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9D5CA61D1B13127200356292 /* Debug */,
+				9D5CA61E1B13127200356292 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
