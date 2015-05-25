@@ -475,7 +475,7 @@ SpecBegin(WLXServiceManager)
             
         });
         
-        context(@"when the notifications are successfully enabled", ^{
+        context(@"when the notifications are successfully disabled", ^{
             
             it(@"calls the block", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager disableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
@@ -495,9 +495,9 @@ SpecBegin(WLXServiceManager)
             
         });
         
-        context(@"when the notifications could not be enabled", ^{
+        context(@"when the notifications could not be disabled", ^{
             
-            it(@"calls the block witn an error", ^{ waitUntil(^(DoneCallback done) {
+            it(@"calls the block with an error", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager disableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
                     expect(error).notTo.beNil;
                     done();
@@ -507,7 +507,7 @@ SpecBegin(WLXServiceManager)
             
             it(@"calls the peripheral's setNotifyValue:forCharacteristic method", ^{ waitUntil(^(DoneCallback done) {
                 [serviceManager disableNotificationsForCharacteristic:characteristicUUID usingBlock:^(NSError * error) {
-                    [MKTVerify(mockPeripheral) setNotifyValue:YES forCharacteristic:mockCharacteristic];
+                    [MKTVerify(mockPeripheral) setNotifyValue:NO forCharacteristic:mockCharacteristic];
                     done();
                 }];
                 ASYNC([serviceManager didUpdateNotificationStateForCharacteristic:mockCharacteristic error:error]);
