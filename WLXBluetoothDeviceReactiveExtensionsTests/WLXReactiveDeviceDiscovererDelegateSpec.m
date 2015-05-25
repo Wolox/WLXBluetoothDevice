@@ -5,9 +5,7 @@
 //  Created by Guido Marucci Blas on 3/10/15.
 //  Copyright (c) 2015 Guido Marucci Blas. All rights reserved.
 //
-
-#import <WLXBluetoothDevice/WLXReactiveDeviceDiscovererDelegate.h>
-#import <WLXBluetoothDevice/WLXDeviceDiscoveryData.h>
+#import "SpecHelper.h"
 
 SpecBegin(WLXReactiveDeviceDiscovererDelegate)
 

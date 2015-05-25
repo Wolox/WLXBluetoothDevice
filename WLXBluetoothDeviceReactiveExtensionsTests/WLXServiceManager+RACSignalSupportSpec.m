@@ -5,9 +5,7 @@
 //  Created by Guido Marucci Blas on 3/11/15.
 //  Copyright (c) 2015 Guido Marucci Blas. All rights reserved.
 //
-
-#import <Foundation/Foundation.h>
-#import <WLXBluetoothDevice/WLXServiceManager+RACSignalSupport.h>
+#import "SpecHelper.h"
 
 #define STUB_ASYNC_EXECUTOR(e)                                                                              \
     do {                                                                                                    \
@@ -203,6 +201,7 @@ describe(@"#rac_notificationsForCharacteristic:", ^{
     
     beforeEach(^{
         data = [NSMutableData data];
+        [MKTGiven(characteristic.value) willReturn:data];
     });
     
     context(@"when an update is received", ^{

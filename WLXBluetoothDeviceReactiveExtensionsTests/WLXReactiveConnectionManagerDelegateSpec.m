@@ -5,10 +5,7 @@
 //  Created by Guido Marucci Blas on 3/10/15.
 //  Copyright (c) 2015 Guido Marucci Blas. All rights reserved.
 //
-
-#import <Foundation/Foundation.h>
-
-#import <WLXBluetoothDevice/WLXReactiveConnectionManagerDelegate.h>
+#import "SpecHelper.h"
 
 SpecBegin(WLXReactiveConnectionManagerDelegate)
 
