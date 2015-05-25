@@ -3,12 +3,13 @@
 rvm:
   - 2.1.2
 language: objective-c
-podfile: Example/Podfile
+osx_image: xcode63
 before_install:
   - bundle install
   - brew update
-  - brew outdated xctool || brew upgrade xctool
+  - brew install carthage
+  - carthage bootstrap --verbose
 script:
-  - cd Example && bundle exec xbuild clean && bundle exec xbuild test && cd .. && bundle exec pod lib lint
-after_success:
-  - bundle exec slather
+  - scripts/test.sh && bundle exec pod lib lint --quick
+#after_success:
+#  - bundle exec slather

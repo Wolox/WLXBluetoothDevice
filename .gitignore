@@ -22,5 +22,6 @@ DerivedData
 # Bundler
 .bundle
 
+Carthage/
 Example/Pods/
 WLXBluetoothDevice.wiki/

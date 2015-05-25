@@ -1,0 +1,5 @@
+github "robrix/Box" "1.2.2"
+github "specta/expecta" "v1.0.1"
+github "specta/specta" "v1.0.0"
+github "antitypical/Result" "0.4.3"
+github "ReactiveCocoa/ReactiveCocoa" "b15798ae4f6386b8461b3b06f49908f2009a28ce"
