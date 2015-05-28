@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import "WLXServiceManager.h"
+#import <WLXBluetoothDevice/WLXServiceManager.h>
 
 @interface WLXServiceManager (RACSignalSupport)
 

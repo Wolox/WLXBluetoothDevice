@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
-#import "WLXConnectionManagerDelegate.h"
+#import <WLXBluetoothDevice/WLXConnectionManager.h>
 
 @interface WLXReactiveConnectionManagerDelegate : NSObject<WLXConnectionManagerDelegate>
 
