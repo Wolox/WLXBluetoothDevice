@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <WLXBluetoothDevice/WLXDeviceDiscovererDelegate.h>
+#import <WLXBluetoothDevice/WLXBluetoothDevice.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 @interface WLXReactiveDeviceDiscovererDelegate : NSObject<WLXDeviceDiscovererDelegate>

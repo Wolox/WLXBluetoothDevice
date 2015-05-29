@@ -112,6 +112,7 @@
 		9D5CA7181B13375F00356292 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D5CA7161B13374B00356292 /* Result.framework */; };
 		9D5CA7191B13376800356292 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9D5CA7161B13374B00356292 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9D5CA71D1B133DA900356292 /* SwiftFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA71C1B133DA900356292 /* SwiftFile.swift */; };
+		9DBF37851B1877E3009E99EE /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D44AB2A1B12DAD30009A4A6 /* CocoaLumberjack.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -300,6 +301,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9DBF37851B1877E3009E99EE /* CocoaLumberjack.framework in Frameworks */,
 				9D5CA7171B13374B00356292 /* Result.framework in Frameworks */,
 				9D5CA7121B13333900356292 /* Box.framework in Frameworks */,
 				9D5CA7091B132F8A00356292 /* ReactiveCocoa.framework in Frameworks */,
@@ -991,6 +993,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1014,6 +1017,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = WLXBluetoothDeviceReactiveExtensions/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
