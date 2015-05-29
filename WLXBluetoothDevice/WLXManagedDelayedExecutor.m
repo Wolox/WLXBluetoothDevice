@@ -19,7 +19,7 @@
 
 @implementation WLXManagedDelayedExecutor
 
-DYNAMIC_LOGGER_METHODS
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithQueue:(dispatch_queue_t)queue {
     self = [super init];

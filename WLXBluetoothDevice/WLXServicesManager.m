@@ -36,7 +36,7 @@ NSString * const WLXBluetoothDeviceServiceErrorDomain = @"ar.com.wolox.WLXBlueto
 @dynamic services;
 @dynamic servicesDiscovered;
 
-DYNAMIC_LOGGER_METHODS
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                 notificationCenter:(NSNotificationCenter *)notificationCenter {

@@ -21,7 +21,7 @@
 
 @implementation WLXCentralManagerDelegate
 
-DYNAMIC_LOGGER_METHODS
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithDiscoverer:(WLXBluetoothDeviceDiscoverer *)discoverer
                 notificationCenter:(NSNotificationCenter *)notificationCenter {

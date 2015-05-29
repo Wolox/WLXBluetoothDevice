@@ -20,7 +20,7 @@ NSString * const WLXBluetoothDeviceLastConnectionRecord = @"ar.com.wolox.WLXBlue
 
 @implementation WLXBluetoothDeviceUserDefaultsRepository
 
-DYNAMIC_LOGGER_METHODS
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithUserDefaults:(NSUserDefaults *)userDefaults {
     self = [super init];

@@ -18,7 +18,7 @@
 
 @implementation WLXLinearReconnectionStrategy
 
-DYNAMIC_LOGGER_METHODS
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithWaitTime:(NSUInteger)waitTime
          maxReconnectionAttempts:(NSUInteger)maxReconnectionAttempts

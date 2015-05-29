@@ -26,17 +26,17 @@ static int WLXBluetoothDeviceLogLevel = DDLogLevelWarning;
 #define WLXLogDebug(frmt, ...) LOG_MAYBE(LOG_ASYNC_ENABLED, WLXBluetoothDeviceLogLevel, DDLogFlagDebug, WLX_LOG_CONTEXT, nil, __PRETTY_FUNCTION__, frmt, ##__VA_ARGS__)
 #define WLXLogVerbose(frmt, ...) LOG_MAYBE(LOG_ASYNC_ENABLED, WLXBluetoothDeviceLogLevel, DDLogFlagVerbose, WLX_LOG_CONTEXT, nil, __PRETTY_FUNCTION__, frmt, ##__VA_ARGS__)
 
-#define DYNAMIC_LOGGER_METHODS              \
-+ (int)ddLogLevel {                         \
-    return WLXBluetoothDeviceLogLevel;      \
-}                                           \
-                                            \
-+ (void)ddSetLogLevel:(int)logLevel {       \
-    WLXBluetoothDeviceLogLevel = logLevel;  \
-}                                           \
-                                            \
-+ (int)loggerContext {                      \
-    return WLX_LOG_CONTEXT;                 \
+#define WLX_BD_DYNAMIC_LOGGER_METHODS               \
++ (int)ddLogLevel {                                 \
+    return WLXBluetoothDeviceLogLevel;              \
+}                                                   \
+                                                    \
++ (void)ddSetLogLevel:(int)logLevel {               \
+    WLXBluetoothDeviceLogLevel = logLevel;          \
+}                                                   \
+                                                    \
++ (int)loggerContext {                              \
+    return WLX_LOG_CONTEXT;                         \
 }
 
 #endif

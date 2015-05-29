@@ -22,7 +22,7 @@
 
 @implementation WLXCharacteristicAsyncExecutor
 
-DYNAMIC_LOGGER_METHODS
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithCharacteristicLocator:(id<WLXCharacteristicLocator>)locator queue:(dispatch_queue_t)queue {
     WLXAssertNotNil(locator);

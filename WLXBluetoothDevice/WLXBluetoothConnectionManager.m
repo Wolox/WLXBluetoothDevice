@@ -32,7 +32,7 @@
 @dynamic peripheralUUID;
 @dynamic active;
 
-DYNAMIC_LOGGER_METHODS
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                     centralManager:(CBCentralManager *)centralManager

@@ -44,7 +44,7 @@ static NSString * createQueueName(CBService * service) {
 
 @dynamic characteristics;
 
-DYNAMIC_LOGGER_METHODS
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                            service:(CBService *)service

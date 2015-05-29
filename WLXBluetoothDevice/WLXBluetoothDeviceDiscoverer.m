@@ -29,7 +29,7 @@
 
 @dynamic discoveredDevices;
 
-DYNAMIC_LOGGER_METHODS
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithCentralManager:(CBCentralManager *)centralManager
                     notificationCenter:(NSNotificationCenter *)notificationCenter
