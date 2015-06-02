@@ -111,6 +111,10 @@
 		9D5CA71D1B133DA900356292 /* SwiftFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA71C1B133DA900356292 /* SwiftFile.swift */; };
 		9DBF379D1B1D8BAE009E99EE /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DBF379C1B1D8BAE009E99EE /* CocoaLumberjack.framework */; };
 		9DBF379E1B1D8BD7009E99EE /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DBF379C1B1D8BAE009E99EE /* CocoaLumberjack.framework */; };
+		9DBF37B61B1E01DB009E99EE /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DBF379C1B1D8BAE009E99EE /* CocoaLumberjack.framework */; };
+		9DBF37B71B1E01E8009E99EE /* CocoaLumberjack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9DBF379C1B1D8BAE009E99EE /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9DBF37B81B1E01F1009E99EE /* CocoaLumberjack.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9DBF379C1B1D8BAE009E99EE /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9DBF37B91B1E01F8009E99EE /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DBF379C1B1D8BAE009E99EE /* CocoaLumberjack.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,6 +156,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				9D5CA63E1B131D9A00356292 /* Expecta.framework in CopyFiles */,
+				9DBF37B71B1E01E8009E99EE /* CocoaLumberjack.framework in CopyFiles */,
 				9D5CA63F1B131DAC00356292 /* Specta.framework in CopyFiles */,
 				9D5CA6401B131DB600356292 /* OCHamcrestIOS.framework in CopyFiles */,
 				9D5CA6411B131DB600356292 /* OCMockitoIOS.framework in CopyFiles */,
@@ -167,6 +172,7 @@
 				9D5CA7191B13376800356292 /* Result.framework in CopyFiles */,
 				9D5CA7111B1332E400356292 /* Box.framework in CopyFiles */,
 				9D5CA66F1B132D3700356292 /* OCHamcrestIOS.framework in CopyFiles */,
+				9DBF37B81B1E01F1009E99EE /* CocoaLumberjack.framework in CopyFiles */,
 				9D5CA6701B132D3700356292 /* ReactiveCocoa.framework in CopyFiles */,
 				9D5CA6711B132D3700356292 /* OCMockitoIOS.framework in CopyFiles */,
 				9D5CA6731B132D3700356292 /* Expecta.framework in CopyFiles */,
@@ -287,6 +293,7 @@
 			files = (
 				9D5CA5FF1B13092900356292 /* OCHamcrestIOS.framework in Frameworks */,
 				9D44AB2D1B12DAE00009A4A6 /* OCMockitoIOS.framework in Frameworks */,
+				9DBF37B61B1E01DB009E99EE /* CocoaLumberjack.framework in Frameworks */,
 				9D1FD8891B1230E5004A45F4 /* Expecta.framework in Frameworks */,
 				9D1FD88A1B1230E5004A45F4 /* Specta.framework in Frameworks */,
 				9D1FD7DF1B12076D004A45F4 /* WLXBluetoothDevice.framework in Frameworks */,
@@ -311,6 +318,7 @@
 			files = (
 				9D5CA7181B13375F00356292 /* Result.framework in Frameworks */,
 				9D5CA7101B1332DB00356292 /* Box.framework in Frameworks */,
+				9DBF37B91B1E01F8009E99EE /* CocoaLumberjack.framework in Frameworks */,
 				9D5CA66B1B132CDE00356292 /* WLXBluetoothDevice.framework in Frameworks */,
 				9D5CA65A1B132CB000356292 /* WLXBluetoothDeviceReactiveExtensions.framework in Frameworks */,
 				9D5CA70A1B132FB200356292 /* OCHamcrestIOS.framework in Frameworks */,
