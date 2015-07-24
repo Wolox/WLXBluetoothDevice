@@ -1,2 +1,2 @@
-github "ReactiveCocoa/ReactiveCocoa" "v3.0-beta.7"
+github "ReactiveCocoa/ReactiveCocoa" "v3.0-RC.1"
 github "guidomb/CocoaLumberjack" "master"
