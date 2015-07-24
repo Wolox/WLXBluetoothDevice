@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+script/bootstrap
+script/test
+bundle exec pod lib lint --quick

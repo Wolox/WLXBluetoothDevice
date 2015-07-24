@@ -1,2 +1,2 @@
 #!/bin/bash
-scripts/test_core.sh && scripts/test_reactive_extensions.sh
+script/test_core && script/test_reactive_extensions

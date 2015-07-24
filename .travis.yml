@@ -4,12 +4,6 @@ rvm:
   - 2.1.2
 language: objective-c
 osx_image: xcode63
-before_install:
-  - bundle install
-  - brew update
-  - brew install carthage
-  - carthage bootstrap --verbose
-script:
-  - scripts/test.sh && bundle exec pod lib lint --quick
+script: script/cibuild
 #after_success:
 #  - bundle exec slather

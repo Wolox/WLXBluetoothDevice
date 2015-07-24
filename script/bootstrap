@@ -1,2 +1,8 @@
 #!/bin/bash
-bundle install && carthage bootstrap
+
+set -e
+
+bundle install
+brew update
+brew install carthage
+carthage bootstrap
