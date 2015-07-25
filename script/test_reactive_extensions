@@ -1,2 +1,9 @@
 #!/bin/bash
-xcodebuild -scheme WLXBluetoothDeviceReactiveExtensions -project WLXBluetoothDevice.xcodeproj -sdk iphonesimulator test | xcpretty -c
+
+test_command="set -o pipefail && xcodebuild -scheme WLXBluetoothDeviceReactiveExtensions -project WLXBluetoothDevice.xcodeproj -sdk iphonesimulator test -configuration Debug"
+if type bundle > /dev/null && bundle show xcpretty > /dev/null
+then
+  test_command="$test_command | bundle exec xcpretty -c"
+fi
+
+eval $test_command
