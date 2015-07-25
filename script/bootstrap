@@ -3,6 +3,6 @@
 set -e
 
 bundle install
-brew update
+brew update > /dev/null
 brew install carthage
 carthage bootstrap
