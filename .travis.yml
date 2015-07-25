@@ -3,7 +3,7 @@
 rvm:
   - 2.1.2
 language: objective-c
-osx_image: xcode63
+osx_image: xcode6.4
 script: script/cibuild
 #after_success:
 #  - bundle exec slather
