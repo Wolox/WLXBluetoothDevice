@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -e
+
+OCHAMCREST_VERSION="4.1.1"
+OCMOCKITO_VERSION="1.4.0"
+
+if [ -z "$GITHUB_ACCESS_TOKEN" ]
+then
+  authentication=""
+else
+  authentication=" -H 'Authentication: token $GITHUB_ACCESS_TOKEN'"
+fi
+curl_command="curl -s"$authentication
+
+ocmockito_url="https://github.com/jonreid/OCMockito/releases/download/v$OCMOCKITO_VERSION/OCMockito-$OCMOCKITO_VERSION.zip"
+ochamcrest_url="https://github.com/hamcrest/OCHamcrest/releases/download/v$OCHAMCREST_VERSION/OCHamcrest-$OCHAMCREST_VERSION.zip"
+
+echo ""
+echo " → Installing frameworks"
+echo ""
+if [ ! -d "Frameworks/OCHamcrestIOS.framework" ]
+then
+  echo "  → Downloading OCHamcrest"
+  eval "$curl_command -L -o Frameworks/OCHamcrest.zip $ochamcrest_url"
+  echo "    ✔ OCHamcrest.zip downloaded"
+  unzip Frameworks/OCHamcrest.zip -d Frameworks > /dev/null
+  echo "    ✔ OCHamcrest.zip unzipped"
+  mv "Frameworks/OCHamcrest-$OCHAMCREST_VERSION/OCHamcrestIOS.framework" Frameworks/OCHamcrestIOS.framework
+  rm -r "Frameworks/OCHamcrest-$OCHAMCREST_VERSION"
+  rm Frameworks/OCHamcrest.zip
+  echo "    ✔ OCHamcrestIOS.framework installed"
+else
+  echo "    ✔ OCHamcrestIOS.framework is already installed"
+fi
+
+if [ ! -d "Frameworks/OCMockitoIOS.framework" ]
+then
+  echo "  → Downloading OCMockito"
+  eval "$curl_command -L -o Frameworks/OCMockito.zip $ocmockito_url"
+  echo "    ✔ OCMockito.zip downloaded"
+  unzip Frameworks/OCMockito.zip -d Frameworks > /dev/null
+  echo "    ✔ OCMockito.zip unzipped"
+  mv "Frameworks/OCMockito-$OCMOCKITO_VERSION/OCMockitoIOS.framework" Frameworks/OCMockitoIOS.framework
+  rm -r "Frameworks/OCMockito-$OCMOCKITO_VERSION"
+  rm Frameworks/OCMockito.zip
+  echo "    ✔ OCMockitoIOS.framework installed"
+else
+  echo "    ✔ OCMockitoIOS.framework is already installed"
+fi
