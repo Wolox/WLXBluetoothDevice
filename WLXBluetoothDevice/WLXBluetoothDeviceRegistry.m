@@ -55,11 +55,6 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     }
 }
 
-- (void)fetchLastConnectionRecordWithBlock:(void(^)(NSError *, WLXBluetoothDeviceConnectionRecord *))block {
-    return [self.repository fetchLastConnectionRecordWithBlock:block];
-}
-
-
 - (void)fetchLastConnectedPeripheralWithBlock:(void(^)(NSError *, CBPeripheral *))block {
     WLXAssertNotNil(block);
     [self fetchLastConnectionRecordWithBlock:^(NSError * error, WLXBluetoothDeviceConnectionRecord * record) {
@@ -71,6 +66,15 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     }];
 }
 
+#pragma mark - WLXBluetoothDeviceRepository
+
+- (void)fetchLastConnectionRecordWithBlock:(void(^)(NSError *, WLXBluetoothDeviceConnectionRecord *))block {
+    return [self.repository fetchLastConnectionRecordWithBlock:block];
+}
+
+- (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRercord withBlock:(void (^)(NSError *))block {
+    [self.repository saveConnectionRecord:connectionRercord withBlock:block];
+}
 
 #pragma mark - Private methods
 

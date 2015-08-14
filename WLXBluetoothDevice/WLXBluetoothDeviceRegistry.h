@@ -10,15 +10,13 @@
 
 #import "WLXBluetoothDeviceRepository.h"
 
-@interface WLXBluetoothDeviceRegistry : NSObject
+@interface WLXBluetoothDeviceRegistry : NSObject<WLXBluetoothDeviceRepository>
 
 @property (nonatomic) BOOL enabled;
 
 - (instancetype)initWithRepository:(id<WLXBluetoothDeviceRepository>)repository
                 notificationCenter:(NSNotificationCenter * )notificationCenter
                     centralManager:(CBCentralManager *)centralManager;
-
-- (void)fetchLastConnectionRecordWithBlock:(void(^)(NSError *, WLXBluetoothDeviceConnectionRecord *))block;
 
 - (void)fetchLastConnectedPeripheralWithBlock:(void(^)(NSError *, CBPeripheral *))block;
 
