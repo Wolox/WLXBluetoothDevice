@@ -115,6 +115,39 @@ SpecBegin(WLXBluetoothDeviceUserDefaultsRepository)
         
     });
 
+    describe(@"#fetchConnectionRecordsWithBlock:", ^{
+    
+        context(@"when connection records were saved", ^{
+        
+            beforeEach(^{
+                [MKTGiven([mockUserDefaults objectForKey:WLXBluetoothDeviceConnectionRecords]) willReturn:encodedConnectionRecords];
+            });
+        
+            it(@"returns the saved records", ^{
+                [repository fetchConnectionRecordsWithBlock:^(NSError * error, NSArray * records) {
+                    expect(records).to.equal(@[connectionRecord2, connectionRecord1]);
+                }];
+            });
+        
+        });
+    
+        context(@"when a connection records were not saved", ^{
+        
+            beforeEach(^{
+                [MKTGiven([mockUserDefaults objectForKey:WLXBluetoothDeviceConnectionRecords]) willReturn:nil];
+            });
+        
+            it(@"returns an empty array", ^{
+                [repository fetchConnectionRecordsWithBlock:^(NSError * error, NSArray * records) {
+                    expect(records).to.equal(@[]);
+                }];
+            });
+        
+        });
+    
+    });
+
+
     describe(@"#deleteConnectionRecord:withBlock:", ^{
     
         context(@"when a connection record was saved", ^{
