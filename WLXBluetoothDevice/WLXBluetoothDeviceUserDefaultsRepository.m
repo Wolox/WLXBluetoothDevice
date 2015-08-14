@@ -55,22 +55,40 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     }
 }
 
-- (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRercord withBlock:(void(^)(NSError *))block {
-    WLXLogDebug(@"Saving connection record %@ in user defaults %@", connectionRercord, self.userDefaults);
+- (void)deleteConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord withBlock:(void(^)(NSError *))block {
+    WLXLogDebug(@"Deleting connection record %@ in user defaults %@", connectionRecord, self.userDefaults);
     [self fetchConnectionRecordsWithBlock:^(NSError * error, NSArray * records) {
         if (error && block) {
             block(error);
         } else {
-            NSArray * newRecords = [self insertConnectionRecord:connectionRercord intoRecods:records];
-            id encodedObject = [NSKeyedArchiver archivedDataWithRootObject:newRecords];
-            [self.userDefaults setObject:encodedObject forKey:WLXBluetoothDeviceConnectionRecords];
-            if (block && [self.userDefaults synchronize]) {
+            NSArray * newRecords = [self removeConnectionRecord:connectionRecord fromRecords:records];
+            if (newRecords == records) {
                 block(nil);
-            } else if (block) {
-                NSError * error = [NSError errorWithDomain:WLXBluetoothDeviceUserDefaultsRepositoryError
-                                                      code:UserDefaultsRepositoryErrorUnableToSynch
-                                                  userInfo:nil];
+                return;
+            }
+            
+            NSError * error = [self saveConnectionRecods:newRecords];
+            if (error && block) {
                 block(error);
+            } else if (block) {
+                block(nil);
+            }
+        }
+    }];
+}
+
+- (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord withBlock:(void(^)(NSError *))block {
+    WLXLogDebug(@"Saving connection record %@ in user defaults %@", connectionRecord, self.userDefaults);
+    [self fetchConnectionRecordsWithBlock:^(NSError * error, NSArray * records) {
+        if (error && block) {
+            block(error);
+        } else {
+            NSArray * newRecords = [self insertConnectionRecord:connectionRecord intoRecords:records];
+            NSError * error = [self saveConnectionRecods:newRecords];
+            if (error && block) {
+                block(error);
+            } else if (block) {
+                block(nil);
             }
         }
     }];
@@ -78,8 +96,20 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 
 #pragma mark - Private methods
 
+- (NSError *)saveConnectionRecods:(NSArray *)records {
+    id encodedObject = [NSKeyedArchiver archivedDataWithRootObject:records];
+    [self.userDefaults setObject:encodedObject forKey:WLXBluetoothDeviceConnectionRecords];
+    NSError * error;
+    if (![self.userDefaults synchronize]) {
+        error = [NSError errorWithDomain:WLXBluetoothDeviceUserDefaultsRepositoryError
+                                    code:UserDefaultsRepositoryErrorUnableToSynch
+                                userInfo:nil];
+    }
+    return error;
+}
+
 - (NSArray *)insertConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord
-                         intoRecods:(NSArray *)records {
+                         intoRecords:(NSArray *)records {
     // Only save the newest record per peripheral UUID
     // Records are sorted from newest to oldest.
     NSMutableArray * newRecords = [NSMutableArray arrayWithCapacity:records.count + 1];
@@ -92,6 +122,18 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     }
     
     return [NSArray arrayWithArray:newRecords];
+}
+
+- (NSArray *)removeConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord
+                         fromRecords:(NSArray *)records {
+    NSMutableArray * newRecords = [NSMutableArray arrayWithArray:records];
+    [newRecords removeObject:connectionRecord];
+    
+    if (newRecords.count == records.count) {
+        return records;
+    } else {
+        return [NSArray arrayWithArray:newRecords];
+    }
 }
 
 @end

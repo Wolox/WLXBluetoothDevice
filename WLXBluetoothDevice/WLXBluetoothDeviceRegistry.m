@@ -76,6 +76,10 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     [self.repository fetchConnectionRecordsWithBlock:block];
 }
 
+- (void)deleteConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord withBlock:(void(^)(NSError *))block {
+    [self.repository deleteConnectionRecord:connectionRecord withBlock:block];
+}
+
 - (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRercord withBlock:(void (^)(NSError *))block {
     [self.repository saveConnectionRecord:connectionRercord withBlock:block];
 }
