@@ -13,6 +13,8 @@
 
 - (void)fetchLastConnectionRecordWithBlock:(void(^)(NSError *, WLXBluetoothDeviceConnectionRecord *))block;
 
+- (void)fetchConnectionRecordsWithBlock:(void(^)(NSError *, NSArray *))block;
+
 - (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRercord withBlock:(void(^)(NSError *))block;
 
 @end

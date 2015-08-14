@@ -69,7 +69,11 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 #pragma mark - WLXBluetoothDeviceRepository
 
 - (void)fetchLastConnectionRecordWithBlock:(void(^)(NSError *, WLXBluetoothDeviceConnectionRecord *))block {
-    return [self.repository fetchLastConnectionRecordWithBlock:block];
+    [self.repository fetchLastConnectionRecordWithBlock:block];
+}
+
+- (void)fetchConnectionRecordsWithBlock:(void (^)(NSError *, NSArray *))block {
+    [self.repository fetchConnectionRecordsWithBlock:block];
 }
 
 - (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRercord withBlock:(void (^)(NSError *))block {

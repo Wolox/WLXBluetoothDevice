@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "WLXBluetoothDeviceRepository.h"
 
-extern NSString * const WLXBluetoothDeviceLastConnectionRecord;
+extern NSString * const WLXBluetoothDeviceConnectionRecords;
 extern NSString * const WLXBluetoothDeviceUserDefaultsRepositoryError;
 
 typedef enum : NSUInteger {
