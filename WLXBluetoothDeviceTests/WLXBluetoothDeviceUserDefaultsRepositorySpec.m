@@ -35,7 +35,7 @@ SpecBegin(WLXBluetoothDeviceUserDefaultsRepository)
     describe(@"#saveConnectionRecord:", ^{
         
         it(@"stores the record in the user defaults", ^{
-            [repository saveConnectionRecord:connectionRecord];
+            [repository saveConnectionRecord:connectionRecord withBlock:nil];
             [MKTVerify(mockUserDefaults) setObject:encodedConnectionRecord forKey:WLXBluetoothDeviceLastConnectionRecord];
         });
         
@@ -49,8 +49,10 @@ SpecBegin(WLXBluetoothDeviceUserDefaultsRepository)
                 [MKTGiven([mockUserDefaults objectForKey:WLXBluetoothDeviceLastConnectionRecord]) willReturn:encodedConnectionRecord];
             });
             
-            it(@"fetches the record from the user defaults", ^{
-                expect([repository fetchLastConnectionRecord]).to.beNil;
+            it(@"returns the saved record", ^{
+                [repository fetchLastConnectionRecordWithBlock:^(NSError * error, WLXBluetoothDeviceConnectionRecord * record) {
+                    expect(record).to.equal(connectionRecord);
+                }];
             });
             
         });
@@ -62,7 +64,9 @@ SpecBegin(WLXBluetoothDeviceUserDefaultsRepository)
             });
             
             it(@"fetches the record from the user defaults", ^{
-                expect([repository fetchLastConnectionRecord]).notTo.beNil;
+                [repository fetchLastConnectionRecordWithBlock:^(NSError * error, WLXBluetoothDeviceConnectionRecord * record) {
+                    expect(record).to.beNil;
+                }];
             });
             
         });

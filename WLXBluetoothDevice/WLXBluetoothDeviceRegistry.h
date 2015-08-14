@@ -13,11 +13,14 @@
 @interface WLXBluetoothDeviceRegistry : NSObject
 
 @property (nonatomic) BOOL enabled;
-@property (nonatomic, readonly) CBPeripheral * lastConnectedPeripheral;
-@property (nonatomic, readonly) WLXBluetoothDeviceConnectionRecord * lastConnectionRecord;
 
 - (instancetype)initWithRepository:(id<WLXBluetoothDeviceRepository>)repository
                 notificationCenter:(NSNotificationCenter * )notificationCenter
                     centralManager:(CBCentralManager *)centralManager;
+
+- (void)fetchLastConnectionRecordWithBlock:(void(^)(NSError *, WLXBluetoothDeviceConnectionRecord *))block;
+
+- (void)fetchLastConnectedPeripheralWithBlock:(void(^)(NSError *, CBPeripheral *))block;
+
 
 @end

@@ -10,6 +10,7 @@
 
 #import "WLXBluetoothDeviceHelpers.h"
 #import "WLXBluetoothDeviceNotifications.h"
+#import "WLXBluetoothDeviceLogger.h"
 
 @interface WLXBluetoothDeviceRegistry (){
     CBPeripheral * _lastConnectedPeripheral;
@@ -24,8 +25,7 @@
 
 @implementation WLXBluetoothDeviceRegistry
 
-@dynamic lastConnectedPeripheral;
-@dynamic lastConnectionRecord;
+WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (instancetype)initWithRepository:(id<WLXBluetoothDeviceRepository>)repository
                 notificationCenter:(NSNotificationCenter * )notificationCenter
@@ -55,16 +55,22 @@
     }
 }
 
-- (WLXBluetoothDeviceConnectionRecord *)lastConnectionRecord {
-    return [self.repository fetchLastConnectionRecord];
+- (void)fetchLastConnectionRecordWithBlock:(void(^)(NSError *, WLXBluetoothDeviceConnectionRecord *))block {
+    return [self.repository fetchLastConnectionRecordWithBlock:block];
 }
 
-- (CBPeripheral *)lastConnectedPeripheral {
-    if (_lastConnectedPeripheral == nil) {
-        _lastConnectedPeripheral = [self loadLastConnectedPeripheral];
-    }
-    return _lastConnectedPeripheral;
+
+- (void)fetchLastConnectedPeripheralWithBlock:(void(^)(NSError *, CBPeripheral *))block {
+    WLXAssertNotNil(block);
+    [self fetchLastConnectionRecordWithBlock:^(NSError * error, WLXBluetoothDeviceConnectionRecord * record) {
+        if (error) {
+            block(error, nil);
+        } else {
+            block(nil, [self peripheralFromRecord:record]);
+        }
+    }];
 }
+
 
 #pragma mark - Private methods
 
@@ -73,14 +79,18 @@
     [self saveLastConnectedPeripheral:lastConnectedPeripheral];
 }
 
-- (CBPeripheral *)loadLastConnectedPeripheral {
-    NSArray * UUIDs = @[[[NSUUID alloc] initWithUUIDString:self.lastConnectionRecord.UUID]];
+
+- (CBPeripheral *)peripheralFromRecord:(WLXBluetoothDeviceConnectionRecord *)record {
+    NSArray * UUIDs = @[[[NSUUID alloc] initWithUUIDString:record.UUID]];
     NSArray * peripherals = [self.centralManager retrievePeripheralsWithIdentifiers:UUIDs];
     return [peripherals firstObject];
 }
 
 - (void)saveLastConnectedPeripheral:(CBPeripheral *)peripheral {
-    [self.repository saveConnectionRecord:[WLXBluetoothDeviceConnectionRecord recordWithPeripheral:peripheral]];
+    id record = [WLXBluetoothDeviceConnectionRecord recordWithPeripheral:peripheral];
+    [self.repository saveConnectionRecord:record withBlock:^(NSError * error) {
+        DDLogError(@"Connection record could not be saved: %@", error);
+    }];
 }
 
 - (void)registerNotificationHandlers {

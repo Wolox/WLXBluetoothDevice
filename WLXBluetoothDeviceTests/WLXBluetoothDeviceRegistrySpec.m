@@ -19,6 +19,7 @@ SpecBegin(WLXBluetoothDeviceRegistry)
     __block WLXBluetoothDeviceRegistry * registry;
     __block CBPeripheral * mockPeripheral;
     __block NSDate * mockDate;
+    __block WLXBluetoothDeviceConnectionRecord * record;
 
     beforeEach(^{
         mockPeripheral = mock([CBPeripheral class]);
@@ -38,13 +39,10 @@ SpecBegin(WLXBluetoothDeviceRegistry)
         NSUUID * UUID = [[NSUUID alloc] initWithUUIDString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
         [MKTGiven([mockPeripheral name]) willReturn:@"Mock Peripheral"];
         [MKTGiven([mockPeripheral identifier]) willReturn:UUID];
-        
         [MKTGiven([NSDate date]) willReturn:mockDate];
+        record = [WLXBluetoothDeviceConnectionRecord recordWithPeripheral:mockPeripheral];
         
         [MKTGiven([mockCentralManager retrievePeripheralsWithIdentifiers:@[UUID]]) willReturn:@[mockPeripheral]];
-        
-        id record = [WLXBluetoothDeviceConnectionRecord recordWithPeripheral:mockPeripheral];
-        [MKTGiven([mockRepository fetchLastConnectionRecord]) willReturn:record];
     });
 
     afterEach(^{
@@ -75,7 +73,7 @@ SpecBegin(WLXBluetoothDeviceRegistry)
                
                 it(@"saves the connected peripheral into the repository", ^{
                     MKTArgumentCaptor * connectionRecordCaptor = [[MKTArgumentCaptor alloc] init];
-                    [MKTVerify(mockRepository) saveConnectionRecord:connectionRecordCaptor.capture];
+                    [MKTVerify(mockRepository) saveConnectionRecord:connectionRecordCaptor.capture withBlock:anything()];
                     WLXBluetoothDeviceConnectionRecord * connectionRecord = connectionRecordCaptor.value;
                     expect(connectionRecord.name).to.equal(mockPeripheral.name);
                     expect(connectionRecord.UUID).to.equal(mockPeripheral.identifier.UUIDString);
@@ -98,7 +96,7 @@ SpecBegin(WLXBluetoothDeviceRegistry)
                 });
             
                 it(@"does not save the connected peripheral into the repository", ^{
-                    [MKTVerifyCount(mockRepository, never()) saveConnectionRecord:anything()];
+                    [MKTVerifyCount(mockRepository, never()) saveConnectionRecord:anything() withBlock:anything()];
                 });
             
             });
@@ -106,7 +104,7 @@ SpecBegin(WLXBluetoothDeviceRegistry)
         
     });
 
-    describe(@"#lastConnectionRecord", ^{
+    describe(@"#fetchLastConnectionRecordWithBlock:", ^{
         
         context(@"when the registry is enabled", ^{
         
@@ -124,10 +122,16 @@ SpecBegin(WLXBluetoothDeviceRegistry)
                 });
                 
                 it(@"returns the last connection record", ^{
-                    WLXBluetoothDeviceConnectionRecord * connectionRecord = registry.lastConnectionRecord;
-                    expect(connectionRecord.name).to.equal(mockPeripheral.name);
-                    expect(connectionRecord.UUID).to.equal(mockPeripheral.identifier.UUIDString);
-                    expect(connectionRecord.connectionDate).to.equal(mockDate);
+                    [registry fetchLastConnectionRecordWithBlock:^(NSError * error, WLXBluetoothDeviceConnectionRecord * connectionRecord) {
+                        expect(connectionRecord.name).to.equal(mockPeripheral.name);
+                        expect(connectionRecord.UUID).to.equal(mockPeripheral.identifier.UUIDString);
+                        expect(connectionRecord.connectionDate).to.equal(mockDate);
+                    }];
+                    
+                    MKTArgumentCaptor * connectionRecordBlockCaptor = [[MKTArgumentCaptor alloc] init];
+                    [MKTVerify(mockRepository) fetchLastConnectionRecordWithBlock:connectionRecordBlockCaptor.capture];
+                    void (^block)(NSError *, WLXBluetoothDeviceConnectionRecord *) = connectionRecordBlockCaptor.value;
+                    block(nil, record);
                 });
                 
             });
@@ -146,7 +150,9 @@ SpecBegin(WLXBluetoothDeviceRegistry)
                 });
                 
                 it(@"returns the previous connection record", ^{
-                    expect(registry.lastConnectionRecord).to.beNil;
+                    [registry fetchLastConnectionRecordWithBlock:^(NSError * error, WLXBluetoothDeviceConnectionRecord * record) {
+                        expect(record).to.beNil;
+                    }];
                 });
                 
             });
@@ -155,7 +161,7 @@ SpecBegin(WLXBluetoothDeviceRegistry)
         
     });
 
-    describe(@"#lastConnectionRecord", ^{
+    describe(@"#fetchLastConnectedPeripheralWithBlock:", ^{
     
         context(@"when the registry is enabled", ^{
         
@@ -173,7 +179,9 @@ SpecBegin(WLXBluetoothDeviceRegistry)
                 });
             
                 it(@"returns the last connected peripheral", ^{
-                    expect(registry.lastConnectedPeripheral).to.equal(mockPeripheral);
+                    [registry fetchLastConnectedPeripheralWithBlock:^(NSError * error, CBPeripheral * peripheral) {
+                        expect(peripheral).to.equal(mockPeripheral);
+                    }];
                 });
             
             });
@@ -192,7 +200,9 @@ SpecBegin(WLXBluetoothDeviceRegistry)
                 });
             
                 it(@"returns the previuos connected peripheral", ^{
-                    expect(registry.lastConnectedPeripheral).to.beNil;
+                    [registry fetchLastConnectedPeripheralWithBlock:^(NSError * error, CBPeripheral * peripheral) {
+                        expect(peripheral).to.equal(nil);
+                    }];
                 });
             
             });

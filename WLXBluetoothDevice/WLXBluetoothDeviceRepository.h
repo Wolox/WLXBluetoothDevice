@@ -11,8 +11,8 @@
 
 @protocol WLXBluetoothDeviceRepository <NSObject>
 
-- (WLXBluetoothDeviceConnectionRecord *)fetchLastConnectionRecord;
+- (void)fetchLastConnectionRecordWithBlock:(void(^)(NSError *, WLXBluetoothDeviceConnectionRecord *))block;
 
-- (BOOL)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRercord;
+- (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRercord withBlock:(void(^)(NSError *))block;
 
 @end

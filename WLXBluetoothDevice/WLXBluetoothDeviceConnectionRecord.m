@@ -61,4 +61,21 @@ static id<WLXDateProvider> dateProvider;
     [coder encodeObject:self.connectionDate forKey:@"connectionDate"];
 }
 
+- (BOOL)isEqual:(id)other {
+    if (other == self) {
+        return YES;
+    } else if (![self isKindOfClass:[other class]]) {
+        return NO;
+    } else {
+        WLXBluetoothDeviceConnectionRecord * otherRecord = other;
+        return [self.UUID isEqualToString:otherRecord.UUID] &&
+               [self.name isEqualToString:otherRecord.name] &&
+               [self.connectionDate isEqualToDate:otherRecord.connectionDate];
+    }
+}
+
+- (NSUInteger)hash {
+    return self.UUID.hash ^ self.name.hash ^ self.connectionDate.hash;
+}
+
 @end

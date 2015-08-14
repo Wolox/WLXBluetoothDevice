@@ -10,6 +10,11 @@
 #import "WLXBluetoothDeviceRepository.h"
 
 extern NSString * const WLXBluetoothDeviceLastConnectionRecord;
+extern NSString * const WLXBluetoothDeviceUserDefaultsRepositoryError;
+
+typedef enum : NSUInteger {
+    UserDefaultsRepositoryErrorUnableToSynch
+} UserDefaultsRepositoryError;
 
 @interface WLXBluetoothDeviceUserDefaultsRepository : NSObject<WLXBluetoothDeviceRepository>
 
