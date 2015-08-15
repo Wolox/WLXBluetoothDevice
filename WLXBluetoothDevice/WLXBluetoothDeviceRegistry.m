@@ -61,7 +61,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
         if (error) {
             block(error, nil);
         } else {
-            block(nil, [self peripheralFromRecord:record]);
+            block(nil, [record loadPeripheralFromCentral:self.centralManager]);
         }
     }];
 }
@@ -91,12 +91,6 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     [self saveLastConnectedPeripheral:lastConnectedPeripheral];
 }
 
-
-- (CBPeripheral *)peripheralFromRecord:(WLXBluetoothDeviceConnectionRecord *)record {
-    NSArray * UUIDs = @[[[NSUUID alloc] initWithUUIDString:record.UUID]];
-    NSArray * peripherals = [self.centralManager retrievePeripheralsWithIdentifiers:UUIDs];
-    return [peripherals firstObject];
-}
 
 - (void)saveLastConnectedPeripheral:(CBPeripheral *)peripheral {
     id record = [WLXBluetoothDeviceConnectionRecord recordWithPeripheral:peripheral];

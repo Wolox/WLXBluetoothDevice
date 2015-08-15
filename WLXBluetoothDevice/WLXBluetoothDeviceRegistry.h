@@ -20,5 +20,4 @@
 
 - (void)fetchLastConnectedPeripheralWithBlock:(void(^)(NSError *, CBPeripheral *))block;
 
-
 @end

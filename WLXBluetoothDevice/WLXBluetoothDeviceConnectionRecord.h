@@ -26,5 +26,6 @@
 
 - (instancetype)initWithUUID:(NSString *)UUID name:(NSString *)name connectionDate:(NSDate *)connectionDate;
 
+- (CBPeripheral *)loadPeripheralFromCentral:(CBCentralManager *)centralManager;
 
 @end

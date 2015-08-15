@@ -78,4 +78,10 @@ static id<WLXDateProvider> dateProvider;
     return self.UUID.hash ^ self.name.hash ^ self.connectionDate.hash;
 }
 
+- (CBPeripheral *)loadPeripheralFromCentral:(CBCentralManager *)centralManager {
+    NSArray * UUIDs = @[[[NSUUID alloc] initWithUUIDString:self.UUID]];
+    NSArray * peripherals = [centralManager retrievePeripheralsWithIdentifiers:UUIDs];
+    return [peripherals firstObject];
+}
+
 @end
