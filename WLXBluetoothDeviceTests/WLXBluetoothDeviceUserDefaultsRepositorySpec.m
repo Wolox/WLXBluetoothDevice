@@ -168,6 +168,28 @@ SpecBegin(WLXBluetoothDeviceUserDefaultsRepository)
         
         });
     
-});
+    });
+
+    describe(@"#deleteConnectionRecordWithUUID:andBlock:", ^{
+    
+        context(@"when a connection record was saved", ^{
+        
+            __block NSData * newEncodedConnectionRecords;
+        
+            beforeEach(^{
+                [MKTGiven([mockUserDefaults objectForKey:WLXBluetoothDeviceConnectionRecords]) willReturn:encodedConnectionRecords];
+                newEncodedConnectionRecords = [NSKeyedArchiver archivedDataWithRootObject:@[connectionRecord2]];
+            });
+        
+            it(@"deletes the connection record", ^{
+                [repository deleteConnectionRecordWithUUID:connectionRecord1.UUID andBlock:^(NSError * error) {
+                    expect(error).to.beNil;
+                    [MKTVerify(mockUserDefaults) setObject:newEncodedConnectionRecords forKey:WLXBluetoothDeviceConnectionRecords];
+                }];
+            });
+        
+        });
+    
+    });
 
 SpecEnd

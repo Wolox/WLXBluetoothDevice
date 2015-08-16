@@ -56,12 +56,18 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 }
 
 - (void)deleteConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord withBlock:(void(^)(NSError *))block {
-    WLXLogDebug(@"Deleting connection record %@ in user defaults %@", connectionRecord, self.userDefaults);
+    WLXAssertNotNil(connectionRecord);
+    [self deleteConnectionRecordWithUUID:connectionRecord.UUID andBlock:block];
+}
+
+- (void)deleteConnectionRecordWithUUID:(NSString *)UUID andBlock:(void(^)(NSError *))block {
+    WLXAssertNotEmpty(UUID);
+    WLXLogDebug(@"Deleting connection record with UUID %@ in user defaults %@", UUID, self.userDefaults);
     [self fetchConnectionRecordsWithBlock:^(NSError * error, NSArray * records) {
         if (error && block) {
             block(error);
         } else {
-            NSArray * newRecords = [self removeConnectionRecord:connectionRecord fromRecords:records];
+            NSArray * newRecords = [self removeConnectionRecordWithUUID:UUID fromRecords:records];
             if (newRecords == records) {
                 block(nil);
                 return;
@@ -77,7 +83,9 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     }];
 }
 
+
 - (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord withBlock:(void(^)(NSError *))block {
+    WLXAssertNotNil(connectionRecord);
     WLXLogDebug(@"Saving connection record %@ in user defaults %@", connectionRecord, self.userDefaults);
     [self fetchConnectionRecordsWithBlock:^(NSError * error, NSArray * records) {
         if (error && block) {
@@ -124,10 +132,14 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     return [NSArray arrayWithArray:newRecords];
 }
 
-- (NSArray *)removeConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord
-                         fromRecords:(NSArray *)records {
-    NSMutableArray * newRecords = [NSMutableArray arrayWithArray:records];
-    [newRecords removeObject:connectionRecord];
+- (NSArray *)removeConnectionRecordWithUUID:(NSString *)UUID
+                                fromRecords:(NSArray *)records {
+    NSMutableArray * newRecords = [NSMutableArray arrayWithCapacity:records.count];
+    for (WLXBluetoothDeviceConnectionRecord * record in records) {
+        if (![record.UUID isEqualToString:UUID]) {
+            [newRecords addObject:record];
+        }
+    }
     
     if (newRecords.count == records.count) {
         return records;
