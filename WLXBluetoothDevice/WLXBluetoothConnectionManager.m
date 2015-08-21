@@ -71,6 +71,10 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     return self.peripheral.identifier.UUIDString;
 }
 
+- (NSString *)peripheralName {
+    return self.peripheral.name;
+}
+
 - (BOOL)isActive {
     return self.connecting || self.reconnecting || self.connected;
 }

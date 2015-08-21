@@ -21,6 +21,7 @@
 @property (nonatomic, readonly, getter=isConnecting) BOOL connecting;
 @property (nonatomic, readonly) CBPeripheral * peripheral;
 @property (nonatomic, readonly) NSString * peripheralUUID;
+@property (nonatomic, readonly) NSString * peripheralName;
 @property (nonatomic) NSDictionary * connectionOptions;
 @property (nonatomic, weak) id<WLXConnectionManagerDelegate> delegate;
 @property (nonatomic, readonly) WLXServicesManager * servicesManager;

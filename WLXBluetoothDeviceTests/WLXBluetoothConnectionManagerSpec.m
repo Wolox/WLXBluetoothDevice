@@ -22,6 +22,7 @@ SpecBegin(WLXBluetoothConnectionManager)
     __block WLXBluetoothConnectionManager * connectionManager;
     __block id<WLXConnectionManagerDelegate> connectionManagerDelegate;
     __block dispatch_queue_t queue;
+    __block NSString * peripheralName;
 
     beforeEach(^{
         mockPeripheral = mock([CBPeripheral class]);
@@ -39,8 +40,9 @@ SpecBegin(WLXBluetoothConnectionManager)
         connectionManager.delegate = connectionManagerDelegate;
         [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
         NSUUID * peripheralUUID = [[NSUUID alloc] initWithUUIDString:@"68753A44-4D6F-1226-9C60-0050E4C00067"];
+        peripheralName = @"Mock Peripheral";
         [MKTGiven(mockPeripheral.identifier) willReturn:peripheralUUID];
-        [MKTGiven(mockPeripheral.name) willReturn:@"Mock Peripheral"];
+        [MKTGiven(mockPeripheral.name) willReturn:peripheralName];
     });
 
     afterEach(^{
@@ -51,6 +53,13 @@ SpecBegin(WLXBluetoothConnectionManager)
         connectionManagerDelegate = nil;
     });
 
+    describe(@"#peripheralName", ^{
+       
+        it(@"returns the peripheral's name", ^{
+            expect(connectionManager.peripheralName).to.equal(peripheralName);
+        });
+        
+    });
     describe(@"#connectWithTimeout:usingBlock:", ^{
         
         it(@"tries to connect to the peripheral", ^{
