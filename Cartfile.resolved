@@ -1,6 +1,6 @@
 github "robrix/Box" "1.2.2"
-github "guidomb/CocoaLumberjack" "edf2d2b55913b6a5b2f1a95a2abbab75b2d48067"
+github "CocoaLumberjack/CocoaLumberjack" "2.0.1"
 github "specta/expecta" "v1.0.2"
 github "specta/specta" "v1.0.3"
 github "antitypical/Result" "0.4.4"
-github "ReactiveCocoa/ReactiveCocoa" "6c37b5ef416799a3a2a61ff78f051d5deb0d76b2"
+github "ReactiveCocoa/ReactiveCocoa" "v3.0-RC.1"
