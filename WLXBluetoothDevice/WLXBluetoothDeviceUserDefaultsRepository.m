@@ -57,17 +57,12 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (void)deleteConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord withBlock:(void(^)(NSError *))block {
     WLXAssertNotNil(connectionRecord);
-    [self deleteConnectionRecordWithUUID:connectionRecord.UUID andBlock:block];
-}
-
-- (void)deleteConnectionRecordWithUUID:(NSString *)UUID andBlock:(void(^)(NSError *))block {
-    WLXAssertNotEmpty(UUID);
-    WLXLogDebug(@"Deleting connection record with UUID %@ in user defaults %@", UUID, self.userDefaults);
+    WLXLogDebug(@"Deleting connection record with UUID %@ in user defaults %@", connectionRecord.UUID, self.userDefaults);
     [self fetchConnectionRecordsWithBlock:^(NSError * error, NSArray * records) {
         if (error && block) {
             block(error);
         } else {
-            NSArray * newRecords = [self removeConnectionRecordWithUUID:UUID fromRecords:records];
+            NSArray * newRecords = [self removeConnectionRecordWithUUID:connectionRecord.UUID fromRecords:records];
             if (newRecords == records) {
                 block(nil);
                 return;
@@ -81,6 +76,11 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
             }
         }
     }];
+}
+
+- (void)deleteConnectionRecordWithUUID:(NSString *)UUID andBlock:(void(^)(NSError *))block {
+    WLXAssertNotEmpty(UUID);
+    
 }
 
 

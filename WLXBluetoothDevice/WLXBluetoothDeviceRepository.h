@@ -17,8 +17,6 @@
 
 - (void)deleteConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord withBlock:(void(^)(NSError *))block;
 
-- (void)deleteConnectionRecordWithUUID:(NSString *)UUID andBlock:(void(^)(NSError *))block;
-
 - (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRercord withBlock:(void(^)(NSError *))block;
 
 @end
