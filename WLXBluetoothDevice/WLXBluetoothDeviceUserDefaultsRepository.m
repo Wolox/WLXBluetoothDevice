@@ -65,6 +65,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
             NSArray * newRecords = [self removeConnectionRecordWithUUID:connectionRecord.UUID fromRecords:records];
             if (newRecords == records) {
                 block(nil);
+                WLXLogDebug(@"Connection record wasn't deleted because it wasn't originally saved.");
                 return;
             }
             
