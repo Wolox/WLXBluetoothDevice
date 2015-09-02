@@ -78,11 +78,6 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     }];
 }
 
-- (void)deleteConnectionRecordWithUUID:(NSString *)UUID andBlock:(void(^)(NSError *))block {
-    WLXAssertNotEmpty(UUID);
-    
-}
-
 
 - (void)saveConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord withBlock:(void(^)(NSError *))block {
     WLXAssertNotNil(connectionRecord);
