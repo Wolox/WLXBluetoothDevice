@@ -49,6 +49,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     NSData * encodedObject = [self.userDefaults objectForKey:WLXBluetoothDeviceConnectionRecords];
     if (encodedObject) {
         NSArray * records = [NSKeyedUnarchiver unarchiveObjectWithData:encodedObject];
+        WLXLogDebug(@"Fetched connection records %@", records);
         block(nil, records);
     } else {
         block(nil, @[]);
@@ -57,7 +58,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (void)deleteConnectionRecord:(WLXBluetoothDeviceConnectionRecord *)connectionRecord withBlock:(void(^)(NSError *))block {
     WLXAssertNotNil(connectionRecord);
-    WLXLogDebug(@"Deleting connection record with UUID %@ in user defaults %@", connectionRecord.UUID, self.userDefaults);
+    WLXLogDebug(@"Deleting connection record %@ in user defaults %@", connectionRecord, self.userDefaults);
     [self fetchConnectionRecordsWithBlock:^(NSError * error, NSArray * records) {
         if (error && block) {
             block(error);
