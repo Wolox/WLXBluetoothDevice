@@ -102,9 +102,6 @@
 		9D5CA70B1B132FB200356292 /* OCMockitoIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D44AB2C1B12DAE00009A4A6 /* OCMockitoIOS.framework */; };
 		9D5CA70C1B132FB200356292 /* Expecta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D1FD8871B1230E5004A45F4 /* Expecta.framework */; };
 		9D5CA70D1B132FB200356292 /* Specta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D1FD8881B1230E5004A45F4 /* Specta.framework */; };
-		9D5CA7101B1332DB00356292 /* Box.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D5CA70F1B1332DB00356292 /* Box.framework */; };
-		9D5CA7111B1332E400356292 /* Box.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9D5CA70F1B1332DB00356292 /* Box.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		9D5CA7121B13333900356292 /* Box.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D5CA70F1B1332DB00356292 /* Box.framework */; };
 		9D5CA7171B13374B00356292 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D5CA7161B13374B00356292 /* Result.framework */; };
 		9D5CA7181B13375F00356292 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D5CA7161B13374B00356292 /* Result.framework */; };
 		9D5CA7191B13376800356292 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9D5CA7161B13374B00356292 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -170,7 +167,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				9D5CA7191B13376800356292 /* Result.framework in CopyFiles */,
-				9D5CA7111B1332E400356292 /* Box.framework in CopyFiles */,
 				9D5CA66F1B132D3700356292 /* OCHamcrestIOS.framework in CopyFiles */,
 				9DBF37B81B1E01F1009E99EE /* CocoaLumberjack.framework in CopyFiles */,
 				9D5CA6701B132D3700356292 /* ReactiveCocoa.framework in CopyFiles */,
@@ -306,7 +302,6 @@
 			files = (
 				9DBF379E1B1D8BD7009E99EE /* CocoaLumberjack.framework in Frameworks */,
 				9D5CA7171B13374B00356292 /* Result.framework in Frameworks */,
-				9D5CA7121B13333900356292 /* Box.framework in Frameworks */,
 				9D5CA7091B132F8A00356292 /* ReactiveCocoa.framework in Frameworks */,
 				9D5CA6681B132CC100356292 /* WLXBluetoothDevice.framework in Frameworks */,
 			);
@@ -317,7 +312,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D5CA7181B13375F00356292 /* Result.framework in Frameworks */,
-				9D5CA7101B1332DB00356292 /* Box.framework in Frameworks */,
 				9DBF37B91B1E01F8009E99EE /* CocoaLumberjack.framework in Frameworks */,
 				9D5CA66B1B132CDE00356292 /* WLXBluetoothDevice.framework in Frameworks */,
 				9D5CA65A1B132CB000356292 /* WLXBluetoothDeviceReactiveExtensions.framework in Frameworks */,
@@ -648,7 +642,8 @@
 		9D1FD7CA1B12076C004A45F4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Wolox;
 				TargetAttributes = {
 					9D1FD7D21B12076C004A45F4 = {
@@ -832,6 +827,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -915,6 +911,7 @@
 				INFOPLIST_FILE = WLXBluetoothDevice/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "ar.com.wolox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -936,6 +933,7 @@
 				INFOPLIST_FILE = WLXBluetoothDevice/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "ar.com.wolox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -962,6 +960,7 @@
 					XCTest,
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ar.com.wolox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -983,6 +982,7 @@
 					XCTest,
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ar.com.wolox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -1006,6 +1006,7 @@
 				INFOPLIST_FILE = WLXBluetoothDeviceReactiveExtensions/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "ar.com.wolox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1026,6 +1027,7 @@
 				INFOPLIST_FILE = WLXBluetoothDeviceReactiveExtensions/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "ar.com.wolox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -1053,6 +1055,7 @@
 					XCTest,
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ar.com.wolox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "WLXBluetoothDeviceReactiveExtensionsTests/WLXBluetoothDeviceReactiveExtensionsTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1077,6 +1080,7 @@
 					XCTest,
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ar.com.wolox.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "WLXBluetoothDeviceReactiveExtensionsTests/WLXBluetoothDeviceReactiveExtensionsTests-Bridging-Header.h";
 			};
