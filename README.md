@@ -3,7 +3,7 @@
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Wolox/WLXBluetoothDevice?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![CI Status](https://travis-ci.org/Wolox/WLXBluetoothDevice.svg?branch=master)](https://travis-ci.org/Wolox/WLXBluetoothDevice)
 [![Coverage Status](https://coveralls.io/repos/Wolox/WLXBluetoothDevice/badge.png?branch=master)](https://coveralls.io/r/Wolox/WLXBluetoothDevice?branch=master)
-[![Version](https://img.shields.io/cocoapods/v/WLXBluetoothDevice.svg?style=flat)](http://cocoadocs.org/docsets/WLXBluetoothDevice)
+[![Release](https://img.shields.io/github/release/Wolox/WLXBluetoothDevice.svg)](https://github.com/Wolox/WLXBluetoothDevice/releases)
 [![License](https://img.shields.io/cocoapods/l/WLXBluetoothDevice.svg?style=flat)](http://cocoadocs.org/docsets/WLXBluetoothDevice)
 [![Platform](https://img.shields.io/cocoapods/p/WLXBluetoothDevice.svg?style=flat)](http://cocoadocs.org/docsets/WLXBluetoothDevice)
 
@@ -36,46 +36,55 @@ Here are some of the most relevant features that are included in **WLXBluetoothD
   * NSNotifications for Bluetooth connection and discovery events.
   * Storage service to remember devices.
 
-### Dependencies
-
-We wanted to minimize the use of external dependencies and we commit not to
-include any other external library unless that library solves a huge problem.
-The only dependency that **WLXBluetoothDevice** has is
-[CocoaLumberjack](https://github.com/CocoaLumberjack/CocoaLumberjack) because
-is a great library and you should use it. Also if you need to debug what
-is happening with the Bluetooth connection you can turn our logger on and you
-will get a lot of information about what the library is doing.
-
-### Future versions
-
-We want version `0.1.0` to be the core base set of features and then build
-more cool stuff on top of it. We plan to add a [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)
-API as a separate sub spec, so for those who like reactive functional programming there
-will be a signal based API.
-
-Once [CocoaPods](http://cocoapods.org/) supports Swift we will add it as a
-first class citizen, exposing an API that feels more natural in Swift.
-
 ## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+~~To run the example project, clone the repo, and run `pod install` from the Example directory first.
 To actually use the example app you need a Bluetooth peripheral that exposes certain
 characteristics in a certain way. That is why we made a test iOS app that acts as
 a peripheral in the way the example project expects it. You can clone the test
-app from [here](https://github.com/Wolox/WLXBluetoothDeviceMockPeripheral).
+app from [here](https://github.com/Wolox/WLXBluetoothDeviceMockPeripheral).~~
+
+**NOTE**: The example project is currently broken because it uses CocoaPods to install `WLXBluetoothDevice`. The actual code probably works. This will be fixed in future versions. Check issue [#35](https://github.com/Wolox/WLXBluetoothDevice/issues/35).
+
+### Reactive extensions
+
+If you like [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) there is a separate target that adds support for a `RACSignal` based API. All you have to do is add the `WLXBluetoothDeviceReactiveExtensions.framework` to your project.
 
 ## Installation
 
-**WLXBluetoothDevice** is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+### [Carthage]
 
-    pod "WLXBluetoothDevice"
+[Carthage]: https://github.com/Carthage/Carthage
 
-Once the pod is installed you can add the following header to your prefix file:
+Add the following to your Cartfile:
 
-```objc
-#import <WLXBluetoothDevice/WLXBluetoothDevice.h>
 ```
+github "Wolox/WLXBluetoothDevice" ~> 0.2.0
+```
+
+Then run `carthage update`.
+
+Follow the current instructions in [Carthage's README][carthage-installation]
+for up to date installation instructions.
+
+[carthage-installation]: https://github.com/Carthage/Carthage#adding-frameworks-to-an-application
+
+You'll also need to add the following frameworks to your Xcode project:
+  * `Box.framework`
+  * `CocoaLumberjack.framework`
+  * `ReactiveCocoa.framework`
+  * `Result.framework`
+
+[Box]: https://github.com/robrix/box
+[Result]: https://github.com/antitypical/Result
+[ReactiveCocoa]: https://github.com/ReactiveCocoa/ReactiveCocoa
+[CocoaLumberjack]: https://github.com/CocoaLumberjack/CocoaLumberjack
+
+### CocoaPods
+
+Installing through CocoaPods is not supported yet. After migrating to Carthage the podspec was broken and CocoaPods support wasn't a priority. Also this projects depends on ReactiveCocoa and there is not official support of ReactiveCocoa in CocoaPods. We still to decide if this is going to be a problem so until the ReactiveCocoa podspec is updated to support `v3.0.0` we will not try to support CocoaPods again.
+
+This issue is being tracked in [#40](https://github.com/Wolox/WLXBluetoothDevice/issues/40). Pull requests are welcomed!!!
 
 ## Documentation
 
@@ -83,6 +92,24 @@ You can check the library's [wiki](https://github.com/Wolox/WLXBluetoothDevice/w
 for documentation and examples of how to use different APIs. If there is
 something missing in the wiki you can [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Wolox/WLXBluetoothDevice?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).
 
+## Development
+
+To start developing you just need to run the following commands:
+
+```
+git clone git@github.com:Wolox/WLXBluetoothDevice.git
+cd WLXBluetoothDevice
+script/bootstrap
+open WLXBluetoothDevice.xcodeproj
+```
+
+### Scripts
+
+Inside the `script` folder there are several scripts to facilitate the development process. For up to date documentation of this scripts check [this](http://github.com/guidomb/ios-scripts) repository. The most relevant scripts are:
+
+  * `script/bootstrap`: Bootstraps the project for the first time.
+  * `script/test`: Runs the project's tests
+  * `script/update`: Updates the project's dependencies.
 
 ## About ##
 
