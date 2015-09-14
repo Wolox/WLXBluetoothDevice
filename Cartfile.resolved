@@ -1,6 +1,6 @@
 github "robrix/Box" "1.2.2"
 github "CocoaLumberjack/CocoaLumberjack" "2.0.1"
-github "specta/expecta" "v1.0.2"
+github "specta/expecta" "v1.0.3"
 github "specta/specta" "v1.0.3"
 github "antitypical/Result" "0.4.4"
-github "ReactiveCocoa/ReactiveCocoa" "v3.0-RC.1"
+github "ReactiveCocoa/ReactiveCocoa" "v3.0.0"
