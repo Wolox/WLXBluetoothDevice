@@ -1,5 +1,7 @@
 # WLXBluetoothDevice
 
+
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Wolox/WLXBluetoothDevice?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![CI Status](https://travis-ci.org/Wolox/WLXBluetoothDevice.svg?branch=master)](https://travis-ci.org/Wolox/WLXBluetoothDevice)
 [![Coverage Status](https://coveralls.io/repos/Wolox/WLXBluetoothDevice/badge.png?branch=master)](https://coveralls.io/r/Wolox/WLXBluetoothDevice?branch=master)
