@@ -90,7 +90,7 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
                 [MKTVerify(mockLocator) discoverCharacteristics:@[characteristicUUID]];
             });
             
-            it(@"increments the amount of pending operations", ^{
+            it(@"increments the amount of pending operations", ^{ 
                 NSUInteger pendingOperations = [asyncExecutor pendingOperationsCountForCharacteristic:characteristicUUID];
                 [asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
                     
@@ -114,14 +114,15 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
                 [MKTGiven(mockLocator.characteristics) willReturn:@[mockCharacteristic]];
             });
             
-            it(@"executes the pending operations", ^{
+            it(@"executes the pending operations", ^{ waitUntil(^(DoneCallback done) {
                 block = ^(NSError * error, CBCharacteristic * characteristic) {
                     expect(error).to.beNil;
                     expect(characteristic).to.equal(mockCharacteristic);
+                    done();
                 };
                 [asyncExecutor executeBlock:block forCharacteristic:characteristicUUID];
                 [asyncExecutor flushPendingOperations];
-            });
+            });});
             
         });
         
@@ -138,14 +139,16 @@ SpecBegin(WLXCharacteristicAsyncExecutor)
                 [MKTGiven(mockLocator.characteristics) willReturn:@[mockCharacteristic]];
             });
             
-            it(@"executes the pending operations", ^{
+            it(@"executes the pending operations", ^{ waitUntil(^(DoneCallback done) {
                 block = ^(NSError * error, CBCharacteristic * characteristic) {
                     expect(error).notTo.beNil;
-                    expect(characteristic).to.beNil;                };
+                    expect(characteristic).to.beNil;
+                    done();
+                };
                 [asyncExecutor executeBlock:block forCharacteristic:characteristicUUID];
                 NSError * error = [NSError errorWithDomain:@"foo" code:0 userInfo:nil];
                 [asyncExecutor flushPendingOperationsWithError:error];
-            });
+            });});
             
         });
         
