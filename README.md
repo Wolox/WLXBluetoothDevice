@@ -48,10 +48,6 @@ app from [here](https://github.com/Wolox/WLXBluetoothDeviceMockPeripheral).~~
 
 **NOTE**: The example project is currently broken because it uses CocoaPods to install `WLXBluetoothDevice`. The actual code probably works. This will be fixed in future versions. Check issue [#35](https://github.com/Wolox/WLXBluetoothDevice/issues/35).
 
-### Reactive extensions
-
-If you like [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) there is a separate target that adds support for a `RACSignal` based API. All you have to do is add the `WLXBluetoothDeviceReactiveExtensions.framework` to your project.
-
 ## Installation
 
 ### [Carthage]
@@ -61,7 +57,7 @@ If you like [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) ther
 Add the following to your Cartfile:
 
 ```
-github "Wolox/WLXBluetoothDevice" ~> 0.2.0
+github "Wolox/WLXBluetoothDevice" ~> 0.3.0
 ```
 
 Then run `carthage update`.
@@ -72,14 +68,8 @@ for up to date installation instructions.
 [carthage-installation]: https://github.com/Carthage/Carthage#adding-frameworks-to-an-application
 
 You'll also need to add the following frameworks to your Xcode project:
-  * `Box.framework`
   * `CocoaLumberjack.framework`
-  * `ReactiveCocoa.framework`
-  * `Result.framework`
 
-[Box]: https://github.com/robrix/box
-[Result]: https://github.com/antitypical/Result
-[ReactiveCocoa]: https://github.com/ReactiveCocoa/ReactiveCocoa
 [CocoaLumberjack]: https://github.com/CocoaLumberjack/CocoaLumberjack
 
 ### CocoaPods
