@@ -1,1 +1,1 @@
-github "CocoaLumberjack/CocoaLumberjack" "2.1.0-beta"
+github "CocoaLumberjack/CocoaLumberjack" ~> 2.2.0

@@ -1,2 +1,2 @@
 github "specta/specta" ~> 1.0.4
-github "specta/expecta" ~> 1.0.1
+github "specta/expecta" ~> 1.0.3
