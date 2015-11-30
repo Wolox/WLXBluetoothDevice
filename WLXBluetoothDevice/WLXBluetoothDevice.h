@@ -30,6 +30,11 @@
 #import <WLXBluetoothDevice/WLXServiceManager.h>
 #import <WLXBluetoothDevice/WLXServicesManager.h>
 
+#import <WLXBluetoothDevice/WLXCentralManagerDelegate.h>
+#import <WLXBluetoothDevice/WLXDictionaryOfArrays.h>
+#import <WLXBluetoothDevice/WLXManagedDelayedExecutor.h>
+#import <WLXBluetoothDevice/WLXRealDateProvider.h>
+
 //! Project version number for WLXBluetoothDevice.
 FOUNDATION_EXPORT double WLXBluetoothDeviceVersionNumber;
 
