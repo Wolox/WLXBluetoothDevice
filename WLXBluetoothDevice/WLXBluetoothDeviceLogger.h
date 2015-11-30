@@ -43,6 +43,6 @@ static int WLXBluetoothDeviceLogLevel = DDLogLevelWarning;
 
 @interface WLXBluetoothDeviceLogger : NSObject
 
-+ (void)setLogLevel:(int)logLevel;
++ (void)setLogLevel:(DDLogLevel)logLevel;
 
 @end

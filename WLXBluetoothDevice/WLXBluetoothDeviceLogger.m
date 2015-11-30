@@ -12,7 +12,7 @@
 
 @implementation WLXBluetoothDeviceLogger
 
-+ (void)setLogLevel:(int)logLevel {
++ (void)setLogLevel:(DDLogLevel)logLevel {
     SEL loggerContextSelector = NSSelectorFromString(@"loggerContext");
     for (Class clazz in [DDLog registeredClasses]) {
         if (![clazz respondsToSelector:loggerContextSelector]) {
