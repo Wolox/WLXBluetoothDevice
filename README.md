@@ -57,7 +57,7 @@ app from [here](https://github.com/Wolox/WLXBluetoothDeviceMockPeripheral).~~
 Add the following to your Cartfile:
 
 ```
-github "Wolox/WLXBluetoothDevice" ~> 0.3.0
+github "Wolox/WLXBluetoothDevice" ~> 0.6.1
 ```
 
 Then run `carthage update`.
@@ -74,9 +74,11 @@ You'll also need to add the following frameworks to your Xcode project:
 
 ### CocoaPods
 
-Installing through CocoaPods is not supported yet. After migrating to Carthage the podspec was broken and CocoaPods support wasn't a priority. Also this projects depends on ReactiveCocoa and there is not official support of ReactiveCocoa in CocoaPods. We still to decide if this is going to be a problem so until the ReactiveCocoa podspec is updated to support `v3.0.0` we will not try to support CocoaPods again.
+CocoaPods is not supported yet. This issue is being tracked in [#40](https://github.com/Wolox/WLXBluetoothDevice/issues/40). Pull requests are welcomed!!!
 
-This issue is being tracked in [#40](https://github.com/Wolox/WLXBluetoothDevice/issues/40). Pull requests are welcomed!!!
+## Reactive extensions
+
+If you like to use [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) there is an extension of WLXBluetoothDevice that adds support for ReactiveCocoa. Check it out [here](https://github.com/Wolox/WLXBluetoothDeviceReactiveExtensions)
 
 ## Documentation
 
