@@ -112,7 +112,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
         return NO;
     }
     if (![self discoveredDeviceMatchesRequiredName:deviceDiscoveryData]) {
-        WLXLogDebug(@"Device %@ that not matches required name %@", deviceDiscoveryData.deviceName,
+        WLXLogDebug(@"Device %@ does not matches required name %@", deviceDiscoveryData.deviceName,
                    self.deviceNameRegex.pattern);
         return NO;
     }
