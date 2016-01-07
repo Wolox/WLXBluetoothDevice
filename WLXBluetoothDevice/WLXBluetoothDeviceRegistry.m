@@ -12,9 +12,7 @@
 #import "WLXBluetoothDeviceNotifications.h"
 #import "WLXBluetoothDeviceLogger.h"
 
-@interface WLXBluetoothDeviceRegistry (){
-    CBPeripheral * _lastConnectedPeripheral;
-}
+@interface WLXBluetoothDeviceRegistry ()
 
 @property (nonatomic) NSNotificationCenter * notificationCenter;
 @property (nonatomic) id<WLXBluetoothDeviceRepository> repository;
@@ -87,7 +85,6 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 #pragma mark - Private methods
 
 - (void)setLastConnectedPeripheral:(CBPeripheral *)lastConnectedPeripheral {
-    _lastConnectedPeripheral = lastConnectedPeripheral;
     [self saveLastConnectedPeripheral:lastConnectedPeripheral];
 }
 
