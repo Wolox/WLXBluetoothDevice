@@ -36,7 +36,7 @@ SpecBegin(WLXBluetoothConnectionManager)
                                                                    notificationCenter:notificationCenter
                                                                                 queue:queue
                                                                  reconnectionStrategy:mockReconnectionStrategy
-                                                                           bluetoohOn:NO];
+                                                                           bluetoothOn:NO];
         connectionManagerDelegate = mockProtocol(@protocol(WLXConnectionManagerDelegate));
         connectionManager.delegate = connectionManagerDelegate;
         [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
@@ -329,7 +329,7 @@ SpecBegin(WLXBluetoothConnectionManager)
                                                                            notificationCenter:notificationCenter
                                                                                         queue:queue
                                                                          reconnectionStrategy:rs
-                                                                                   bluetoohOn:NO];
+                                                                                   bluetoothOn:NO];
                 connectionManager.delegate = connectionManagerDelegate;
                 [notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:nil userInfo:nil];
                 [MKTGiven([mockReconnectionStrategy remainingConnectionAttempts]) willReturnUnsignedInteger:1];

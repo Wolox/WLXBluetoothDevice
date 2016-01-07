@@ -34,7 +34,7 @@
                 notificationCenter:(NSNotificationCenter *)notificationCenter
                              queue:(dispatch_queue_t)queue
               reconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy
-                        bluetoohOn:(BOOL)bluetoothOn;
+                        bluetoothOn:(BOOL)bluetoothOn;
 
 - (void)didFailToConnect:(NSError *)error;
 
