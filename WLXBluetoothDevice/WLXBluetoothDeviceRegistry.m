@@ -92,7 +92,9 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 - (void)saveLastConnectedPeripheral:(CBPeripheral *)peripheral {
     id record = [WLXBluetoothDeviceConnectionRecord recordWithPeripheral:peripheral];
     [self.repository saveConnectionRecord:record withBlock:^(NSError * error) {
-        WLXLogError(@"Connection record could not be saved: %@", error);
+        if (error) {
+            WLXLogError(@"Connection record could not be saved: %@", error);
+        }
     }];
 }
 
