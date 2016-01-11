@@ -84,8 +84,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
                                                                       centralManager:self.centralManager
                                                                   notificationCenter:self.notificationCenter
                                                                                queue:self.queue
-                                                                reconnectionStrategy:reconnectionStrategy
-                                                                          bluetoothOn:self.bluetoothOn];
+                                                                reconnectionStrategy:reconnectionStrategy];
     [self.centralManagerDelegate registerConnectionManager:connectionManager];
     return connectionManager;
 }

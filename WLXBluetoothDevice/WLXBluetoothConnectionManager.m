@@ -38,8 +38,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
                     centralManager:(CBCentralManager *)centralManager
                 notificationCenter:(NSNotificationCenter *)notificationCenter
                              queue:(dispatch_queue_t)queue
-              reconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy
-                        bluetoothOn:(BOOL)bluetoothOn{
+              reconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy {
     WLXAssertNotNil(peripheral);
     WLXAssertNotNil(centralManager);
     WLXAssertNotNil(notificationCenter);
@@ -55,7 +54,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
         _reconnecting = NO;
         _connectionOptions = nil;
         _disconnecting = NO;
-        _bluetoothOn = bluetoothOn;
+        _bluetoothOn = NO;
         _connectionTimerExecutor = [[WLXManagedDelayedExecutor alloc] initWithQueue:queue];
         _allowReconnection = YES;
         [self registerNotificationHandlers];

@@ -20,8 +20,6 @@
 @property (nonatomic) NSNotificationCenter * notificationCenter;
 @property (nonatomic) NSArray * handlers;
 @property (nonatomic) WLXManagedDelayedExecutor * discoveryTimerExecutor;
-@property BOOL bluetoothOn;
-
 
 @end
 

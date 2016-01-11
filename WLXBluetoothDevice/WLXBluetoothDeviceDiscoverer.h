@@ -21,6 +21,8 @@
 @property (nonatomic) NSDictionary * scanOptions;
 @property (nonatomic, weak) id<WLXDeviceDiscovererDelegate> delegate;
 
+@property (nonatomic, getter=isBluetoothOn) BOOL bluetoothOn;
+
 - (instancetype)initWithCentralManager:(CBCentralManager *)centralManager
                     notificationCenter:(NSNotificationCenter *)notificationCenter
                                  queue:(dispatch_queue_t)queue;

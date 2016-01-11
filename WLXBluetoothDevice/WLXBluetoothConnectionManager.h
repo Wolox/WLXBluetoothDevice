@@ -16,7 +16,6 @@
 
 @interface WLXBluetoothConnectionManager : NSObject<WLXConnectionManager>
 
-@property (nonatomic, readonly, getter=isBluetoothOn) BOOL bluetoothOn;
 @property (nonatomic, readonly, getter=isReconnecting) BOOL reconnecting;
 @property (nonatomic, readonly, getter=isActive) BOOL active;
 @property (nonatomic, readonly, getter=isConnected) BOOL connected;
@@ -29,12 +28,14 @@
 @property (nonatomic, readonly) WLXServicesManager * servicesManager;
 @property (nonatomic) BOOL allowReconnection;
 
+@property (nonatomic, getter=isBluetoothOn) BOOL bluetoothOn;
+
+
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                     centralManager:(CBCentralManager *)centralManager
                 notificationCenter:(NSNotificationCenter *)notificationCenter
                              queue:(dispatch_queue_t)queue
-              reconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy
-                        bluetoothOn:(BOOL)bluetoothOn;
+              reconnectionStrategy:(id<WLXReconnectionStrategy>)reconnectionStrategy;
 
 - (void)didFailToConnect:(NSError *)error;
 

@@ -38,6 +38,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 
 - (void)registerConnectionManager:(WLXBluetoothConnectionManager *)connectionManager {
     WLXAssertNotNil(connectionManager);
+    connectionManager.bluetoothOn = self.bluetoothOn;
     NSString * __attribute__((unused)) message = [NSString stringWithFormat:@"An active connection manager has already been registered for peripheral '%@'",
                           connectionManager.peripheralUUID];
     WLXBluetoothConnectionManager * __attribute__((unused)) previousConnectionManager = self.connectionMangers[connectionManager.peripheralUUID];
@@ -53,7 +54,6 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central {
-    NSDictionary * userInfo;
     switch (central.state) {
         case CBCentralManagerStateUnknown:
             WLXLogDebug(@"The Bluetooth manager state is unknown");
@@ -75,20 +75,12 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
         case CBCentralManagerStatePoweredOn:
             WLXLogDebug(@"Bluetooh is turned on");
             self.bluetoothOn = YES;
-            userInfo = @{ WLXBluetoothEnabled : @(self.bluetoothOn) };
-            [self.notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOn object:self];
-            [self.notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothPowerStatusChanged
-                                                   object:self
-                                                 userInfo:userInfo];
+            [self notifyBluetoothPowerStatus];
             break;
         case CBCentralManagerStatePoweredOff:
             WLXLogDebug(@"Bluetooth is turned off");
             self.bluetoothOn = NO;
-            userInfo = @{ WLXBluetoothEnabled : @(self.bluetoothOn) };
-            [self.notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothIsOff object:self];
-            [self.notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothPowerStatusChanged
-                                                   object:self
-                                                 userInfo:userInfo];
+            [self notifyBluetoothPowerStatus];
             break;
         default:
             WLXLogDebug(@"Central Manager did change state to %ld", (long)central.state);
@@ -134,6 +126,22 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     } else {
         WLXLogWarn(@"There is no registered connection manager for peripheral with UUID '%@'", UUID);
     }
+}
+
+#pragma mark - Private methods
+
+- (void)notifyBluetoothPowerStatus {
+    self.discoverer.bluetoothOn = YES;
+    for (WLXBluetoothConnectionManager * connectionManager in self.connectionMangers.allValues) {
+        connectionManager.bluetoothOn = YES;
+    }
+    
+    NSDictionary * userInfo = @{ WLXBluetoothEnabled : @(self.bluetoothOn) };
+    NSString * notificationName = (self.bluetoothOn) ? WLXBluetoothDeviceBluetoothIsOn : WLXBluetoothDeviceBluetoothIsOff;
+    [self.notificationCenter postNotificationName:notificationName object:self];
+    [self.notificationCenter postNotificationName:WLXBluetoothDeviceBluetoothPowerStatusChanged
+                                           object:self
+                                         userInfo:userInfo];
 }
 
 @end
