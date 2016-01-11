@@ -10,6 +10,8 @@
 #import <WLXBluetoothDevice/WLXServiceManager.h>
 #import <WLXBluetoothDevice/WLXBluetoothDeviceNotifications.h>
 
+#import "WLXCharacteristicAsyncExecutor.h"
+
 #define ASYNC(code)                     \
     dispatch_async(specQueue, ^{ code; })
 
@@ -72,8 +74,8 @@ SpecBegin(WLXServiceManager)
         asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:mockLocator queue:specQueue];
         serviceManager = [[WLXServiceManager alloc] initWithPeripheral:mockPeripheral
                                                                service:mockService
-                                                    notificationCenter:notificationCenter];
-        serviceManager.asyncExecutor = asyncExecutor;
+                                                    notificationCenter:notificationCenter
+                                                         asyncExecutor:asyncExecutor];
     });
 
     afterEach(^{

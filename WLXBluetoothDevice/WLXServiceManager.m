@@ -12,6 +12,7 @@
 #import "WLXBluetoothDeviceHelpers.h"
 #import "WLXBluetoothDeviceLogger.h"
 #import "WLXDictionaryOfArrays.h"
+#import "WLXCharacteristicAsyncExecutor.h"
 
 #define DISPATCH(line)  \
     dispatch_async(_queue, ^{ line; })
@@ -37,6 +38,7 @@ static NSString * createQueueName(CBService * service) {
 @property (nonatomic) WLXDictionaryOfArrays * readHandlerBlockQueues;
 @property (nonatomic) WLXDictionaryOfArrays * writeHandlerBlockQueues;
 @property (nonatomic) WLXDictionaryOfArrays * stateChangeHandlerBlockQueues;
+@property (nonatomic) WLXCharacteristicAsyncExecutor * asyncExecutor;
 
 @end
 
@@ -52,6 +54,21 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     WLXAssertNotNil(peripheral);
     WLXAssertNotNil(service);
     WLXAssertNotNil(notificationCenter);
+    id asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:self queue:self.queue];
+    return [self initWithPeripheral:peripheral
+                            service:service
+                 notificationCenter:notificationCenter
+                      asyncExecutor:asyncExecutor];
+}
+
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
+                           service:(CBService *)service
+                notificationCenter:(NSNotificationCenter *)notificationCenter
+                     asyncExecutor:(WLXCharacteristicAsyncExecutor *)asyncExecutor {
+    WLXAssertNotNil(peripheral);
+    WLXAssertNotNil(service);
+    WLXAssertNotNil(notificationCenter);
+    WLXAssertNotNil(asyncExecutor);
     self = [super init];
     if (self) {
         _peripheral = peripheral;
@@ -64,7 +81,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
         _readHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _writeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _stateChangeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
-        _asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:self queue:self.queue];
+        _asyncExecutor = asyncExecutor;
         _invalidated = NO;
         [self invalidateServiceManagerOnConnectionLost];
     }

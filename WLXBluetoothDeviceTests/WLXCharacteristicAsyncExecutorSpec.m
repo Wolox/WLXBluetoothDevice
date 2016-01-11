@@ -8,7 +8,8 @@
 //
 #import "SpecHelper.h"
 
-#import <WLXBluetoothDevice/WLXCharacteristicAsyncExecutor.h>
+#import "WLXCharacteristicAsyncExecutor.h"
+
 #import <WLXBluetoothDevice/WLXCharacteristicLocator.h>
 
 SpecBegin(WLXCharacteristicAsyncExecutor)

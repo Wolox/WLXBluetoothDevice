@@ -7,7 +7,8 @@
 //
 #import "SpecHelper.h"
 
-#import <WLXBluetoothDevice/WLXBluetoothConnectionManager.h>
+#import "WLXBluetoothConnectionManager.h"
+
 #import <WLXBluetoothDevice/WLXBluetoothDeviceConnectionError.h>
 #import <WLXBluetoothDevice/WLXBluetoothDeviceNotifications.h>
 #import <WLXBluetoothDevice/WLXLinearReconnectionStrategy.h>

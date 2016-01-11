@@ -14,6 +14,7 @@
 
 @interface WLXCharacteristicAsyncExecutor : NSObject
 
+// Reference to locator is weak.
 - (instancetype)initWithCharacteristicLocator:(id<WLXCharacteristicLocator>)locator queue:(dispatch_queue_t)queue;
 
 - (void)executeBlock:(void(^)(NSError *, CBCharacteristic *))block forCharacteristic:(CBUUID *)characteristicUUID;

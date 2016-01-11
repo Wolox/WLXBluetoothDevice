@@ -14,7 +14,7 @@
 
 @interface WLXCharacteristicAsyncExecutor ()
 
-@property (nonatomic, readonly) id<WLXCharacteristicLocator> locator;
+@property (weak, nonatomic, readonly) id<WLXCharacteristicLocator> locator;
 @property (nonatomic, readonly) dispatch_queue_t queue;
 @property (nonatomic) WLXDictionaryOfArrays * pendingOperations;
 

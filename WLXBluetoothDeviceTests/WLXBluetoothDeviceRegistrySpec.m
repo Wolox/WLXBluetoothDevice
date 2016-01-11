@@ -9,7 +9,7 @@
 
 #import <WLXBluetoothDevice/WLXBluetoothDeviceRegistry.h>
 #import <WLXBluetoothDevice/WLXBluetoothDeviceNotifications.h>
-#import <WLXBluetoothDevice/WLXFakeDateProvider.h>
+#import "WLXFakeDateProvider.h"
 
 SpecBegin(WLXBluetoothDeviceRegistry)
 

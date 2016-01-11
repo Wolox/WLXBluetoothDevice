@@ -9,20 +9,25 @@
 #import <Foundation/Foundation.h>
 
 #import "WLXServicesManagerDelegate.h"
-#import "WLXCharacteristicAsyncExecutor.h"
 #import "WLXCharacteristicLocator.h"
 
 @import CoreBluetooth;
 
+@class WLXCharacteristicAsyncExecutor;
+
 @interface WLXServiceManager : NSObject<WLXServicesManagerDelegate, WLXCharacteristicLocator>
 
-@property (nonatomic) WLXCharacteristicAsyncExecutor * asyncExecutor;
 @property (nonatomic, readonly) NSArray * characteristics;
 @property (nonatomic, readonly) BOOL invalidated;
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                            service:(CBService *)service
                 notificationCenter:(NSNotificationCenter *)notificationCenter;
+
+- (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
+                           service:(CBService *)service
+                notificationCenter:(NSNotificationCenter *)notificationCenter
+                     asyncExecutor:(WLXCharacteristicAsyncExecutor *)asyncExecutor;
 
 #pragma mark - Reading & writing characteristic value
 

@@ -25,14 +25,14 @@
 		9D5CA6841B132E8400356292 /* WLXLinearReconnectionStrategySpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA67B1B132E8400356292 /* WLXLinearReconnectionStrategySpec.m */; };
 		9D5CA6851B132E8400356292 /* WLXServiceManagerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA67C1B132E8400356292 /* WLXServiceManagerSpec.m */; };
 		9D5CA6861B132E8400356292 /* WLXServicesManagerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA67D1B132E8400356292 /* WLXServicesManagerSpec.m */; };
-		9D5CA6BA1B132E9B00356292 /* WLXBluetoothConnectionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6871B132E9B00356292 /* WLXBluetoothConnectionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D5CA6BA1B132E9B00356292 /* WLXBluetoothConnectionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6871B132E9B00356292 /* WLXBluetoothConnectionManager.h */; };
 		9D5CA6BB1B132E9B00356292 /* WLXBluetoothConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6881B132E9B00356292 /* WLXBluetoothConnectionManager.m */; };
 		9D5CA6BC1B132E9B00356292 /* WLXBluetoothDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6891B132E9B00356292 /* WLXBluetoothDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6BD1B132E9B00356292 /* WLXBluetoothDeviceConnectionError.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA68A1B132E9B00356292 /* WLXBluetoothDeviceConnectionError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6BE1B132E9B00356292 /* WLXBluetoothDeviceConnectionError.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA68B1B132E9B00356292 /* WLXBluetoothDeviceConnectionError.m */; };
 		9D5CA6BF1B132E9B00356292 /* WLXBluetoothDeviceConnectionRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA68C1B132E9B00356292 /* WLXBluetoothDeviceConnectionRecord.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6C01B132E9B00356292 /* WLXBluetoothDeviceConnectionRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA68D1B132E9B00356292 /* WLXBluetoothDeviceConnectionRecord.m */; };
-		9D5CA6C11B132E9B00356292 /* WLXBluetoothDeviceDiscoverer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA68E1B132E9B00356292 /* WLXBluetoothDeviceDiscoverer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D5CA6C11B132E9B00356292 /* WLXBluetoothDeviceDiscoverer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA68E1B132E9B00356292 /* WLXBluetoothDeviceDiscoverer.h */; };
 		9D5CA6C21B132E9B00356292 /* WLXBluetoothDeviceDiscoverer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA68F1B132E9B00356292 /* WLXBluetoothDeviceDiscoverer.m */; };
 		9D5CA6C31B132E9B00356292 /* WLXBluetoothDeviceHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6901B132E9B00356292 /* WLXBluetoothDeviceHelpers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6C41B132E9B00356292 /* WLXBluetoothDeviceLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6911B132E9B00356292 /* WLXBluetoothDeviceLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -46,9 +46,9 @@
 		9D5CA6CC1B132E9B00356292 /* WLXBluetoothDeviceRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6991B132E9B00356292 /* WLXBluetoothDeviceRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6CD1B132E9B00356292 /* WLXBluetoothDeviceUserDefaultsRepository.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA69A1B132E9B00356292 /* WLXBluetoothDeviceUserDefaultsRepository.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6CE1B132E9B00356292 /* WLXBluetoothDeviceUserDefaultsRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA69B1B132E9B00356292 /* WLXBluetoothDeviceUserDefaultsRepository.m */; };
-		9D5CA6CF1B132E9B00356292 /* WLXCentralManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA69C1B132E9B00356292 /* WLXCentralManagerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D5CA6CF1B132E9B00356292 /* WLXCentralManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA69C1B132E9B00356292 /* WLXCentralManagerDelegate.h */; };
 		9D5CA6D01B132E9B00356292 /* WLXCentralManagerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA69D1B132E9B00356292 /* WLXCentralManagerDelegate.m */; };
-		9D5CA6D11B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA69E1B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D5CA6D11B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA69E1B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h */; };
 		9D5CA6D21B132E9B00356292 /* WLXCharacteristicAsyncExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA69F1B132E9B00356292 /* WLXCharacteristicAsyncExecutor.m */; };
 		9D5CA6D31B132E9B00356292 /* WLXCharacteristicLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6A01B132E9B00356292 /* WLXCharacteristicLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6D41B132E9B00356292 /* WLXConnectionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6A11B132E9B00356292 /* WLXConnectionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -58,17 +58,17 @@
 		9D5CA6D81B132E9B00356292 /* WLXDeviceDiscovererDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6A51B132E9B00356292 /* WLXDeviceDiscovererDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6D91B132E9B00356292 /* WLXDeviceDiscoveryData.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6A61B132E9B00356292 /* WLXDeviceDiscoveryData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6DA1B132E9B00356292 /* WLXDeviceDiscoveryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6A71B132E9B00356292 /* WLXDeviceDiscoveryData.m */; };
-		9D5CA6DB1B132E9B00356292 /* WLXDictionaryOfArrays.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6A81B132E9B00356292 /* WLXDictionaryOfArrays.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D5CA6DB1B132E9B00356292 /* WLXDictionaryOfArrays.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6A81B132E9B00356292 /* WLXDictionaryOfArrays.h */; };
 		9D5CA6DC1B132E9B00356292 /* WLXDictionaryOfArrays.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6A91B132E9B00356292 /* WLXDictionaryOfArrays.m */; };
-		9D5CA6DD1B132E9B00356292 /* WLXFakeDateProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6AA1B132E9B00356292 /* WLXFakeDateProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D5CA6DD1B132E9B00356292 /* WLXFakeDateProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6AA1B132E9B00356292 /* WLXFakeDateProvider.h */; };
 		9D5CA6DE1B132E9B00356292 /* WLXFakeDateProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6AB1B132E9B00356292 /* WLXFakeDateProvider.m */; };
 		9D5CA6DF1B132E9B00356292 /* WLXLinearReconnectionStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6AC1B132E9B00356292 /* WLXLinearReconnectionStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6E01B132E9B00356292 /* WLXLinearReconnectionStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6AD1B132E9B00356292 /* WLXLinearReconnectionStrategy.m */; };
-		9D5CA6E11B132E9B00356292 /* WLXManagedDelayedExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6AE1B132E9B00356292 /* WLXManagedDelayedExecutor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D5CA6E11B132E9B00356292 /* WLXManagedDelayedExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6AE1B132E9B00356292 /* WLXManagedDelayedExecutor.h */; };
 		9D5CA6E21B132E9B00356292 /* WLXManagedDelayedExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6AF1B132E9B00356292 /* WLXManagedDelayedExecutor.m */; };
 		9D5CA6E31B132E9B00356292 /* WLXNullReconnectionStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6B01B132E9B00356292 /* WLXNullReconnectionStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6E41B132E9B00356292 /* WLXNullReconnectionStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6B11B132E9B00356292 /* WLXNullReconnectionStrategy.m */; };
-		9D5CA6E51B132E9B00356292 /* WLXRealDateProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6B21B132E9B00356292 /* WLXRealDateProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D5CA6E51B132E9B00356292 /* WLXRealDateProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6B21B132E9B00356292 /* WLXRealDateProvider.h */; };
 		9D5CA6E61B132E9B00356292 /* WLXRealDateProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA6B31B132E9B00356292 /* WLXRealDateProvider.m */; };
 		9D5CA6E71B132E9B00356292 /* WLXReconnectionStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6B41B132E9B00356292 /* WLXReconnectionStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6E81B132E9B00356292 /* WLXServiceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6B51B132E9B00356292 /* WLXServiceManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -343,15 +343,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9D5CA6BA1B132E9B00356292 /* WLXBluetoothConnectionManager.h in Headers */,
 				9D5CA6D31B132E9B00356292 /* WLXCharacteristicLocator.h in Headers */,
 				9D5CA6D41B132E9B00356292 /* WLXConnectionManager.h in Headers */,
 				9D5CA6C41B132E9B00356292 /* WLXBluetoothDeviceLogger.h in Headers */,
-				9D5CA6DD1B132E9B00356292 /* WLXFakeDateProvider.h in Headers */,
-				9D5CA6C11B132E9B00356292 /* WLXBluetoothDeviceDiscoverer.h in Headers */,
 				9D5CA6C81B132E9B00356292 /* WLXBluetoothDeviceNotifications.h in Headers */,
 				9D5CA6CD1B132E9B00356292 /* WLXBluetoothDeviceUserDefaultsRepository.h in Headers */,
-				9D5CA6CF1B132E9B00356292 /* WLXCentralManagerDelegate.h in Headers */,
 				9D5CA6E31B132E9B00356292 /* WLXNullReconnectionStrategy.h in Headers */,
 				9D5CA6D71B132E9B00356292 /* WLXDeviceDiscoverer.h in Headers */,
 				9D5CA6BD1B132E9B00356292 /* WLXBluetoothDeviceConnectionError.h in Headers */,
@@ -364,16 +360,20 @@
 				9D5CA6CA1B132E9B00356292 /* WLXBluetoothDeviceRegistry.h in Headers */,
 				9D5CA6D81B132E9B00356292 /* WLXDeviceDiscovererDelegate.h in Headers */,
 				9D5CA6CC1B132E9B00356292 /* WLXBluetoothDeviceRepository.h in Headers */,
-				9D5CA6DB1B132E9B00356292 /* WLXDictionaryOfArrays.h in Headers */,
 				9D5CA6D91B132E9B00356292 /* WLXDeviceDiscoveryData.h in Headers */,
 				9D5CA6EA1B132E9B00356292 /* WLXServicesManager.h in Headers */,
-				9D5CA6E51B132E9B00356292 /* WLXRealDateProvider.h in Headers */,
 				9D5CA6D51B132E9B00356292 /* WLXConnectionManagerDelegate.h in Headers */,
-				9D5CA6E11B132E9B00356292 /* WLXManagedDelayedExecutor.h in Headers */,
 				9D5CA6E71B132E9B00356292 /* WLXReconnectionStrategy.h in Headers */,
 				9D5CA6DF1B132E9B00356292 /* WLXLinearReconnectionStrategy.h in Headers */,
-				9D5CA6D11B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h in Headers */,
 				9D5CA6BC1B132E9B00356292 /* WLXBluetoothDevice.h in Headers */,
+				9D5CA6E51B132E9B00356292 /* WLXRealDateProvider.h in Headers */,
+				9D5CA6CF1B132E9B00356292 /* WLXCentralManagerDelegate.h in Headers */,
+				9D5CA6BA1B132E9B00356292 /* WLXBluetoothConnectionManager.h in Headers */,
+				9D5CA6DD1B132E9B00356292 /* WLXFakeDateProvider.h in Headers */,
+				9D5CA6C11B132E9B00356292 /* WLXBluetoothDeviceDiscoverer.h in Headers */,
+				9D5CA6DB1B132E9B00356292 /* WLXDictionaryOfArrays.h in Headers */,
+				9D5CA6E11B132E9B00356292 /* WLXManagedDelayedExecutor.h in Headers */,
+				9D5CA6D11B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

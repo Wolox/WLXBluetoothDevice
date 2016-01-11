@@ -8,7 +8,7 @@
 
 #import "SpecHelper.h"
 
-#import <WLXBluetoothDevice/WLXBluetoothDeviceDiscoverer.h>
+#import "WLXBluetoothDeviceDiscoverer.h"
 
 SpecBegin(WLXBluetoothDeviceDiscoverer)
 
