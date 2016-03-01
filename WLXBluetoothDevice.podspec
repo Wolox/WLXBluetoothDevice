@@ -23,9 +23,9 @@ Pod::Spec.new do |s|
 
   s.homepage     = "http://www.wolox.com.ar"
   s.license      = "MIT"
-  s.author             = { "Wolox" => "contact@wolox.com.ar" }
+  s.author       = { "Wolox" => "contact@wolox.com.ar" }
   s.platform     = :ios, "5.0"
-  s.source       = { :git => "https://github.com/Wolox/WLXBluetoothDevice.git", :tag => "0.6.1" }
+  s.source       = { :git => "https://github.com/Wolox/WLXBluetoothDevice.git", :tag => s.version }
   s.source_files  = "WLXBluetoothDevice", "WLXBluetoothDevice/**/*.{h,m}"
   s.exclude_files = "Classes/Exclude"
   s.subspec "CocoaLumberjack" do |ss|
