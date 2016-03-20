@@ -24,6 +24,11 @@ run_tests ()
   if type bundle > /dev/null && bundle show xcpretty > /dev/null
   then
     test_command="$test_command | bundle exec xcpretty -c"
+    if type bundle > /dev/null && bundle show xcpretty-travis-formatter > /dev/null && [ "$TRAVIS" == "true" ]
+    then
+      formatter_class=`bundle exec xcpretty-travis-formatter`
+      test_command="$test_command -f '$formatter_class'"
+    fi
   fi
 
   echo ""
@@ -56,7 +61,7 @@ then
     # does not returns successfully, which could happen
     # in case of severe lint errors
     swiftlint lint --reporter json > .swiftlint-report.json || true
-    bundle exec linterbot $REPO_SLUG $PULL_REQUEST < .swiftlint-report.json
+    bundle exec linterbot $REPO_SLUG $PULL_REQUEST --trace < .swiftlint-report.json
   else
     swiftlint
   fi
