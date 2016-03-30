@@ -1,7 +1,8 @@
 language: objective-c
 osx_image: xcode7.2
 before_install: sudo gem install bundler
-script: REPO_SLUG="$TRAVIS_REPO_SLUG" PULL_REQUEST="$TRAVIS_PULL_REQUEST" FORCE_CARTHAGE_VERSION=true script/cibuild
+script: REPO_SLUG="$TRAVIS_REPO_SLUG" PULL_REQUEST="$TRAVIS_PULL_REQUEST" FORCE_CARTHAGE_VERSION=true
+  script/cibuild
 after_success: bundle exec slather
 branches:
   only:
@@ -10,3 +11,7 @@ env:
   global:
   - secure: D7z0DMvnWeH2scCvlkDZADdt+CSov1W7Db5oOf1A2/qUrTH8cFR3p7zz4lvxXrksIM5J3+HJj+mIp3w1s3XoNB3hZNLd12Zu1UyVrdcHABpCPZJjl2XPm1Xj36UDPWsw2fZlDZiKPLo43BKzWeKIuIQrRWelv/nnUHKUAS6qR4Q=
   - secure: GoN7Ignb8ygd1CqJBoA1rf+iKi8HS6ZrMGcnYR7aElmCF8izfS2rz0rt67ERx0Z1SDX9AwfNM+GVYU9Q0mDkV3+Hzs+5Qa7C5wqWJhW60DI/0gYPwgXtknCRfumysSskKBvvVQuWyEcdiGiKAyx60yUGpwVKfv5txCyKX+8F/KU=
+  - secure: BtR233iaMky7Uq1Y1x3ePveYPd2CLo5GNPq/KE5AbWC7c9lZnkutaouoB6iS8fPx/T+rhra+UwqRcgrwGvt6Bp9Yj8G+m6hK5dgzDUVZq3f2mm8d4OWAgjiPE8U6qgCwzKSZu/Jhf3RANacF6aVrzgbwqpCw3WaMURTnHpIkKjo=
+  - secure: ul4dLKSmM/hO/Ux/aEYEBg4z+LjsqFf+e97i5bAMrlOarpebIWDufG+F7/JEbkvH+gYzcKXMuUnxRum6M8HQg6FH+/5Q9ofUsT9nt4vVpjhHr4OoMEETP9qM85IIgeIbgphvn6EQKDgVakGW2f1XAcUF5V6LQ7xWO6pMCMdxTUk=
+  - secure: D8JbiIP5YXUiiBdNb5n+DyQS46FBuo3xj+TquRgSmUjHvetCIJPXVZGN4YDO/Rv9B1Pbghp7wZMqTfmJ112XDiWD04Xx3q2F7Wgrm1ONUOue1okJr0xPEXacCx0vw1yyJoavonpb+JW9uxrrgV7np0cHiXIHG+fiO4ZDFuXjOqk=
+  - secure: DMaFQ1fd5GMSZWSw/f3Y4+ZKL3sgct2nu1Pr6lUNn1vp8rYTfBp+Ve5uBI5yt9qYzVHiV3F+uC2yyoejK2Exm8dGDaERyOLWYgGhx/HLu3Wtz/KWykG2nV/2adIcqzx0C5oiRqPmq/KhCvWTWOuAeu7mhn+GM47fAWefnFpY9hk=

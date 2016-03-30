@@ -26,3 +26,4 @@ Carthage/
 Example/Pods/
 WLXBluetoothDevice.wiki/
 Frameworks/
+.carthage_cache.yml
