@@ -110,7 +110,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
             DISPATCH(block(error, nil));
         } else {
             this.readHandlerBlockQueues[characteristicUUID] = [block copy];
-            WLXLogDebug(@"Reading value for characteristic %@", characteristicUUID.UUIDString);
+            WLXLogVerbose(@"Reading value for characteristic %@", characteristicUUID.UUIDString);
             [this.peripheral readValueForCharacteristic:characteristic];
         }
     } forCharacteristic:characteristicUUID];
@@ -129,7 +129,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
             DISPATCH(block(error));
         } else {
             this.writeHandlerBlockQueues[characteristicUUID] = [block copy];
-            WLXLogDebug(@"Writting value for characteristic %@ with response", characteristicUUID);
+            WLXLogVerbose(@"Writting value for characteristic %@ with response", characteristicUUID);
             [this.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
         }
     } forCharacteristic:characteristicUUID];
@@ -144,7 +144,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     [self.asyncExecutor executeBlock:^(NSError * error, CBCharacteristic * characteristic) {
         __strong typeof(self) this = wself;
         if (!error) {
-            WLXLogDebug(@"Writting value for characteristic %@ without response", characteristicUUID);
+            WLXLogVerbose(@"Writting value for characteristic %@ without response", characteristicUUID);
             [this.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
         }
     } forCharacteristic:characteristicUUID];
