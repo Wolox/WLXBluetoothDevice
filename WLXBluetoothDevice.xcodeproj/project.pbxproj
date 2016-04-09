@@ -48,7 +48,7 @@
 		9D5CA6CE1B132E9B00356292 /* WLXBluetoothDeviceUserDefaultsRepository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA69B1B132E9B00356292 /* WLXBluetoothDeviceUserDefaultsRepository.m */; };
 		9D5CA6CF1B132E9B00356292 /* WLXCentralManagerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA69C1B132E9B00356292 /* WLXCentralManagerDelegate.h */; };
 		9D5CA6D01B132E9B00356292 /* WLXCentralManagerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA69D1B132E9B00356292 /* WLXCentralManagerDelegate.m */; };
-		9D5CA6D11B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA69E1B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h */; };
+		9D5CA6D11B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA69E1B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6D21B132E9B00356292 /* WLXCharacteristicAsyncExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D5CA69F1B132E9B00356292 /* WLXCharacteristicAsyncExecutor.m */; };
 		9D5CA6D31B132E9B00356292 /* WLXCharacteristicLocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6A01B132E9B00356292 /* WLXCharacteristicLocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9D5CA6D41B132E9B00356292 /* WLXConnectionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 9D5CA6A11B132E9B00356292 /* WLXConnectionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -366,6 +366,7 @@
 				9D5CA6E71B132E9B00356292 /* WLXReconnectionStrategy.h in Headers */,
 				9D5CA6DF1B132E9B00356292 /* WLXLinearReconnectionStrategy.h in Headers */,
 				9D5CA6BC1B132E9B00356292 /* WLXBluetoothDevice.h in Headers */,
+				9D5CA6D11B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h in Headers */,
 				9D5CA6E51B132E9B00356292 /* WLXRealDateProvider.h in Headers */,
 				9D5CA6CF1B132E9B00356292 /* WLXCentralManagerDelegate.h in Headers */,
 				9D5CA6BA1B132E9B00356292 /* WLXBluetoothConnectionManager.h in Headers */,
@@ -373,7 +374,6 @@
 				9D5CA6C11B132E9B00356292 /* WLXBluetoothDeviceDiscoverer.h in Headers */,
 				9D5CA6DB1B132E9B00356292 /* WLXDictionaryOfArrays.h in Headers */,
 				9D5CA6E11B132E9B00356292 /* WLXManagedDelayedExecutor.h in Headers */,
-				9D5CA6D11B132E9B00356292 /* WLXCharacteristicAsyncExecutor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

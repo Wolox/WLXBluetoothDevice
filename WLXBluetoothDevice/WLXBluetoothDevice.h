@@ -27,6 +27,8 @@
 #import <WLXBluetoothDevice/WLXServiceManager.h>
 #import <WLXBluetoothDevice/WLXServicesManager.h>
 
+#import <WLXBluetoothDevice/WLXCharacteristicAsyncExecutor.h>
+
 //! Project version number for WLXBluetoothDevice.
 FOUNDATION_EXPORT double WLXBluetoothDeviceVersionNumber;
 
