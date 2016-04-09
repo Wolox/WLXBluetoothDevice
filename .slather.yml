@@ -1,5 +1,6 @@
 coverage_service: coveralls
 xcodeproj: WLXBluetoothDevice.xcodeproj
+scheme: WLXBluetoothDevice
 ignore:
   - WLXBluetoothDeviceTests/*
   - Example/*
