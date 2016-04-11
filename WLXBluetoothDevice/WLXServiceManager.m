@@ -33,7 +33,6 @@ static NSString * createQueueName(CBService * service) {
 @property (nonatomic) CBService * service;
 @property (nonatomic) NSMutableDictionary * characteristicByUUID;
 @property (nonatomic) dispatch_queue_t queue;
-@property (nonatomic) NSString * queueName;
 @property (nonatomic) WLXDictionaryOfArrays * observers;
 @property (nonatomic) WLXDictionaryOfArrays * readHandlerBlockQueues;
 @property (nonatomic) WLXDictionaryOfArrays * writeHandlerBlockQueues;
@@ -54,16 +53,20 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
     WLXAssertNotNil(peripheral);
     WLXAssertNotNil(service);
     WLXAssertNotNil(notificationCenter);
-    id asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:self queue:self.queue];
+    const char * queueName = [createQueueName(service) cStringUsingEncoding:NSASCIIStringEncoding];
+    dispatch_queue_t queue = dispatch_queue_create(queueName, DISPATCH_QUEUE_SERIAL);
+    id asyncExecutor = [[WLXCharacteristicAsyncExecutor alloc] initWithCharacteristicLocator:self queue:queue];
     return [self initWithPeripheral:peripheral
                             service:service
                  notificationCenter:notificationCenter
+                              queue:queue
                       asyncExecutor:asyncExecutor];
 }
 
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                            service:(CBService *)service
                 notificationCenter:(NSNotificationCenter *)notificationCenter
+                             queue:(dispatch_queue_t)queue
                      asyncExecutor:(WLXCharacteristicAsyncExecutor *)asyncExecutor {
     WLXAssertNotNil(peripheral);
     WLXAssertNotNil(service);
@@ -76,8 +79,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
         _notificationCenter = notificationCenter;
         _characteristicByUUID = [[NSMutableDictionary alloc] init];
         _observers = [[WLXDictionaryOfArrays alloc] init];
-        _queueName = createQueueName(service);
-        _queue = dispatch_queue_create([_queueName cStringUsingEncoding:NSASCIIStringEncoding], DISPATCH_QUEUE_SERIAL);
+        _queue = queue;
         _readHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _writeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];
         _stateChangeHandlerBlockQueues = [[WLXDictionaryOfArrays alloc] init];

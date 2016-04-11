@@ -75,6 +75,7 @@ SpecBegin(WLXServiceManager)
         serviceManager = [[WLXServiceManager alloc] initWithPeripheral:mockPeripheral
                                                                service:mockService
                                                     notificationCenter:notificationCenter
+                                                                 queue:specQueue
                                                          asyncExecutor:asyncExecutor];
     });
 

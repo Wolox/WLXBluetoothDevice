@@ -27,6 +27,7 @@
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral
                            service:(CBService *)service
                 notificationCenter:(NSNotificationCenter *)notificationCenter
+                             queue:(dispatch_queue_t)queue
                      asyncExecutor:(WLXCharacteristicAsyncExecutor *)asyncExecutor;
 
 #pragma mark - Reading & writing characteristic value
