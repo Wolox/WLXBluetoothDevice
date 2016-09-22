@@ -117,7 +117,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 }
 
 - (void)didFailToConnect:(NSError *)error {
-    NSAssert(self.connecting, @"Cannot call didFailToConnect if connecting is NO");
+    NSAssert(self.connecting || self.reconnecting, @"Cannot call didFailToConnect if both connecting and reconnecting are NO");
     [self.connectionTimerExecutor invalidateExecutors];
     if (self.reconnecting) {
         [self tryToReconnect:error];
