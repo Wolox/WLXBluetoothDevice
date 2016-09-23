@@ -117,8 +117,13 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 }
 
 - (void)didFailToConnect:(NSError *)error {
-    NSAssert(self.connecting || self.reconnecting, @"Cannot call didFailToConnect if both connecting and reconnecting are NO");
+    WLXLogDebug(@"A connection could not be established: %@", error);
     [self.connectionTimerExecutor invalidateExecutors];
+    if (!self.connecting && !self.reconnecting) {
+        WLXLogDebug(@"Ignoring call to didFailToConnect because both connecting and reconnecting are NO.");
+        return;
+    }
+    
     if (self.reconnecting) {
         [self tryToReconnect:error];
     } else {
@@ -231,7 +236,6 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
             } else {
                 [self failToConnectWithError:error];
             }
-            self.disconnecting = YES;
             [this.centralManager cancelPeripheralConnection:peripheral];
         }
     }];
@@ -288,6 +292,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
         [this connectWithTimeout:this.reconnectionStrategy.connectionTimeout usingBlock:nil];
     }];
     if (!willTryToReconnect) {
+        WLXLogDebug(@"All reconnection attempts have been exhausted.");
         _reconnecting = NO;
         NSDictionary * userInfo = @{ WLXBluetoothDevicePeripheral : self.peripheral, WLXBluetoothDeviceError : error };
         [self.notificationCenter postNotificationName:WLXBluetoothDeviceConnectionLost object:self userInfo:userInfo];

@@ -46,7 +46,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
 }
 
 - (void)invalidateExecutors {
-    WLXLogVerbose(@"Invalidating all pending executors");
+    WLXLogDebug(@"Invalidating all pending executors: %@", self.executorsTimestamps);
     [self.executorsTimestamps removeAllObjects];
 }
 

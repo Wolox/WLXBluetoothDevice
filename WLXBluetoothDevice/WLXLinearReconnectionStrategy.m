@@ -9,10 +9,12 @@
 #import "WLXLinearReconnectionStrategy.h"
 #import "WLXBluetoothDeviceHelpers.h"
 #import "WLXBluetoothDeviceLogger.h"
+#import "WLXManagedDelayedExecutor.h"
 
 @interface WLXLinearReconnectionStrategy ()
 
 @property (nonatomic) dispatch_queue_t queue;
+@property (nonatomic) WLXManagedDelayedExecutor * delayedExecutor;
 
 @end
 
@@ -31,6 +33,7 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
         _connectionTimeout = connectionTimeout;
         _remainingConnectionAttempts = maxReconnectionAttempts;
         _queue = queue;
+        _delayedExecutor = [[WLXManagedDelayedExecutor alloc] initWithQueue:queue];
     }
     return self;
 }
@@ -41,17 +44,19 @@ WLX_BD_DYNAMIC_LOGGER_METHODS
         return NO;
     }
     WLXLogDebug(@"Waiting for %d ms before trying to reconnect", (int)_waitTime);
-    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.waitTime * NSEC_PER_MSEC));
-    dispatch_after(delayTime, self.queue, ^{
+    [self.delayedExecutor invalidateExecutors];
+    WLXLogDebug(@"Previous reconnection attempts delayed blocks have been invalidated");
+    [self.delayedExecutor after:self.waitTime dispatchBlock:^{
         WLXLogDebug(@"Trying to reconnect with device. Remaining reconnection attempts %d. Max reconnection attempts %d",
-                   (int)_remainingConnectionAttempts, (int)_maxReconnectionAttempts);
+                    (int)_remainingConnectionAttempts, (int)_maxReconnectionAttempts);
         block();
-    });
+    }];
     return YES;
 }
 
 - (void)reset {
     _remainingConnectionAttempts = _maxReconnectionAttempts;
+    [self.delayedExecutor invalidateExecutors];
 }
 
 

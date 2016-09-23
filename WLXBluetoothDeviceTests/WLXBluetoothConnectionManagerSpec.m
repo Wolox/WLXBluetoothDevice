@@ -212,16 +212,6 @@ SpecBegin(WLXBluetoothConnectionManager)
             error = nil;
         });
         
-        context(@"when the connection manager is not connecting", ^{
-            
-            it(@"raises an exception", ^{
-                expect(^{
-                    [connectionManager didFailToConnect:nil];
-                }).to.raise(@"NSInternalInconsistencyException");
-            });
-            
-        });
-        
         context(@"when the connection manager is connecting", ^{
             
             it(@"changes the connecting attribute", ^{
