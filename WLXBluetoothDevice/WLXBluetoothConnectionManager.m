@@ -17,7 +17,6 @@
 @interface WLXBluetoothConnectionManager ()
 
 @property (nonatomic, copy) void (^connectionBlock)(NSError *);
-@property (nonatomic) CBCentralManager * centralManager;
 @property (nonatomic) NSNotificationCenter * notificationCenter;
 @property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic) id<WLXReconnectionStrategy> reconnectionStrategy;

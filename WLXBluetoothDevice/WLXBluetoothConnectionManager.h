@@ -20,6 +20,7 @@
 @property (nonatomic, readonly, getter=isActive) BOOL active;
 @property (nonatomic, readonly, getter=isConnected) BOOL connected;
 @property (nonatomic, readonly, getter=isConnecting) BOOL connecting;
+@property (nonatomic) CBCentralManager * centralManager;
 @property (nonatomic, readonly) CBPeripheral * peripheral;
 @property (nonatomic, readonly) NSString * peripheralUUID;
 @property (nonatomic, readonly) NSString * peripheralName;
